@@ -1,0 +1,9 @@
+Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
+430;Berlin-Tegel;13.29;52.56;35;2;19630101;19630228;Hygrograph nach Frankenberg;Feuchteregistrieung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;19630301;19641216;Hygrograph nach Frankenberg;Feuchteregistrieung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;19660705;19711013;Hygrograph nach Frankenberg;Feuchteregistrieung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;19711014;19960705;Hygrograph nach Frankenberg;Feuchteregistrieung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;19941121;20080925;HYGROMER MP300;Feuchtemessung, elektr.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;20080924;20190312;Feuchtesonde HMP45D;Feuchtemessung, elektr.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;20180125;20190312;EE33;Feuchtemessung, elektr.;eor;
+generiert: 14.03.2019 --  Deutscher Wetterdienst  --

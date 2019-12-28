@@ -1,0 +1,5 @@
+Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
+430;Berlin-Tegel;13.31;52.56;36;10;19870101;19941130;Universal-Windschreiber 90;Windmessung, elektromechanisch;eor;
+430;Berlin-Tegel;13.31;52.56;36;10;19941201;20131114;Windsensor Classic 4.3303;Windmessung, elektr.;eor;
+430;Berlin-Tegel;13.31;52.56;36;10;20131115;20191225;Windsensor Classic 4.3303 (DWDSYN);Windmessung, elektr.;eor;
+generiert: 26.12.2019 --  Deutscher Wetterdienst  --

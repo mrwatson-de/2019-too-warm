@@ -1,0 +1,4 @@
+Stations_id;Stationshoehe;Geogr.Breite;Geogr.Laenge;von_datum;bis_datum;Stationsname
+   430;   35.00; 52.5644; 13.2947;19600102;19630228;Berlin-Tegel
+   430;   36.00; 52.5633; 13.3105;19630301;19711013;Berlin-Tegel
+   430;   36.00; 52.5644; 13.3088;19711014;        ;Berlin-Tegel

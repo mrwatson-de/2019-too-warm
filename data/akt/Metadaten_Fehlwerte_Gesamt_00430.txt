@@ -1,0 +1,6 @@
+Stations_ID;Stations_Name;Parameter;Von_Datum;Bis_Datum;Gesamt_Fehlwerte;Beschreibung;eor;                                                                                                              
+430;Berlin-Tegel;TGK;01.01.1963;25.12.2019;2;Gesamt_Messzeitraum;eor;                                                                                                                                   
+430;Berlin-Tegel;FM;01.01.1987;25.12.2019;14;Gesamt_Messzeitraum;eor;                                                                                                                                   
+430;Berlin-Tegel;FX;01.01.1987;25.12.2019;16;Gesamt_Messzeitraum;eor;                                                                                                                                   
+430;Berlin-Tegel;RSK;01.01.1963;25.12.2019;1;Gesamt_Messzeitraum;eor;                                                                                                                                   
+430;Berlin-Tegel;RSKF;01.01.1963;25.12.2019;1;Gesamt_Messzeitraum;eor;                                                                                                                                  

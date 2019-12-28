@@ -1,0 +1,7 @@
+Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
+430;Berlin-Tegel;13.29;52.56;35;2;19630101;19630228;Minimumthermometer;Temperaturmessung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;19630301;19711013;Minimumthermometer;Temperaturmessung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;19711014;19990411;Minimumthermometer;Temperaturmessung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;9999;19771116;19780509;Minimumthermometer;Temperaturmessung, konv.;eor;
+430;Berlin-Tegel;13.31;52.56;36;2;19941121;20190312;PT 100 (Luft);Temperaturmessung, elektr.;eor;
+generiert: 14.03.2019 --  Deutscher Wetterdienst  --
