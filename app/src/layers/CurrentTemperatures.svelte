@@ -61,12 +61,12 @@
             transform="translate({xScale(d.date)},0)">
             {#if $showAnomalies}
                 {#if d.tMin < d.trendMin}
-                    <line class="colder" y1={yScale(d.tMin)} y2={yScale(d.trendMin)} />
+                    <line class="colder" y1={yScale(d.tMin)} y2={yScale(Math.min(d.tMax, d.trendMin))} />
                 {/if}
                 {#if d.tMax > d.trendMax}
-                    <line class="hotter" y1={yScale(d.tMax)} y2={yScale(d.trendMax)} />
+                    <line class="hotter" y1={yScale(d.tMax)} y2={yScale(Math.max(d.tMin, d.trendMax))} />
                 {/if}
-                {#if d.tMin < d.trendMax || d.tMax > d.trendMin}
+                {#if d.tMin < d.trendMax && d.tMax > d.trendMin}
                     <line
                         class="normal"
                         y1={yScale(Math.max(d.trendMin, d.tMin))}

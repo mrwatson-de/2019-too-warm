@@ -16,8 +16,8 @@
     } from './stores';
 
     export let data = [];
-    export let tMin = -29;
-    export let tMax = 45;
+    let tMin = -29;
+    let tMax = 45;
     export let layers = [];
 
     $: dataSmooth =
@@ -66,7 +66,7 @@
         .domain([tMin, tMax])
         .range([height - padding.bottom, padding.top]);
 
-    $: yTicks = yScale.ticks(8);
+    $: yTicks = yScale.ticks(6);
 
     $: height = Math.max(
         450,
@@ -89,6 +89,9 @@
     $: {
         const cache = group(dataSmooth, d => d.dateRaw.substr(4));
 
+        tMin = 99;
+        tMax = -99;
+
         grouped = timeDays($minDate, $maxDate).map(day => {
             const dayFmt = fmt(day);
             const groupedAll = cache.get(dayFmt);
@@ -100,19 +103,34 @@
             const tMinSorted = grouped.map(d => d.tMin).sort(ascending);
             const tAvgSorted = grouped.map(d => d.tAvg).sort(ascending);
             const tMaxSorted = grouped.map(d => d.tMax).sort(ascending);
+            const tMinAbs = min(groupedAll, d => d.tMin);
+            const tMaxAbs = max(groupedAll, d => d.tMax);
+            const dateRaw = day.getFullYear() + dayFmt;
+            const cur = data.find(d => d.dateRaw === dateRaw);
+            tMin = Math.min(tMin, tMinAbs-5);
+            tMax = Math.max(tMax, tMaxAbs+5);
+            if (cur) {
+                tMin = Math.min(tMin, cur.tMin-5);
+                tMax = Math.max(tMax, cur.tMax+5);
+            }
             return {
                 date: day,
-                dateRaw: day.getFullYear() + dayFmt,
+                dateRaw,
                 grouped,
                 tMin: quantileSorted(tMinSorted, $normalRange / 100),
                 tMax: quantileSorted(tMaxSorted, 1 - $normalRange / 100),
-                tMinAbs: min(groupedAll, d => d.tMin),
-                tMaxAbs: max(groupedAll, d => d.tMax),
+                tMinAbs,
+                tMaxAbs,
                 tMinSorted,
                 tAvgSorted,
                 tMaxSorted
             };
         });
+
+        while (tMax - tMin < 40) {
+            tMax++;
+            tMin--;
+        }
     }
 </script>
 
