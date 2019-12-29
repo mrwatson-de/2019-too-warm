@@ -34,6 +34,7 @@
     } from './stores';
 
     export let data;
+    export let station;
 
     $: globalMinYear = data[data.length - 1].date.getFullYear();
     $: globalMaxYear = data[0].date.getFullYear();
@@ -57,8 +58,14 @@
     const nextYear = () => changeDate('FullYear', +1);
 
     const tfmt = timeFormat('%Y-%m-%d');
+    const tfmtIntro = timeFormat($msg.introDateFormat);
 
     $: maxDateStr = tfmt($maxDate);
+
+    $: introLong = $msg.introLong
+        .replace('%station%', station.name)
+        .replace('%minDate%', tfmtIntro($minDate))
+        .replace('%maxDate%', tfmtIntro($maxDate));
 
     function stop() {
         clearInterval(repeat);
@@ -108,17 +115,17 @@
 <BaseChart {data} {layers} />
 
 <div class="row justify-content-between">
-    <div class="col-auto">
+    <div class="col-auto mb-4">
+        <span class="mr-4">
         {$msg.source}:
         <a href="https://www.dwd.de/{$language.toUpperCase()}" target="_blank">
             Deutscher Wetterdienst
         </a>
         /
         <a target="_blank" href={$msg.cdcUrl}>Climate Data Center</a>
-        <span class="ml-4">
+        </span>
             {$msg.visBy}:
             <a href="https://vis4.net">Gregor Aisch</a>
-        </span>
     </div>
     <div class="col-auto">
         <div class="form-row">
@@ -180,12 +187,13 @@
 <div class="row">
 
     <div class="col-md-6 col-lg-4 col-xl-4">
-        <img style="max-width: 100%;margin-bottom: 20px" src="key-de.svg">
-        <p>
-            {@html $msg.intro}
-        </p>
+        <p><b>{@html $msg.intro}</b></p>
+        <p class="text-muted">{@html introLong}</p>
+        <img style="max-width: 100%;margin-bottom: 20px" src="key-{$language}.svg">
+
     </div>
     <div class="col-md-6 col-lg-8 col-xl-8">
+        <p><b>{@html $msg.customize}</b></p>
         <div class="row">
             <div class="col-xl-5">
                 <Checkbox label={$msg.absRecords} bind:value={layerRecord} />
@@ -198,6 +206,9 @@
             <div class="col-xl">
                 <div class="form-inline">
                     <Checkbox label={$msg.avgHighLow} bind:value={layerNormalRange} />
+                    <p class="text-muted">
+                    {$msg.avgHighLowInfo}
+                    </p>
                     <Checkbox label={$msg.avgMedian} bind:value={layerNormal} />
 
                 </div>
@@ -208,13 +219,13 @@
                 </p>
 
                 <div class="form-inline">
-                    <label class="my-1 mr-2">Vergleichszeitraum ändern:</label>
+                    <label class="text-muted my-1 mr-2">{$msg.changePeriod}</label>
                     <select bind:value={$contextRange} class="custom-select custom-select-sm">
                         {#each [5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80] as yr}
                             <option value={yr}>{yr}</option>
                         {/each}
                     </select>
-                    <label class="my-1 mr-1 ml-1 text-muted">Jahre ab</label>
+                    <label class="my-1 mr-1 ml-1 text-muted">{$msg.periodYearsFrom}</label>
                     <input
                         type="number"
                         class="form-control form-control-sm"
@@ -224,17 +235,7 @@
                 </div>
 
                 <div class="form-inline">
-                    <label class="my-1 mr-2">Normalbereich:</label>
-                    <select bind:value={$normalRange} class="custom-select custom-select-sm">
-                        <option value={50}>Median (Tiefst- u. Höchstwert)</option>
-                        <option value={35}>35pct. Tiefst - 65pct Höchst</option>
-                        <option value={25}>25pct. Tiefst - 75pct Höchst</option>
-                        <option value={100}>keiner</option>
-                    </select>
-                </div>
-
-                <div class="form-inline">
-                    <label class="my-1 mr-2">Glättung: &plusmn;</label>
+                    <label class="my-1 mr-2 text-muted">{$msg.smooth} &plusmn;</label>
                     <select
                         bind:value={$smoothNormalRangeWidth}
                         class="custom-select custom-select-sm">
@@ -246,6 +247,16 @@
                         {$smoothNormalRangeWidth === 1 ? $msg.day : $msg.days}
                     </label>
                 </div>
+
+                <!-- <div class="form-inline">
+                    <label class="my-1 mr-2 text-muted">Normalbereich:</label>
+                    <select bind:value={$normalRange} class="custom-select custom-select-sm">
+                        <option value={50}>Median (Tiefst- u. Höchstwert)</option>
+                        <option value={35}>35pct. Tiefst - 65pct Höchst</option>
+                        <option value={25}>25pct. Tiefst - 75pct Höchst</option>
+                        <option value={100}>keiner</option>
+                    </select>
+                </div> -->
             </div>
         </div>
 

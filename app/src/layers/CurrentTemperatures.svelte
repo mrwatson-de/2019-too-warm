@@ -40,6 +40,10 @@
                     d.trendMax = m.tMax;
                     d.tMinAbs = m.tMinAbs;
                     d.tMaxAbs = m.tMaxAbs;
+                    if (d.tMax > d.tMaxAbs || d.tMin < d.tMinAbs) {
+                        d.labelMaxRecord = true;
+                        d.labelMinRecord = true;
+                    }
                 }
             }
             return d;
@@ -47,17 +51,15 @@
         .map((d, i) => {
             if ($labelRecordTemperatures) {
                 if (d.tMax > d.tMaxAbs || d.tMin < d.tMinAbs) {
-                    d.labelMaxRecord = true;
-                    d.labelMinRecord = true;
                     // check if we're a local max
                     filteredData.slice(Math.max(0, i - 7), i + 8).forEach(e => {
-                        if (d != e && e.tMax > e.tMaxAbs) {
+                        if (d != e && e.tMax > e.tMaxAbs && e.labelMaxRecord) {
                             // e is also a record
                             if (e.tMax >= d.tMax) {
                                 d.labelMaxRecord = false;
                             }
                         }
-                        if (d != e && e.tMin < e.tMinAbs) {
+                        if (d != e && e.tMin < e.tMinAbs && e.labelMinRecord) {
                             // e is also a record
                             if (e.tMin <= d.tMin) {
                                 d.labelMinRecord = false;

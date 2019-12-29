@@ -71,7 +71,6 @@
     <div class="row">
         <div class="col">
             <h1>
-                <span>weather.</span>
                 vis4.net
             </h1>
         </div>
@@ -86,12 +85,8 @@
         <div class="col-sm">
             <StationInfo {station} />
         </div>
-        <div class="col-sm-4">
-            <div class="form-row">
-                <div class="col-lg">
-                    <StationSelect bind:station />
-                </div>
-            </div>
+        <div class="col-sm-auto">
+            <StationSelect bind:station />
         </div>
     </div>
 </div>
@@ -101,7 +96,7 @@
             <!-- promise is pending -->
             <p>Daten werden geladen...</p>
         {:then data}
-            <DataLoaded {data} />
+            <DataLoaded {data} {station} />
         {:catch error}
             <!-- promise was rejected -->
             <p>Something went wrong: {error.message}</p>

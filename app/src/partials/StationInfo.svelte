@@ -18,11 +18,11 @@
                 {$msg.monthLong[station.to.getMonth()]} {station.to.getFullYear()}
             </div>
             <div class="col-sm-auto">
-                <b>Lat/Lon:</b>
+                <b>{$msg.location}:</b>
                 <a
                     target="_blank"
                     href="https://www.openstreetmap.org/#map=19/{station.lat}/{station.lon}">
-                    {station.lat}, {station.lon}
+                    {(+station.lat).toFixed(2)}, {(+station.lon).toFixed(2)}
                 </a>
             </div>
             <div class="col-sm-auto">

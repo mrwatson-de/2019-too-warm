@@ -121,7 +121,7 @@
 <svelte:window on:hashchange={hashChange} />
 
 {#await loadStations then res}
-    <small class="form-text text-muted">{$msg.selectStation}</small>
+    <small class="form-text text-muted">{$msg.selectStation.replace('%count%', stations.length)}</small>
     <div class="btn-group">
         <select class="custom-select" bind:value={station}>
             <option value={null}>(select station)</option>
