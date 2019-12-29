@@ -147,13 +147,9 @@
         line-height: 2rem;
         font-style: normal;
         font-weight: 400;
-        color: #333;
+        color: #999;
         margin-top: 0;
         margin-bottom: 0;
-    }
-
-    h1 span {
-        color: #900;
     }
 
     header {
