@@ -180,13 +180,14 @@
 <div class="row">
 
     <div class="col-md-6 col-lg-4 col-xl-4">
+        <img style="max-width: 100%;margin-bottom: 20px" src="key-de.svg">
         <p>
             {@html $msg.intro}
         </p>
     </div>
     <div class="col-md-6 col-lg-8 col-xl-8">
         <div class="row">
-            <div class="col-xl-4">
+            <div class="col-xl-5">
                 <Checkbox label={$msg.absRecords} bind:value={layerRecord} />
                 <p class="text-muted">{$msg.overFullPeriod}</p>
                 <Checkbox label={$msg.showAnomalies} bind:value={$showAnomalies} />

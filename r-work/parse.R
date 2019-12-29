@@ -18,7 +18,7 @@ parse <- function(station) {
     data <- data %>% bind_rows(read_delim(fn.recent, delim = ';', trim_ws = T, col_types = cols()))
   }
   both <- data %>% 
-    filter(TMK > -999) %>% 
+    filter(TMK > -999 & TNK > -999 & TXK > -999) %>% 
     mutate(date=as.Date(as.character(MESS_DATUM), '%Y%m%d')) %>%
     group_by(date) %>% 
     summarise(TMK=first(TMK), TNK=first(TNK), TXK=first(TXK)) %>% 
