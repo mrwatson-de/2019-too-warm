@@ -89,7 +89,7 @@
     let grouped;
 
     $: {
-        const cache = group(data, d => d.dateRaw.substr(4));
+        const cache = group(dataClean, d => d.dateRaw.substr(4));
         const cacheSmooth = group(dataSmooth, d => d.dateRaw.substr(4));
 
         tMin = 99;

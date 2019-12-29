@@ -106,8 +106,8 @@
 <div class="row justify-content-between">
     <div class="col-auto">
         {$msg.source}: <a href="https://www.dwd.de/{$language.toUpperCase()}" target="_blank">Deutscher Wetterdienst</a> / <a target="_blank" href="{$msg.cdcUrl}">Climate Data Center</a>
-        <span class="ml-2">
-            Visualisierung: Gregor Aisch
+        <span class="ml-4">
+            {$msg.visBy}: <a href="https://vis4.net">Gregor Aisch</a>
         </span>
     </div>
     <div class="col-auto">
