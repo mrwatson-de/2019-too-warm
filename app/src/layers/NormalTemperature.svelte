@@ -10,19 +10,13 @@
     import { line, curveBasis, curveStep } from 'd3-shape';
     import Steps from './Steps.svelte';
 
-    $: pathData = path(normalRangeData);
+    $: pathData = path(grouped);
 
     $: path = line()
         .x(d => xScale(d.date))
         .y(d => yScale(d.tAvg))
         .curve(curveBasis);
 
-    $: normalRangeData = grouped.map(d => {
-        return {
-            date: d.date,
-            tAvg: quantileSorted(d.tAvgSorted, 0.5)
-        };
-    });
 </script>
 
 <style>

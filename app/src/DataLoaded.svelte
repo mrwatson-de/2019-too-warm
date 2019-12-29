@@ -4,6 +4,8 @@
     import NormalTemperature from './layers/NormalTemperature.svelte';
     import NormalTemperatureRange from './layers/NormalTemperatureRange.svelte';
     import CurrentTemperatures from './layers/CurrentTemperatures.svelte';
+    import Switch from './components/Switch.svelte';
+    import Checkbox from './components/Checkbox.svelte';
 
     $: layerRecord = true;
     $: layerNormal = true;
@@ -65,66 +67,103 @@
     input[type='number'] {
         width: 5em;
     }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type=number] {
+        -moz-appearance:textfield; /* Firefox */
+    }
+    .form-group .form-control {
+        margin-bottom: 0;
+    }
+    .form-text {
+        margin-top: 0;
+    }
+    .form-inline + .form-inline {
+        margin-top: 10px;
+    }
 </style>
 
 <!-- promise was fulfilled -->
-<BaseChart {data} {layers} />
 <svelte:window on:mouseup={stop} />
+<BaseChart {data} {layers} />
 
-<p>
-    {$msg.year}:
-    <button on:mousedown={prevYear}>&minus;</button>
-    <button on:mousedown={nextYear}>&plus;</button>
-    {$msg.month}:
-    <button on:mousedown={prevMonth}>&minus;</button>
-    <button on:mousedown={nextMonth}>&plus;</button>
-    {$msg.day}:
-    <button on:mousedown={prevDay}>&minus;</button>
-    <button on:mousedown={nextDay}>&plus;</button>
+<hr />
 
-    <button on:mousedown={() => ($maxDate = new Date())}>{$msg.today}</button>
-</p>
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-row">
+            <div class="col-auto form-group">
+                <!-- <button class="btn btn-sm btn-outline-secondary" on:mousedown={prevYear}>&minus;</button> -->
+                <input class="form-control form-control-sm" type="number" value="{$maxDate.getFullYear()}">
+                <small class="form-text text-muted">{$msg.year}</small>
+            </div>
+            <div class="col-auto form-group">
+                <input class="form-control form-control-sm" type="number" value="{$maxDate.getMonth()+1}">
+                <small class="form-text text-muted">{$msg.month}</small>
+            </div>
+            <div class="col-auto form-group">
+                <input class="form-control form-control-sm" type="number" value="{$maxDate.getDate()}">
+                <small class="form-text text-muted">{$msg.day}</small>
+                <!-- <button class="btn btn-sm btn-outline-secondary" on:mousedown={nextYear}>&plus;</button> -->
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-sm btn-outline-secondary" on:mousedown={() => ($maxDate = new Date())}>{$msg.today}</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <Checkbox label="Absolute Höchst- und Tiefstwerte" bind:value={layerRecord} />
+        <p class="text-muted">Bezogen auf gesamten verfügbaren Zeitraum</p>
+    </div>
+    <div class="col-md-6">
+        <div class="form-inline">
+            <Checkbox label="Mittlere Höchst und Tiefstwerte" bind:value={layerNormalRange} />
+            <Checkbox label="Mittlere Tagesmitteltemperatur" bind:value={layerNormal} />
+            <Checkbox label="Anomalien hervorheben" bind:value={$showAnomalies} />
+        </div>
+        <p class="text-muted">Gemittelte Werte beziehen sich auf den Vergleichszeitraum <b>{$contextMinYear} - {$contextMaxYear - 1}</b>. Anomalien bezeichnen Tagestemperaturen ober- und unterhalb der gemittelten Tageshöchst- und Tiefstwerte</p>
 
-<button on:click={switchLanguage}>{$language === 'de' ? 'en' : 'de'}</button>
-
-<div>
-    <label>
-        <input type="checkbox" bind:checked={layerRecord} />
-        Absolute Höchst- und Tiefstwerte
-    </label>
-
-    <label>
-        <input type="checkbox" bind:checked={layerNormalRange} />
-        Mittlere Höchst und Tiefstwerte
-    </label>
-    <label>
-        <input type="checkbox" bind:checked={layerNormal} />
-        Mittlere Tagesmitteltemperatur
-    </label>
-    <label>
-        <input type="checkbox" bind:checked={$showAnomalies} />
-        Anomalien hervorheben
-    </label>
-
-    {#if layerNormal || layerNormalRange}
-        <p>
-            <b>Vergleichszeitraum:</b>
-            <input type="number" min="5" max="40" bind:value={$contextRange} />
-            Jahre ab
+        <div class="form-inline">
+            <label class="my-1 mr-2">Vergleichszeitraum ändern:</label>
+            <select bind:value={$contextRange} class="custom-select custom-select-sm">
+                {#each [5,10,15,20,25,30,35,40,50,60,70,80] as yr}
+                <option value="{yr}">{yr}</option>
+                {/each}
+            </select>
+            <label class="my-1 mr-1 ml-1 text-muted">Jahre ab</label>
             <input
-                type="number"
-                min={globalMinYear}
-                max={globalMaxYear - $contextRange}
-                bind:value={$contextMinYear} />
-            ({$contextMinYear} - {$contextMaxYear - 1})
-        </p>
-        <p>
-            <b>Normalbereich:</b>
-            <input type="range" min="25" max="50" step="1" bind:value={$normalRange} />
-            bis {100 - $normalRange} Prozentil
-        </p>
-    {/if}
-    Smooth &plusmn; {$smoothNormalRangeWidth} day{$smoothNormalRangeWidth !== 1 ? 's' : ''}
-    <input type="range" min="0" max="13" bind:value={$smoothNormalRangeWidth} />
+                    type="number"
+                    class="form-control form-control-sm"
+                    min={globalMinYear}
+                    max={globalMaxYear - $contextRange}
+                    bind:value={$contextMinYear} />
+        </div>
+
+        <div class="form-inline">
+            <label class="my-1 mr-2">Normalbereich:</label>
+            <select bind:value={$normalRange} class="custom-select custom-select-sm">
+                <option value="{50}">Median (Tiefst- u. Höchstwert)</option>
+                <option value="{35}">35pct. Tiefst - 65pct Höchst</option>
+                <option value="{25}">25pct. Tiefst - 75pct Höchst</option>
+                <option value="{100}">keiner</option>
+            </select>
+        </div>
+
+        <div class="form-inline">
+            <label class="my-1 mr-2"><small>Glättung: &plusmn;</small></label>
+            <select bind:value={$smoothNormalRangeWidth} class="custom-select custom-select-sm">
+                {#each [0,1,2,3,4,5,7,15] as dy}
+                <option value="{dy}">{dy}</option>
+                {/each}
+            </select>
+            <label class="my-1 mr-1 ml-1 text-muted"><small>Tage</small></label>
+        </div>
+    </div>
 
 </div>

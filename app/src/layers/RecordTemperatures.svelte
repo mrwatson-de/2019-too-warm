@@ -17,8 +17,8 @@
 
 <style>
     g :global(path) {
-        fill: #ddd;
-        opacity: 0.5;
+        fill: #bbb;
+        opacity: 0.3;
     }
 </style>
 

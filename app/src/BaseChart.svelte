@@ -20,14 +20,16 @@
     let tMax = 45;
     export let layers = [];
 
+    $: dataClean = data.filter(d => d.tMin > -999 && d.tMax > -999);
+
     $: dataSmooth =
         $smoothNormalRangeWidth > 0
-            ? data.map((d, i) => {
+            ? dataClean.map((d, i) => {
                   return {
                       date: d.date,
                       dateRaw: d.dateRaw,
                       tMin: mean(
-                          data
+                          dataClean
                               .slice(
                                   Math.max(0, i - $smoothNormalRangeWidth),
                                   i + $smoothNormalRangeWidth + 1
@@ -35,7 +37,7 @@
                               .map(d => d.tMin)
                       ),
                       tAvg: mean(
-                          data
+                          dataClean
                               .slice(
                                   Math.max(0, i - $smoothNormalRangeWidth),
                                   i + $smoothNormalRangeWidth + 1
@@ -43,7 +45,7 @@
                               .map(d => d.tAvg)
                       ),
                       tMax: mean(
-                          data
+                          dataClean
                               .slice(
                                   Math.max(0, i - $smoothNormalRangeWidth),
                                   i + $smoothNormalRangeWidth + 1
@@ -52,7 +54,7 @@
                       )
                   };
               })
-            : data;
+            : dataClean;
 
     $: padding = { top: 20, right: 5, bottom: 20, left: innerWidth < 400 ? 30 : 40 };
 
@@ -87,7 +89,8 @@
     let grouped;
 
     $: {
-        const cache = group(dataSmooth, d => d.dateRaw.substr(4));
+        const cache = group(data, d => d.dateRaw.substr(4));
+        const cacheSmooth = group(dataSmooth, d => d.dateRaw.substr(4));
 
         tMin = 99;
         tMax = -99;
@@ -95,7 +98,7 @@
         grouped = timeDays($minDate, $maxDate).map(day => {
             const dayFmt = fmt(day);
             const groupedAll = cache.get(dayFmt);
-            const grouped = groupedAll.filter(
+            const grouped = cacheSmooth.get(dayFmt).filter(
                 d =>
                     d.date.getFullYear() >= $contextMinYear &&
                     d.date.getFullYear() < $contextMaxYear
@@ -113,12 +116,14 @@
                 tMin = Math.min(tMin, cur.tMin-5);
                 tMax = Math.max(tMax, cur.tMax+5);
             }
+            const tAvg = quantileSorted(tAvgSorted, 0.5);
             return {
                 date: day,
                 dateRaw,
                 grouped,
-                tMin: quantileSorted(tMinSorted, $normalRange / 100),
-                tMax: quantileSorted(tMaxSorted, 1 - $normalRange / 100),
+                tMin: $normalRange < 100 ? quantileSorted(tMinSorted, $normalRange / 100) : tAvg,
+                tAvg,
+                tMax: $normalRange < 100 ? quantileSorted(tMaxSorted, 1 - $normalRange / 100) : tAvg,
                 tMinAbs,
                 tMaxAbs,
                 tMinSorted,
@@ -133,6 +138,54 @@
         }
     }
 </script>
+
+<svelte:window bind:innerWidth={$innerWidth} />
+
+<div class="chart" bind:clientWidth={$chartWidth}>
+    <svg {height}>
+        <!-- y axis -->
+        <g class="axis y-axis" transform="translate(0, {padding.top})">
+            {#each yTicks as tick}
+                <g
+                    class="tick tick-{tick}"
+                    transform="translate(0, {yScale(tick) - padding.bottom})">
+                    <line x2="100%" />
+                    <text y="-4">
+                        {@html tick < 0 ? '&minus;' : ''}
+                        {Math.abs(tick)}°C
+                    </text>
+                </g>
+            {/each}
+        </g>
+
+        <!-- x axis -->
+        <g class="axis x-axis">
+            {#each xTicks as tick, i}
+                <g class="tick tick-{tick}" transform="translate({xScale(tick)},{height})">
+                    <line y1="-{height}" y2="-{padding.bottom}" x1="0" x2="0" />
+                    {#if midMonth(tick) < $maxDate}
+                        <g transform="translate({xScale(midMonth(tick)) - xScale(tick)},0)">
+                            <text y="0">
+                                {innerWidth > 400 ? format(tick, i) : formatMobile(tick, i)}
+                            </text>
+                            {#if (!i && tick.getMonth() < 10) || !tick.getMonth()}
+                                <text class="year buffer" y="-20">{tick.getFullYear()}</text>
+                                <text class="year" y="-20">{tick.getFullYear()}</text>
+                            {/if}
+                        </g>
+                    {/if}
+                </g>
+            {/each}
+        </g>
+
+        {#each layers as layer}
+            <svelte:component this={layer} {data} {grouped} {xScale} {yScale} />
+        {/each}
+
+        <line class="zero" transform="translate(0,{yScale(0)})" x2="100%" />
+    </svg>
+</div>
+
 
 <style>
     .chart,
@@ -173,8 +226,14 @@
     }
 
     .x-axis .tick text.year {
-        font-size: 24px;
-        font-weight: 300;
+        font-size: 20px;
+        font-weight: 400;
+    }
+    .x-axis .tick text.year.buffer {
+        stroke: #eee;
+        stroke-linejoin: round;
+        stroke-width: 10;
+        fill: #eee;
     }
     line.zero {
         shape-rendering: crispEdges;
@@ -188,49 +247,3 @@
         }
     }
 </style>
-
-<svelte:window bind:innerWidth={$innerWidth} />
-
-<div class="chart" bind:clientWidth={$chartWidth}>
-    <svg {height}>
-        <!-- y axis -->
-        <g class="axis y-axis" transform="translate(0, {padding.top})">
-            {#each yTicks as tick}
-                <g
-                    class="tick tick-{tick}"
-                    transform="translate(0, {yScale(tick) - padding.bottom})">
-                    <line x2="100%" />
-                    <text y="-4">
-                        {@html tick < 0 ? '&minus;' : ''}
-                        {Math.abs(tick)}°C
-                    </text>
-                </g>
-            {/each}
-        </g>
-
-        <!-- x axis -->
-        <g class="axis x-axis">
-            {#each xTicks as tick, i}
-                <g class="tick tick-{tick}" transform="translate({xScale(tick)},{height})">
-                    <line y1="-{height}" y2="-{padding.bottom}" x1="0" x2="0" />
-                    {#if midMonth(tick) < $maxDate}
-                        <g transform="translate({xScale(midMonth(tick)) - xScale(tick)},0)">
-                            <text y="0">
-                                {innerWidth > 400 ? format(tick, i) : formatMobile(tick, i)}
-                            </text>
-                            {#if (!i && tick.getMonth() < 10) || !tick.getMonth()}
-                                <text class="year" y="-20">{tick.getFullYear()}</text>
-                            {/if}
-                        </g>
-                    {/if}
-                </g>
-            {/each}
-        </g>
-
-        {#each layers as layer}
-            <svelte:component this={layer} {data} {grouped} {xScale} {yScale} />
-        {/each}
-
-        <line class="zero" transform="translate(0,{yScale(0)})" x2="100%" />
-    </svg>
-</div>

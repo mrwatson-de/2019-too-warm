@@ -37,6 +37,10 @@ export const msg = derived(language, lang => {
             year: 'Jahr',
             month: 'Monat',
             day: 'Tag',
+            timerange: 'Zeitraum',
+            to: 'bis',
+            selectStation: 'Wetterstation auswählen',
+            altitude: 'Stationshöhe',
             tooltipDateFormat: '%d. %b',
             monthLong: 'Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember'.split(
                 ','
@@ -48,6 +52,10 @@ export const msg = derived(language, lang => {
         year: 'Year',
         month: 'Month',
         day: 'Day',
+        timerange: 'Range',
+        to: 'to',
+        selectStation: 'Select weather station',
+        altitude: 'Station altitude',
         tooltipDateFormat: '%b %d',
         monthLong: 'January,February,March,April,May,June,July,August,September,October,November,December'.split(
             ','

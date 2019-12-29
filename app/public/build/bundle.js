@@ -196,8 +196,15 @@ var app = (function () {
             resolved_promise.then(flush);
         }
     }
+    function tick() {
+        schedule_update();
+        return resolved_promise;
+    }
     function add_render_callback(fn) {
         render_callbacks.push(fn);
+    }
+    function add_flush_callback(fn) {
+        flush_callbacks.push(fn);
     }
     function flush() {
         const seen_callbacks = new Set();
@@ -340,6 +347,16 @@ var app = (function () {
                 return true;
             }
             info.resolved = promise;
+        }
+    }
+
+    const globals = (typeof window !== 'undefined' ? window : global);
+
+    function bind(component, name, callback) {
+        const index = component.$$.props[name];
+        if (index !== undefined) {
+            component.$$.bound[index] = callback;
+            callback(component.$$.ctx[index]);
         }
     }
     function create_component(block) {
@@ -1284,6 +1301,10 @@ var app = (function () {
                 year: 'Jahr',
                 month: 'Monat',
                 day: 'Tag',
+                timerange: 'Zeitraum',
+                to: 'bis',
+                selectStation: 'Wetterstation auswählen',
+                altitude: 'Stationshöhe',
                 tooltipDateFormat: '%d. %b',
                 monthLong: 'Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember'.split(
                     ','
@@ -1295,6 +1316,10 @@ var app = (function () {
             year: 'Year',
             month: 'Month',
             day: 'Day',
+            timerange: 'Range',
+            to: 'to',
+            selectStation: 'Select weather station',
+            altitude: 'Station altitude',
             tooltipDateFormat: '%b %d',
             monthLong: 'January,February,March,April,May,June,July,August,September,October,November,December'.split(
                 ','
@@ -3274,31 +3299,31 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[27] = list[i];
+    	child_ctx[28] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[30] = list[i];
-    	child_ctx[32] = i;
+    	child_ctx[31] = list[i];
+    	child_ctx[33] = i;
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[30] = list[i];
+    	child_ctx[31] = list[i];
     	return child_ctx;
     }
 
-    // (198:12) {#each yTicks as tick}
+    // (148:12) {#each yTicks as tick}
     function create_each_block_2(ctx) {
     	let g;
     	let line;
     	let text_1;
     	let html_tag;
-    	let raw_value = (/*tick*/ ctx[30] < 0 ? "&minus;" : "") + "";
-    	let t0_value = Math.abs(/*tick*/ ctx[30]) + "";
+    	let raw_value = (/*tick*/ ctx[31] < 0 ? "&minus;" : "") + "";
+    	let t0_value = Math.abs(/*tick*/ ctx[31]) + "";
     	let t0;
     	let t1;
     	let g_class_value;
@@ -3312,15 +3337,15 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = text("°C\n                    ");
     			attr_dev(line, "x2", "100%");
-    			attr_dev(line, "class", "svelte-15tn2sx");
-    			add_location(line, file, 201, 20, 5738);
+    			attr_dev(line, "class", "svelte-dtjmc3");
+    			add_location(line, file, 151, 20, 5126);
     			html_tag = new HtmlTag(raw_value, t0);
     			attr_dev(text_1, "y", "-4");
-    			attr_dev(text_1, "class", "svelte-15tn2sx");
-    			add_location(text_1, file, 202, 20, 5777);
-    			attr_dev(g, "class", g_class_value = "tick tick-" + /*tick*/ ctx[30] + " svelte-15tn2sx");
-    			attr_dev(g, "transform", g_transform_value = "translate(0, " + (/*yScale*/ ctx[8](/*tick*/ ctx[30]) - /*padding*/ ctx[3].bottom) + ")");
-    			add_location(g, file, 198, 16, 5591);
+    			attr_dev(text_1, "class", "svelte-dtjmc3");
+    			add_location(text_1, file, 152, 20, 5165);
+    			attr_dev(g, "class", g_class_value = "tick tick-" + /*tick*/ ctx[31] + " svelte-dtjmc3");
+    			attr_dev(g, "transform", g_transform_value = "translate(0, " + (/*yScale*/ ctx[8](/*tick*/ ctx[31]) - /*padding*/ ctx[3].bottom) + ")");
+    			add_location(g, file, 148, 16, 4979);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -3331,14 +3356,14 @@ var app = (function () {
     			append_dev(text_1, t1);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*yTicks*/ 1024 && raw_value !== (raw_value = (/*tick*/ ctx[30] < 0 ? "&minus;" : "") + "")) html_tag.p(raw_value);
-    			if (dirty[0] & /*yTicks*/ 1024 && t0_value !== (t0_value = Math.abs(/*tick*/ ctx[30]) + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*yTicks*/ 1024 && raw_value !== (raw_value = (/*tick*/ ctx[31] < 0 ? "&minus;" : "") + "")) html_tag.p(raw_value);
+    			if (dirty[0] & /*yTicks*/ 1024 && t0_value !== (t0_value = Math.abs(/*tick*/ ctx[31]) + "")) set_data_dev(t0, t0_value);
 
-    			if (dirty[0] & /*yTicks*/ 1024 && g_class_value !== (g_class_value = "tick tick-" + /*tick*/ ctx[30] + " svelte-15tn2sx")) {
+    			if (dirty[0] & /*yTicks*/ 1024 && g_class_value !== (g_class_value = "tick tick-" + /*tick*/ ctx[31] + " svelte-dtjmc3")) {
     				attr_dev(g, "class", g_class_value);
     			}
 
-    			if (dirty[0] & /*yScale, yTicks, padding*/ 1288 && g_transform_value !== (g_transform_value = "translate(0, " + (/*yScale*/ ctx[8](/*tick*/ ctx[30]) - /*padding*/ ctx[3].bottom) + ")")) {
+    			if (dirty[0] & /*yScale, yTicks, padding*/ 1288 && g_transform_value !== (g_transform_value = "translate(0, " + (/*yScale*/ ctx[8](/*tick*/ ctx[31]) - /*padding*/ ctx[3].bottom) + ")")) {
     				attr_dev(g, "transform", g_transform_value);
     			}
     		},
@@ -3351,24 +3376,24 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(198:12) {#each yTicks as tick}",
+    		source: "(148:12) {#each yTicks as tick}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (216:20) {#if midMonth(tick) < $maxDate}
+    // (166:20) {#if midMonth(tick) < $maxDate}
     function create_if_block(ctx) {
     	let g;
     	let text_1;
 
     	let t_value = (innerWidth > 400
-    	? /*format*/ ctx[11](/*tick*/ ctx[30], /*i*/ ctx[32])
-    	: /*formatMobile*/ ctx[12](/*tick*/ ctx[30], /*i*/ ctx[32])) + "";
+    	? /*format*/ ctx[11](/*tick*/ ctx[31], /*i*/ ctx[33])
+    	: /*formatMobile*/ ctx[12](/*tick*/ ctx[31], /*i*/ ctx[33])) + "";
 
     	let t;
-    	let show_if = !/*i*/ ctx[32] && /*tick*/ ctx[30].getMonth() < 10 || !/*tick*/ ctx[30].getMonth();
+    	let show_if = !/*i*/ ctx[33] && /*tick*/ ctx[31].getMonth() < 10 || !/*tick*/ ctx[31].getMonth();
     	let g_transform_value;
     	let if_block = show_if && create_if_block_1(ctx);
 
@@ -3379,10 +3404,10 @@ var app = (function () {
     			t = text(t_value);
     			if (if_block) if_block.c();
     			attr_dev(text_1, "y", "0");
-    			attr_dev(text_1, "class", "svelte-15tn2sx");
-    			add_location(text_1, file, 217, 28, 6415);
-    			attr_dev(g, "transform", g_transform_value = "translate(" + (/*xScale*/ ctx[4](/*midMonth*/ ctx[14](/*tick*/ ctx[30])) - /*xScale*/ ctx[4](/*tick*/ ctx[30])) + ",0)");
-    			add_location(g, file, 216, 24, 6318);
+    			attr_dev(text_1, "class", "svelte-dtjmc3");
+    			add_location(text_1, file, 167, 28, 5803);
+    			attr_dev(g, "transform", g_transform_value = "translate(" + (/*xScale*/ ctx[4](/*midMonth*/ ctx[14](/*tick*/ ctx[31])) - /*xScale*/ ctx[4](/*tick*/ ctx[31])) + ",0)");
+    			add_location(g, file, 166, 24, 5706);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -3392,10 +3417,10 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty[0] & /*format, xTicks, formatMobile*/ 6272 && t_value !== (t_value = (innerWidth > 400
-    			? /*format*/ ctx[11](/*tick*/ ctx[30], /*i*/ ctx[32])
-    			: /*formatMobile*/ ctx[12](/*tick*/ ctx[30], /*i*/ ctx[32])) + "")) set_data_dev(t, t_value);
+    			? /*format*/ ctx[11](/*tick*/ ctx[31], /*i*/ ctx[33])
+    			: /*formatMobile*/ ctx[12](/*tick*/ ctx[31], /*i*/ ctx[33])) + "")) set_data_dev(t, t_value);
 
-    			if (dirty[0] & /*xTicks*/ 128) show_if = !/*i*/ ctx[32] && /*tick*/ ctx[30].getMonth() < 10 || !/*tick*/ ctx[30].getMonth();
+    			if (dirty[0] & /*xTicks*/ 128) show_if = !/*i*/ ctx[33] && /*tick*/ ctx[31].getMonth() < 10 || !/*tick*/ ctx[31].getMonth();
 
     			if (show_if) {
     				if (if_block) {
@@ -3410,7 +3435,7 @@ var app = (function () {
     				if_block = null;
     			}
 
-    			if (dirty[0] & /*xScale, xTicks*/ 144 && g_transform_value !== (g_transform_value = "translate(" + (/*xScale*/ ctx[4](/*midMonth*/ ctx[14](/*tick*/ ctx[30])) - /*xScale*/ ctx[4](/*tick*/ ctx[30])) + ",0)")) {
+    			if (dirty[0] & /*xScale, xTicks*/ 144 && g_transform_value !== (g_transform_value = "translate(" + (/*xScale*/ ctx[4](/*midMonth*/ ctx[14](/*tick*/ ctx[31])) - /*xScale*/ ctx[4](/*tick*/ ctx[31])) + ",0)")) {
     				attr_dev(g, "transform", g_transform_value);
     			}
     		},
@@ -3424,36 +3449,48 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(216:20) {#if midMonth(tick) < $maxDate}",
+    		source: "(166:20) {#if midMonth(tick) < $maxDate}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (221:28) {#if (!i && tick.getMonth() < 10) || !tick.getMonth()}
+    // (171:28) {#if (!i && tick.getMonth() < 10) || !tick.getMonth()}
     function create_if_block_1(ctx) {
-    	let text_1;
-    	let t_value = /*tick*/ ctx[30].getFullYear() + "";
-    	let t;
+    	let text0;
+    	let t0_value = /*tick*/ ctx[31].getFullYear() + "";
+    	let t0;
+    	let text1;
+    	let t1_value = /*tick*/ ctx[31].getFullYear() + "";
+    	let t1;
 
     	const block = {
     		c: function create() {
-    			text_1 = svg_element("text");
-    			t = text(t_value);
-    			attr_dev(text_1, "class", "year svelte-15tn2sx");
-    			attr_dev(text_1, "y", "-20");
-    			add_location(text_1, file, 221, 32, 6672);
+    			text0 = svg_element("text");
+    			t0 = text(t0_value);
+    			text1 = svg_element("text");
+    			t1 = text(t1_value);
+    			attr_dev(text0, "class", "year buffer svelte-dtjmc3");
+    			attr_dev(text0, "y", "-20");
+    			add_location(text0, file, 171, 32, 6060);
+    			attr_dev(text1, "class", "year svelte-dtjmc3");
+    			attr_dev(text1, "y", "-20");
+    			add_location(text1, file, 172, 32, 6154);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, text_1, anchor);
-    			append_dev(text_1, t);
+    			insert_dev(target, text0, anchor);
+    			append_dev(text0, t0);
+    			insert_dev(target, text1, anchor);
+    			append_dev(text1, t1);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty[0] & /*xTicks*/ 128 && t_value !== (t_value = /*tick*/ ctx[30].getFullYear() + "")) set_data_dev(t, t_value);
+    			if (dirty[0] & /*xTicks*/ 128 && t0_value !== (t0_value = /*tick*/ ctx[31].getFullYear() + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*xTicks*/ 128 && t1_value !== (t1_value = /*tick*/ ctx[31].getFullYear() + "")) set_data_dev(t1, t1_value);
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(text_1);
+    			if (detaching) detach_dev(text0);
+    			if (detaching) detach_dev(text1);
     		}
     	};
 
@@ -3461,20 +3498,20 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(221:28) {#if (!i && tick.getMonth() < 10) || !tick.getMonth()}",
+    		source: "(171:28) {#if (!i && tick.getMonth() < 10) || !tick.getMonth()}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (213:12) {#each xTicks as tick, i}
+    // (163:12) {#each xTicks as tick, i}
     function create_each_block_1(ctx) {
     	let g;
     	let line;
     	let line_y__value;
     	let line_y__value_1;
-    	let show_if = /*midMonth*/ ctx[14](/*tick*/ ctx[30]) < /*$maxDate*/ ctx[5];
+    	let show_if = /*midMonth*/ ctx[14](/*tick*/ ctx[31]) < /*$maxDate*/ ctx[5];
     	let g_class_value;
     	let g_transform_value;
     	let if_block = show_if && create_if_block(ctx);
@@ -3488,11 +3525,11 @@ var app = (function () {
     			attr_dev(line, "y2", line_y__value_1 = "-" + /*padding*/ ctx[3].bottom);
     			attr_dev(line, "x1", "0");
     			attr_dev(line, "x2", "0");
-    			attr_dev(line, "class", "svelte-15tn2sx");
-    			add_location(line, file, 214, 20, 6181);
-    			attr_dev(g, "class", g_class_value = "tick tick-" + /*tick*/ ctx[30] + " svelte-15tn2sx");
-    			attr_dev(g, "transform", g_transform_value = "translate(" + /*xScale*/ ctx[4](/*tick*/ ctx[30]) + "," + /*height*/ ctx[9] + ")");
-    			add_location(g, file, 213, 16, 6085);
+    			attr_dev(line, "class", "svelte-dtjmc3");
+    			add_location(line, file, 164, 20, 5569);
+    			attr_dev(g, "class", g_class_value = "tick tick-" + /*tick*/ ctx[31] + " svelte-dtjmc3");
+    			attr_dev(g, "transform", g_transform_value = "translate(" + /*xScale*/ ctx[4](/*tick*/ ctx[31]) + "," + /*height*/ ctx[9] + ")");
+    			add_location(g, file, 163, 16, 5473);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -3508,7 +3545,7 @@ var app = (function () {
     				attr_dev(line, "y2", line_y__value_1);
     			}
 
-    			if (dirty[0] & /*xTicks, $maxDate*/ 160) show_if = /*midMonth*/ ctx[14](/*tick*/ ctx[30]) < /*$maxDate*/ ctx[5];
+    			if (dirty[0] & /*xTicks, $maxDate*/ 160) show_if = /*midMonth*/ ctx[14](/*tick*/ ctx[31]) < /*$maxDate*/ ctx[5];
 
     			if (show_if) {
     				if (if_block) {
@@ -3523,11 +3560,11 @@ var app = (function () {
     				if_block = null;
     			}
 
-    			if (dirty[0] & /*xTicks*/ 128 && g_class_value !== (g_class_value = "tick tick-" + /*tick*/ ctx[30] + " svelte-15tn2sx")) {
+    			if (dirty[0] & /*xTicks*/ 128 && g_class_value !== (g_class_value = "tick tick-" + /*tick*/ ctx[31] + " svelte-dtjmc3")) {
     				attr_dev(g, "class", g_class_value);
     			}
 
-    			if (dirty[0] & /*xScale, xTicks, height*/ 656 && g_transform_value !== (g_transform_value = "translate(" + /*xScale*/ ctx[4](/*tick*/ ctx[30]) + "," + /*height*/ ctx[9] + ")")) {
+    			if (dirty[0] & /*xScale, xTicks, height*/ 656 && g_transform_value !== (g_transform_value = "translate(" + /*xScale*/ ctx[4](/*tick*/ ctx[31]) + "," + /*height*/ ctx[9] + ")")) {
     				attr_dev(g, "transform", g_transform_value);
     			}
     		},
@@ -3541,18 +3578,18 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(213:12) {#each xTicks as tick, i}",
+    		source: "(163:12) {#each xTicks as tick, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (230:8) {#each layers as layer}
+    // (181:8) {#each layers as layer}
     function create_each_block(ctx) {
     	let switch_instance_anchor;
     	let current;
-    	var switch_value = /*layer*/ ctx[27];
+    	var switch_value = /*layer*/ ctx[28];
 
     	function switch_props(ctx) {
     		return {
@@ -3590,7 +3627,7 @@ var app = (function () {
     			if (dirty[0] & /*xScale*/ 16) switch_instance_changes.xScale = /*xScale*/ ctx[4];
     			if (dirty[0] & /*yScale*/ 256) switch_instance_changes.yScale = /*yScale*/ ctx[8];
 
-    			if (switch_value !== (switch_value = /*layer*/ ctx[27])) {
+    			if (switch_value !== (switch_value = /*layer*/ ctx[28])) {
     				if (switch_instance) {
     					group_outros();
     					const old_component = switch_instance;
@@ -3633,7 +3670,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(230:8) {#each layers as layer}",
+    		source: "(181:8) {#each layers as layer}",
     		ctx
     	});
 
@@ -3651,7 +3688,7 @@ var app = (function () {
     	let div_resize_listener;
     	let current;
     	let dispose;
-    	add_render_callback(/*onwindowresize*/ ctx[25]);
+    	add_render_callback(/*onwindowresize*/ ctx[26]);
     	let each_value_2 = /*yTicks*/ ctx[10];
     	let each_blocks_2 = [];
 
@@ -3700,20 +3737,20 @@ var app = (function () {
     			line = svg_element("line");
     			attr_dev(g0, "class", "axis y-axis");
     			attr_dev(g0, "transform", g0_transform_value = "translate(0, " + /*padding*/ ctx[3].top + ")");
-    			add_location(g0, file, 196, 8, 5476);
-    			attr_dev(g1, "class", "axis x-axis svelte-15tn2sx");
-    			add_location(g1, file, 211, 8, 6007);
-    			attr_dev(line, "class", "zero svelte-15tn2sx");
+    			add_location(g0, file, 146, 8, 4864);
+    			attr_dev(g1, "class", "axis x-axis svelte-dtjmc3");
+    			add_location(g1, file, 161, 8, 5395);
+    			attr_dev(line, "class", "zero svelte-dtjmc3");
     			attr_dev(line, "transform", line_transform_value = "translate(0," + /*yScale*/ ctx[8](0) + ")");
     			attr_dev(line, "x2", "100%");
-    			add_location(line, file, 233, 8, 7009);
+    			add_location(line, file, 184, 8, 6491);
     			attr_dev(svg, "height", /*height*/ ctx[9]);
-    			attr_dev(svg, "class", "svelte-15tn2sx");
-    			add_location(svg, file, 194, 4, 5429);
-    			attr_dev(div, "class", "chart svelte-15tn2sx");
-    			add_render_callback(() => /*div_elementresize_handler*/ ctx[26].call(div));
-    			add_location(div, file, 193, 0, 5374);
-    			dispose = listen_dev(window, "resize", /*onwindowresize*/ ctx[25]);
+    			attr_dev(svg, "class", "svelte-dtjmc3");
+    			add_location(svg, file, 144, 4, 4817);
+    			attr_dev(div, "class", "chart svelte-dtjmc3");
+    			add_render_callback(() => /*div_elementresize_handler*/ ctx[27].call(div));
+    			add_location(div, file, 143, 0, 4762);
+    			dispose = listen_dev(window, "resize", /*onwindowresize*/ ctx[26]);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3738,7 +3775,7 @@ var app = (function () {
     			}
 
     			append_dev(svg, line);
-    			div_resize_listener = add_resize_listener(div, /*div_elementresize_handler*/ ctx[26].bind(div));
+    			div_resize_listener = add_resize_listener(div, /*div_elementresize_handler*/ ctx[27].bind(div));
     			current = true;
     		},
     		p: function update(ctx, dirty) {
@@ -3877,21 +3914,21 @@ var app = (function () {
     	let $normalRange;
     	let $innerWidth;
     	validate_store(smoothNormalRangeWidth, "smoothNormalRangeWidth");
-    	component_subscribe($$self, smoothNormalRangeWidth, $$value => $$invalidate(18, $smoothNormalRangeWidth = $$value));
+    	component_subscribe($$self, smoothNormalRangeWidth, $$value => $$invalidate(19, $smoothNormalRangeWidth = $$value));
     	validate_store(minDate, "minDate");
-    	component_subscribe($$self, minDate, $$value => $$invalidate(19, $minDate = $$value));
+    	component_subscribe($$self, minDate, $$value => $$invalidate(20, $minDate = $$value));
     	validate_store(maxDate, "maxDate");
     	component_subscribe($$self, maxDate, $$value => $$invalidate(5, $maxDate = $$value));
     	validate_store(chartWidth, "chartWidth");
     	component_subscribe($$self, chartWidth, $$value => $$invalidate(6, $chartWidth = $$value));
     	validate_store(msg, "msg");
-    	component_subscribe($$self, msg, $$value => $$invalidate(20, $msg = $$value));
+    	component_subscribe($$self, msg, $$value => $$invalidate(21, $msg = $$value));
     	validate_store(contextMinYear, "contextMinYear");
-    	component_subscribe($$self, contextMinYear, $$value => $$invalidate(21, $contextMinYear = $$value));
+    	component_subscribe($$self, contextMinYear, $$value => $$invalidate(22, $contextMinYear = $$value));
     	validate_store(contextMaxYear, "contextMaxYear");
-    	component_subscribe($$self, contextMaxYear, $$value => $$invalidate(22, $contextMaxYear = $$value));
+    	component_subscribe($$self, contextMaxYear, $$value => $$invalidate(23, $contextMaxYear = $$value));
     	validate_store(normalRange, "normalRange");
-    	component_subscribe($$self, normalRange, $$value => $$invalidate(23, $normalRange = $$value));
+    	component_subscribe($$self, normalRange, $$value => $$invalidate(24, $normalRange = $$value));
     	validate_store(innerWidth, "innerWidth");
     	component_subscribe($$self, innerWidth, $$value => $$invalidate(13, $innerWidth = $$value));
     	let { data = [] } = $$props;
@@ -3932,6 +3969,7 @@ var app = (function () {
     			tMax,
     			layers,
     			grouped,
+    			dataClean,
     			dataSmooth,
     			$smoothNormalRangeWidth,
     			padding,
@@ -3959,7 +3997,8 @@ var app = (function () {
     		if ("tMax" in $$props) $$invalidate(16, tMax = $$props.tMax);
     		if ("layers" in $$props) $$invalidate(1, layers = $$props.layers);
     		if ("grouped" in $$props) $$invalidate(2, grouped = $$props.grouped);
-    		if ("dataSmooth" in $$props) $$invalidate(17, dataSmooth = $$props.dataSmooth);
+    		if ("dataClean" in $$props) $$invalidate(17, dataClean = $$props.dataClean);
+    		if ("dataSmooth" in $$props) $$invalidate(18, dataSmooth = $$props.dataSmooth);
     		if ("$smoothNormalRangeWidth" in $$props) smoothNormalRangeWidth.set($smoothNormalRangeWidth = $$props.$smoothNormalRangeWidth);
     		if ("padding" in $$props) $$invalidate(3, padding = $$props.padding);
     		if ("xScale" in $$props) $$invalidate(4, xScale = $$props.xScale);
@@ -3979,6 +4018,7 @@ var app = (function () {
     		if ("$innerWidth" in $$props) innerWidth.set($innerWidth = $$props.$innerWidth);
     	};
 
+    	let dataClean;
     	let dataSmooth;
     	let padding;
     	let xScale;
@@ -3990,21 +4030,25 @@ var app = (function () {
     	let formatMobile;
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty[0] & /*$smoothNormalRangeWidth, data*/ 262145) {
-    			 $$invalidate(17, dataSmooth = $smoothNormalRangeWidth > 0
-    			? data.map((d, i) => {
+    		if ($$self.$$.dirty[0] & /*data*/ 1) {
+    			 $$invalidate(17, dataClean = data.filter(d => d.tMin > -999 && d.tMax > -999));
+    		}
+
+    		if ($$self.$$.dirty[0] & /*$smoothNormalRangeWidth, dataClean*/ 655360) {
+    			 $$invalidate(18, dataSmooth = $smoothNormalRangeWidth > 0
+    			? dataClean.map((d, i) => {
     					return {
     						date: d.date,
     						dateRaw: d.dateRaw,
-    						tMin: mean(data.slice(Math.max(0, i - $smoothNormalRangeWidth), i + $smoothNormalRangeWidth + 1).map(d => d.tMin)),
-    						tAvg: mean(data.slice(Math.max(0, i - $smoothNormalRangeWidth), i + $smoothNormalRangeWidth + 1).map(d => d.tAvg)),
-    						tMax: mean(data.slice(Math.max(0, i - $smoothNormalRangeWidth), i + $smoothNormalRangeWidth + 1).map(d => d.tMax))
+    						tMin: mean(dataClean.slice(Math.max(0, i - $smoothNormalRangeWidth), i + $smoothNormalRangeWidth + 1).map(d => d.tMin)),
+    						tAvg: mean(dataClean.slice(Math.max(0, i - $smoothNormalRangeWidth), i + $smoothNormalRangeWidth + 1).map(d => d.tAvg)),
+    						tMax: mean(dataClean.slice(Math.max(0, i - $smoothNormalRangeWidth), i + $smoothNormalRangeWidth + 1).map(d => d.tMax))
     					};
     				})
-    			: data);
+    			: dataClean);
     		}
 
-    		if ($$self.$$.dirty[0] & /*$minDate, $maxDate, padding, $chartWidth*/ 524392) {
+    		if ($$self.$$.dirty[0] & /*$minDate, $maxDate, padding, $chartWidth*/ 1048680) {
     			 $$invalidate(4, xScale = scaleTime().domain([$minDate, $maxDate]).range([padding.left, $chartWidth - padding.right]));
     		}
 
@@ -4012,16 +4056,17 @@ var app = (function () {
     			 $$invalidate(7, xTicks = xScale.ticks(month));
     		}
 
-    		if ($$self.$$.dirty[0] & /*dataSmooth, $minDate, $maxDate, $contextMinYear, $contextMaxYear, data, tMin, tMax, $normalRange*/ 15433761) {
+    		if ($$self.$$.dirty[0] & /*data, dataSmooth, $minDate, $maxDate, $contextMinYear, $contextMaxYear, tMin, tMax, $normalRange*/ 30769185) {
     			 {
-    				const cache = group(dataSmooth, d => d.dateRaw.substr(4));
+    				const cache = group(data, d => d.dateRaw.substr(4));
+    				const cacheSmooth = group(dataSmooth, d => d.dateRaw.substr(4));
     				$$invalidate(15, tMin = 99);
     				$$invalidate(16, tMax = -99);
 
     				$$invalidate(2, grouped = days($minDate, $maxDate).map(day => {
     					const dayFmt = fmt(day);
     					const groupedAll = cache.get(dayFmt);
-    					const grouped = groupedAll.filter(d => d.date.getFullYear() >= $contextMinYear && d.date.getFullYear() < $contextMaxYear);
+    					const grouped = cacheSmooth.get(dayFmt).filter(d => d.date.getFullYear() >= $contextMinYear && d.date.getFullYear() < $contextMaxYear);
     					const tMinSorted = grouped.map(d => d.tMin).sort(ascending);
     					const tAvgSorted = grouped.map(d => d.tAvg).sort(ascending);
     					const tMaxSorted = grouped.map(d => d.tMax).sort(ascending);
@@ -4037,12 +4082,19 @@ var app = (function () {
     						$$invalidate(16, tMax = Math.max(tMax, cur.tMax + 5));
     					}
 
+    					const tAvg = quantileSorted(tAvgSorted, 0.5);
+
     					return {
     						date: day,
     						dateRaw,
     						grouped,
-    						tMin: quantileSorted(tMinSorted, $normalRange / 100),
-    						tMax: quantileSorted(tMaxSorted, 1 - $normalRange / 100),
+    						tMin: $normalRange < 100
+    						? quantileSorted(tMinSorted, $normalRange / 100)
+    						: tAvg,
+    						tAvg,
+    						tMax: $normalRange < 100
+    						? quantileSorted(tMaxSorted, 1 - $normalRange / 100)
+    						: tAvg,
     						tMinAbs,
     						tMaxAbs,
     						tMinSorted,
@@ -4070,11 +4122,11 @@ var app = (function () {
     			 $$invalidate(10, yTicks = yScale.ticks(6));
     		}
 
-    		if ($$self.$$.dirty[0] & /*$msg*/ 1048576) {
+    		if ($$self.$$.dirty[0] & /*$msg*/ 2097152) {
     			 $$invalidate(11, format = (d, i) => $msg.monthLong[d.getMonth()]);
     		}
 
-    		if ($$self.$$.dirty[0] & /*$msg*/ 1048576) {
+    		if ($$self.$$.dirty[0] & /*$msg*/ 2097152) {
     			 $$invalidate(12, formatMobile = (d, i) => $msg.monthShort[d.getMonth()]);
     		}
     	};
@@ -4104,6 +4156,7 @@ var app = (function () {
     		midMonth,
     		tMin,
     		tMax,
+    		dataClean,
     		dataSmooth,
     		$smoothNormalRangeWidth,
     		$minDate,
@@ -4756,7 +4809,7 @@ var app = (function () {
     		c: function create() {
     			g = svg_element("g");
     			create_component(steps.$$.fragment);
-    			attr_dev(g, "class", "svelte-11wkd91");
+    			attr_dev(g, "class", "svelte-19ej34d");
     			add_location(g, file$2, 24, 0, 396);
     		},
     		l: function claim(nodes) {
@@ -4931,9 +4984,9 @@ var app = (function () {
     			path_1 = svg_element("path");
     			attr_dev(path_1, "d", /*pathData*/ ctx[0]);
     			attr_dev(path_1, "class", "svelte-1cmn9dm");
-    			add_location(path_1, file$3, 42, 4, 908);
+    			add_location(path_1, file$3, 36, 4, 742);
     			attr_dev(g, "class", "normal-temp");
-    			add_location(g, file$3, 40, 0, 828);
+    			add_location(g, file$3, 34, 0, 662);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4990,8 +5043,7 @@ var app = (function () {
     			data,
     			grouped,
     			pathData,
-    			path,
-    			normalRangeData
+    			path
     		};
     	};
 
@@ -5002,29 +5054,18 @@ var app = (function () {
     		if ("grouped" in $$props) $$invalidate(4, grouped = $$props.grouped);
     		if ("pathData" in $$props) $$invalidate(0, pathData = $$props.pathData);
     		if ("path" in $$props) $$invalidate(5, path = $$props.path);
-    		if ("normalRangeData" in $$props) $$invalidate(6, normalRangeData = $$props.normalRangeData);
     	};
 
     	let pathData;
     	let path;
-    	let normalRangeData;
 
     	$$self.$$.update = () => {
     		if ($$self.$$.dirty & /*xScale, yScale*/ 6) {
     			 $$invalidate(5, path = line().x(d => xScale(d.date)).y(d => yScale(d.tAvg)).curve(curveBasis));
     		}
 
-    		if ($$self.$$.dirty & /*grouped*/ 16) {
-    			 $$invalidate(6, normalRangeData = grouped.map(d => {
-    				return {
-    					date: d.date,
-    					tAvg: quantileSorted(d.tAvgSorted, 0.5)
-    				};
-    			}));
-    		}
-
-    		if ($$self.$$.dirty & /*path, normalRangeData*/ 96) {
-    			 $$invalidate(0, pathData = path(normalRangeData));
+    		if ($$self.$$.dirty & /*path, grouped*/ 48) {
+    			 $$invalidate(0, pathData = path(grouped));
     		}
     	};
 
@@ -6158,471 +6199,56 @@ var app = (function () {
     	}
     }
 
-    /* src/DataLoaded.svelte generated by Svelte v3.16.7 */
+    /* src/components/Checkbox.svelte generated by Svelte v3.16.7 */
 
-    const file$6 = "src/DataLoaded.svelte";
-
-    // (109:4) {#if layerNormal || layerNormalRange}
-    function create_if_block$2(ctx) {
-    	let p0;
-    	let b0;
-    	let t1;
-    	let input0;
-    	let input0_updating = false;
-    	let t2;
-    	let input1;
-    	let input1_max_value;
-    	let input1_updating = false;
-    	let t3;
-    	let t4;
-    	let t5;
-    	let t6_value = /*$contextMaxYear*/ ctx[13] - 1 + "";
-    	let t6;
-    	let t7;
-    	let t8;
-    	let p1;
-    	let b1;
-    	let t10;
-    	let input2;
-    	let t11;
-    	let t12_value = 100 - /*$normalRange*/ ctx[14] + "";
-    	let t12;
-    	let t13;
-    	let dispose;
-
-    	function input0_input_handler() {
-    		input0_updating = true;
-    		/*input0_input_handler*/ ctx[31].call(input0);
-    	}
-
-    	function input1_input_handler() {
-    		input1_updating = true;
-    		/*input1_input_handler*/ ctx[32].call(input1);
-    	}
-
-    	const block = {
-    		c: function create() {
-    			p0 = element("p");
-    			b0 = element("b");
-    			b0.textContent = "Vergleichszeitraum:";
-    			t1 = space();
-    			input0 = element("input");
-    			t2 = text("\n            Jahre ab\n            ");
-    			input1 = element("input");
-    			t3 = text("\n            (");
-    			t4 = text(/*$contextMinYear*/ ctx[12]);
-    			t5 = text(" - ");
-    			t6 = text(t6_value);
-    			t7 = text(")");
-    			t8 = space();
-    			p1 = element("p");
-    			b1 = element("b");
-    			b1.textContent = "Normalbereich:";
-    			t10 = space();
-    			input2 = element("input");
-    			t11 = text("\n            bis ");
-    			t12 = text(t12_value);
-    			t13 = text(" Prozentil");
-    			add_location(b0, file$6, 110, 12, 3135);
-    			attr_dev(input0, "type", "number");
-    			attr_dev(input0, "min", "5");
-    			attr_dev(input0, "max", "40");
-    			attr_dev(input0, "class", "svelte-uh3o4n");
-    			add_location(input0, file$6, 111, 12, 3174);
-    			attr_dev(input1, "type", "number");
-    			attr_dev(input1, "min", /*globalMinYear*/ ctx[5]);
-    			attr_dev(input1, "max", input1_max_value = /*globalMaxYear*/ ctx[6] - /*$contextRange*/ ctx[11]);
-    			attr_dev(input1, "class", "svelte-uh3o4n");
-    			add_location(input1, file$6, 113, 12, 3275);
-    			add_location(p0, file$6, 109, 8, 3119);
-    			add_location(b1, file$6, 121, 12, 3541);
-    			attr_dev(input2, "type", "range");
-    			attr_dev(input2, "min", "25");
-    			attr_dev(input2, "max", "50");
-    			attr_dev(input2, "step", "1");
-    			add_location(input2, file$6, 122, 12, 3575);
-    			add_location(p1, file$6, 120, 8, 3525);
-
-    			dispose = [
-    				listen_dev(input0, "input", input0_input_handler),
-    				listen_dev(input1, "input", input1_input_handler),
-    				listen_dev(input2, "change", /*input2_change_input_handler*/ ctx[33]),
-    				listen_dev(input2, "input", /*input2_change_input_handler*/ ctx[33])
-    			];
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, p0, anchor);
-    			append_dev(p0, b0);
-    			append_dev(p0, t1);
-    			append_dev(p0, input0);
-    			set_input_value(input0, /*$contextRange*/ ctx[11]);
-    			append_dev(p0, t2);
-    			append_dev(p0, input1);
-    			set_input_value(input1, /*$contextMinYear*/ ctx[12]);
-    			append_dev(p0, t3);
-    			append_dev(p0, t4);
-    			append_dev(p0, t5);
-    			append_dev(p0, t6);
-    			append_dev(p0, t7);
-    			insert_dev(target, t8, anchor);
-    			insert_dev(target, p1, anchor);
-    			append_dev(p1, b1);
-    			append_dev(p1, t10);
-    			append_dev(p1, input2);
-    			set_input_value(input2, /*$normalRange*/ ctx[14]);
-    			append_dev(p1, t11);
-    			append_dev(p1, t12);
-    			append_dev(p1, t13);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (!input0_updating && dirty[0] & /*$contextRange*/ 2048) {
-    				set_input_value(input0, /*$contextRange*/ ctx[11]);
-    			}
-
-    			input0_updating = false;
-
-    			if (dirty[0] & /*globalMinYear*/ 32) {
-    				attr_dev(input1, "min", /*globalMinYear*/ ctx[5]);
-    			}
-
-    			if (dirty[0] & /*globalMaxYear, $contextRange*/ 2112 && input1_max_value !== (input1_max_value = /*globalMaxYear*/ ctx[6] - /*$contextRange*/ ctx[11])) {
-    				attr_dev(input1, "max", input1_max_value);
-    			}
-
-    			if (!input1_updating && dirty[0] & /*$contextMinYear*/ 4096) {
-    				set_input_value(input1, /*$contextMinYear*/ ctx[12]);
-    			}
-
-    			input1_updating = false;
-    			if (dirty[0] & /*$contextMinYear*/ 4096) set_data_dev(t4, /*$contextMinYear*/ ctx[12]);
-    			if (dirty[0] & /*$contextMaxYear*/ 8192 && t6_value !== (t6_value = /*$contextMaxYear*/ ctx[13] - 1 + "")) set_data_dev(t6, t6_value);
-
-    			if (dirty[0] & /*$normalRange*/ 16384) {
-    				set_input_value(input2, /*$normalRange*/ ctx[14]);
-    			}
-
-    			if (dirty[0] & /*$normalRange*/ 16384 && t12_value !== (t12_value = 100 - /*$normalRange*/ ctx[14] + "")) set_data_dev(t12, t12_value);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p0);
-    			if (detaching) detach_dev(t8);
-    			if (detaching) detach_dev(p1);
-    			run_all(dispose);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block$2.name,
-    		type: "if",
-    		source: "(109:4) {#if layerNormal || layerNormalRange}",
-    		ctx
-    	});
-
-    	return block;
-    }
+    const file$6 = "src/components/Checkbox.svelte";
 
     function create_fragment$6(ctx) {
-    	let t0;
-    	let p;
-    	let t1_value = /*$msg*/ ctx[9].year + "";
-    	let t1;
-    	let t2;
-    	let button0;
-    	let t4;
-    	let button1;
-    	let t6;
-    	let t7_value = /*$msg*/ ctx[9].month + "";
-    	let t7;
-    	let t8;
-    	let button2;
-    	let t10;
-    	let button3;
-    	let t12;
-    	let t13_value = /*$msg*/ ctx[9].day + "";
-    	let t13;
-    	let t14;
-    	let button4;
-    	let t16;
-    	let button5;
-    	let t18;
-    	let button6;
-    	let t19_value = /*$msg*/ ctx[9].today + "";
-    	let t19;
-    	let t20;
-    	let button7;
-    	let t21_value = (/*$language*/ ctx[8] === "de" ? "en" : "de") + "";
-    	let t21;
-    	let t22;
     	let div;
-    	let label0;
-    	let input0;
-    	let t23;
-    	let t24;
-    	let label1;
-    	let input1;
-    	let t25;
-    	let t26;
-    	let label2;
-    	let input2;
-    	let t27;
-    	let t28;
-    	let label3;
-    	let input3;
-    	let t29;
-    	let t30;
-    	let t31;
-    	let t32;
-    	let t33;
-    	let t34_value = (/*$smoothNormalRangeWidth*/ ctx[15] !== 1 ? "s" : "") + "";
-    	let t34;
-    	let t35;
-    	let input4;
-    	let current;
+    	let input;
+    	let t;
+    	let label_1;
     	let dispose;
-
-    	const basechart = new BaseChart({
-    			props: {
-    				data: /*data*/ ctx[0],
-    				layers: /*layers*/ ctx[4]
-    			},
-    			$$inline: true
-    		});
-
-    	let if_block = (/*layerNormal*/ ctx[2] || /*layerNormalRange*/ ctx[3]) && create_if_block$2(ctx);
 
     	const block = {
     		c: function create() {
-    			create_component(basechart.$$.fragment);
-    			t0 = space();
-    			p = element("p");
-    			t1 = text(t1_value);
-    			t2 = text(":\n    ");
-    			button0 = element("button");
-    			button0.textContent = "−";
-    			t4 = space();
-    			button1 = element("button");
-    			button1.textContent = "+";
-    			t6 = space();
-    			t7 = text(t7_value);
-    			t8 = text(":\n    ");
-    			button2 = element("button");
-    			button2.textContent = "−";
-    			t10 = space();
-    			button3 = element("button");
-    			button3.textContent = "+";
-    			t12 = space();
-    			t13 = text(t13_value);
-    			t14 = text(":\n    ");
-    			button4 = element("button");
-    			button4.textContent = "−";
-    			t16 = space();
-    			button5 = element("button");
-    			button5.textContent = "+";
-    			t18 = space();
-    			button6 = element("button");
-    			t19 = text(t19_value);
-    			t20 = space();
-    			button7 = element("button");
-    			t21 = text(t21_value);
-    			t22 = space();
     			div = element("div");
-    			label0 = element("label");
-    			input0 = element("input");
-    			t23 = text("\n        Absolute Höchst- und Tiefstwerte");
-    			t24 = space();
-    			label1 = element("label");
-    			input1 = element("input");
-    			t25 = text("\n        Mittlere Höchst und Tiefstwerte");
-    			t26 = space();
-    			label2 = element("label");
-    			input2 = element("input");
-    			t27 = text("\n        Mittlere Tagesmitteltemperatur");
-    			t28 = space();
-    			label3 = element("label");
-    			input3 = element("input");
-    			t29 = text("\n        Anomalien hervorheben");
-    			t30 = space();
-    			if (if_block) if_block.c();
-    			t31 = text("\n    Smooth ± ");
-    			t32 = text(/*$smoothNormalRangeWidth*/ ctx[15]);
-    			t33 = text(" day");
-    			t34 = text(t34_value);
-    			t35 = space();
-    			input4 = element("input");
-    			add_location(button0, file$6, 75, 4, 2049);
-    			add_location(button1, file$6, 76, 4, 2102);
-    			add_location(button2, file$6, 78, 4, 2172);
-    			add_location(button3, file$6, 79, 4, 2226);
-    			add_location(button4, file$6, 81, 4, 2295);
-    			add_location(button5, file$6, 82, 4, 2347);
-    			add_location(button6, file$6, 84, 4, 2399);
-    			add_location(p, file$6, 73, 0, 2024);
-    			add_location(button7, file$6, 87, 0, 2480);
-    			attr_dev(input0, "type", "checkbox");
-    			add_location(input0, file$6, 91, 8, 2585);
-    			add_location(label0, file$6, 90, 4, 2569);
-    			attr_dev(input1, "type", "checkbox");
-    			add_location(input1, file$6, 96, 8, 2713);
-    			add_location(label1, file$6, 95, 4, 2697);
-    			attr_dev(input2, "type", "checkbox");
-    			add_location(input2, file$6, 100, 8, 2844);
-    			add_location(label2, file$6, 99, 4, 2828);
-    			attr_dev(input3, "type", "checkbox");
-    			add_location(input3, file$6, 104, 8, 2969);
-    			add_location(label3, file$6, 103, 4, 2953);
-    			attr_dev(input4, "type", "range");
-    			attr_dev(input4, "min", "0");
-    			attr_dev(input4, "max", "13");
-    			add_location(input4, file$6, 127, 4, 3817);
-    			add_location(div, file$6, 89, 0, 2559);
-
-    			dispose = [
-    				listen_dev(window, "mouseup", /*stop*/ ctx[22], false, false, false),
-    				listen_dev(button0, "mousedown", /*prevYear*/ ctx[20], false, false, false),
-    				listen_dev(button1, "mousedown", /*nextYear*/ ctx[21], false, false, false),
-    				listen_dev(button2, "mousedown", /*prevMonth*/ ctx[18], false, false, false),
-    				listen_dev(button3, "mousedown", /*nextMonth*/ ctx[19], false, false, false),
-    				listen_dev(button4, "mousedown", /*prevDay*/ ctx[16], false, false, false),
-    				listen_dev(button5, "mousedown", /*nextDay*/ ctx[17], false, false, false),
-    				listen_dev(button6, "mousedown", /*mousedown_handler*/ ctx[26], false, false, false),
-    				listen_dev(button7, "click", /*switchLanguage*/ ctx[23], false, false, false),
-    				listen_dev(input0, "change", /*input0_change_handler*/ ctx[27]),
-    				listen_dev(input1, "change", /*input1_change_handler*/ ctx[28]),
-    				listen_dev(input2, "change", /*input2_change_handler*/ ctx[29]),
-    				listen_dev(input3, "change", /*input3_change_handler*/ ctx[30]),
-    				listen_dev(input4, "change", /*input4_change_input_handler*/ ctx[34]),
-    				listen_dev(input4, "input", /*input4_change_input_handler*/ ctx[34])
-    			];
+    			input = element("input");
+    			t = space();
+    			label_1 = element("label");
+    			attr_dev(input, "type", "checkbox");
+    			attr_dev(input, "class", "custom-control-input");
+    			attr_dev(input, "id", /*id*/ ctx[2]);
+    			add_location(input, file$6, 8, 2, 178);
+    			attr_dev(label_1, "class", "custom-control-label");
+    			attr_dev(label_1, "for", /*id*/ ctx[2]);
+    			add_location(label_1, file$6, 9, 2, 264);
+    			attr_dev(div, "class", "custom-control custom-checkbox svelte-2esays");
+    			add_location(div, file$6, 7, 0, 131);
+    			dispose = listen_dev(input, "change", /*input_change_handler*/ ctx[3]);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			mount_component(basechart, target, anchor);
-    			insert_dev(target, t0, anchor);
-    			insert_dev(target, p, anchor);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
-    			append_dev(p, button0);
-    			append_dev(p, t4);
-    			append_dev(p, button1);
-    			append_dev(p, t6);
-    			append_dev(p, t7);
-    			append_dev(p, t8);
-    			append_dev(p, button2);
-    			append_dev(p, t10);
-    			append_dev(p, button3);
-    			append_dev(p, t12);
-    			append_dev(p, t13);
-    			append_dev(p, t14);
-    			append_dev(p, button4);
-    			append_dev(p, t16);
-    			append_dev(p, button5);
-    			append_dev(p, t18);
-    			append_dev(p, button6);
-    			append_dev(button6, t19);
-    			insert_dev(target, t20, anchor);
-    			insert_dev(target, button7, anchor);
-    			append_dev(button7, t21);
-    			insert_dev(target, t22, anchor);
     			insert_dev(target, div, anchor);
-    			append_dev(div, label0);
-    			append_dev(label0, input0);
-    			input0.checked = /*layerRecord*/ ctx[1];
-    			append_dev(label0, t23);
-    			append_dev(div, t24);
-    			append_dev(div, label1);
-    			append_dev(label1, input1);
-    			input1.checked = /*layerNormalRange*/ ctx[3];
-    			append_dev(label1, t25);
-    			append_dev(div, t26);
-    			append_dev(div, label2);
-    			append_dev(label2, input2);
-    			input2.checked = /*layerNormal*/ ctx[2];
-    			append_dev(label2, t27);
-    			append_dev(div, t28);
-    			append_dev(div, label3);
-    			append_dev(label3, input3);
-    			input3.checked = /*$showAnomalies*/ ctx[10];
-    			append_dev(label3, t29);
-    			append_dev(div, t30);
-    			if (if_block) if_block.m(div, null);
-    			append_dev(div, t31);
-    			append_dev(div, t32);
-    			append_dev(div, t33);
-    			append_dev(div, t34);
-    			append_dev(div, t35);
-    			append_dev(div, input4);
-    			set_input_value(input4, /*$smoothNormalRangeWidth*/ ctx[15]);
-    			current = true;
+    			append_dev(div, input);
+    			input.checked = /*value*/ ctx[0];
+    			append_dev(div, t);
+    			append_dev(div, label_1);
+    			label_1.innerHTML = /*label*/ ctx[1];
     		},
-    		p: function update(ctx, dirty) {
-    			const basechart_changes = {};
-    			if (dirty[0] & /*data*/ 1) basechart_changes.data = /*data*/ ctx[0];
-    			if (dirty[0] & /*layers*/ 16) basechart_changes.layers = /*layers*/ ctx[4];
-    			basechart.$set(basechart_changes);
-    			if ((!current || dirty[0] & /*$msg*/ 512) && t1_value !== (t1_value = /*$msg*/ ctx[9].year + "")) set_data_dev(t1, t1_value);
-    			if ((!current || dirty[0] & /*$msg*/ 512) && t7_value !== (t7_value = /*$msg*/ ctx[9].month + "")) set_data_dev(t7, t7_value);
-    			if ((!current || dirty[0] & /*$msg*/ 512) && t13_value !== (t13_value = /*$msg*/ ctx[9].day + "")) set_data_dev(t13, t13_value);
-    			if ((!current || dirty[0] & /*$msg*/ 512) && t19_value !== (t19_value = /*$msg*/ ctx[9].today + "")) set_data_dev(t19, t19_value);
-    			if ((!current || dirty[0] & /*$language*/ 256) && t21_value !== (t21_value = (/*$language*/ ctx[8] === "de" ? "en" : "de") + "")) set_data_dev(t21, t21_value);
-
-    			if (dirty[0] & /*layerRecord*/ 2) {
-    				input0.checked = /*layerRecord*/ ctx[1];
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*value*/ 1) {
+    				input.checked = /*value*/ ctx[0];
     			}
 
-    			if (dirty[0] & /*layerNormalRange*/ 8) {
-    				input1.checked = /*layerNormalRange*/ ctx[3];
-    			}
-
-    			if (dirty[0] & /*layerNormal*/ 4) {
-    				input2.checked = /*layerNormal*/ ctx[2];
-    			}
-
-    			if (dirty[0] & /*$showAnomalies*/ 1024) {
-    				input3.checked = /*$showAnomalies*/ ctx[10];
-    			}
-
-    			if (/*layerNormal*/ ctx[2] || /*layerNormalRange*/ ctx[3]) {
-    				if (if_block) {
-    					if_block.p(ctx, dirty);
-    				} else {
-    					if_block = create_if_block$2(ctx);
-    					if_block.c();
-    					if_block.m(div, t31);
-    				}
-    			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
-    			}
-
-    			if (!current || dirty[0] & /*$smoothNormalRangeWidth*/ 32768) set_data_dev(t32, /*$smoothNormalRangeWidth*/ ctx[15]);
-    			if ((!current || dirty[0] & /*$smoothNormalRangeWidth*/ 32768) && t34_value !== (t34_value = (/*$smoothNormalRangeWidth*/ ctx[15] !== 1 ? "s" : "") + "")) set_data_dev(t34, t34_value);
-
-    			if (dirty[0] & /*$smoothNormalRangeWidth*/ 32768) {
-    				set_input_value(input4, /*$smoothNormalRangeWidth*/ ctx[15]);
-    			}
-    		},
-    		i: function intro(local) {
-    			if (current) return;
-    			transition_in(basechart.$$.fragment, local);
-    			current = true;
-    		},
-    		o: function outro(local) {
-    			transition_out(basechart.$$.fragment, local);
-    			current = false;
-    		},
+    			if (dirty & /*label*/ 2) label_1.innerHTML = /*label*/ ctx[1];		},
+    		i: noop,
+    		o: noop,
     		d: function destroy(detaching) {
-    			destroy_component(basechart, detaching);
-    			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(p);
-    			if (detaching) detach_dev(t20);
-    			if (detaching) detach_dev(button7);
-    			if (detaching) detach_dev(t22);
     			if (detaching) detach_dev(div);
-    			if (if_block) if_block.d();
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
@@ -6638,33 +6264,792 @@ var app = (function () {
     }
 
     function instance$6($$self, $$props, $$invalidate) {
+    	let { value } = $$props;
+    	let { label } = $$props;
+    	const id = `checkbox-${Math.round(Math.random() * 1000000).toString(30)}`;
+    	const writable_props = ["value", "label"];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Checkbox> was created with unknown prop '${key}'`);
+    	});
+
+    	function input_change_handler() {
+    		value = this.checked;
+    		$$invalidate(0, value);
+    	}
+
+    	$$self.$set = $$props => {
+    		if ("value" in $$props) $$invalidate(0, value = $$props.value);
+    		if ("label" in $$props) $$invalidate(1, label = $$props.label);
+    	};
+
+    	$$self.$capture_state = () => {
+    		return { value, label };
+    	};
+
+    	$$self.$inject_state = $$props => {
+    		if ("value" in $$props) $$invalidate(0, value = $$props.value);
+    		if ("label" in $$props) $$invalidate(1, label = $$props.label);
+    	};
+
+    	return [value, label, id, input_change_handler];
+    }
+
+    class Checkbox extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, { value: 0, label: 1 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "Checkbox",
+    			options,
+    			id: create_fragment$6.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || ({});
+
+    		if (/*value*/ ctx[0] === undefined && !("value" in props)) {
+    			console.warn("<Checkbox> was created without expected prop 'value'");
+    		}
+
+    		if (/*label*/ ctx[1] === undefined && !("label" in props)) {
+    			console.warn("<Checkbox> was created without expected prop 'label'");
+    		}
+    	}
+
+    	get value() {
+    		throw new Error("<Checkbox>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set value(value) {
+    		throw new Error("<Checkbox>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get label() {
+    		throw new Error("<Checkbox>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set label(value) {
+    		throw new Error("<Checkbox>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    /* src/DataLoaded.svelte generated by Svelte v3.16.7 */
+
+    const file$7 = "src/DataLoaded.svelte";
+
+    function get_each_context$2(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[35] = list[i];
+    	return child_ctx;
+    }
+
+    function get_each_context_1$1(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[38] = list[i];
+    	return child_ctx;
+    }
+
+    // (135:16) {#each [5,10,15,20,25,30,35,40,50,60,70,80] as yr}
+    function create_each_block_1$1(ctx) {
+    	let option;
+    	let t;
+    	let option_value_value;
+
+    	const block = {
+    		c: function create() {
+    			option = element("option");
+    			t = text(/*yr*/ ctx[38]);
+    			option.__value = option_value_value = /*yr*/ ctx[38];
+    			option.value = option.__value;
+    			add_location(option, file$7, 135, 16, 4979);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, option, anchor);
+    			append_dev(option, t);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(option);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block_1$1.name,
+    		type: "each",
+    		source: "(135:16) {#each [5,10,15,20,25,30,35,40,50,60,70,80] as yr}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (161:16) {#each [0,1,2,3,4,5,7,15] as dy}
+    function create_each_block$2(ctx) {
+    	let option;
+    	let t;
+    	let option_value_value;
+
+    	const block = {
+    		c: function create() {
+    			option = element("option");
+    			t = text(/*dy*/ ctx[35]);
+    			option.__value = option_value_value = /*dy*/ ctx[35];
+    			option.value = option.__value;
+    			add_location(option, file$7, 161, 16, 6178);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, option, anchor);
+    			append_dev(option, t);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(option);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block$2.name,
+    		type: "each",
+    		source: "(161:16) {#each [0,1,2,3,4,5,7,15] as dy}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$7(ctx) {
+    	let t0;
+    	let hr;
+    	let t1;
+    	let div12;
+    	let div5;
+    	let div4;
+    	let div0;
+    	let input0;
+    	let input0_value_value;
+    	let t2;
+    	let small0;
+    	let t3_value = /*$msg*/ ctx[8].year + "";
+    	let t3;
+    	let t4;
+    	let div1;
+    	let input1;
+    	let input1_value_value;
+    	let t5;
+    	let small1;
+    	let t6_value = /*$msg*/ ctx[8].month + "";
+    	let t6;
+    	let t7;
+    	let div2;
+    	let input2;
+    	let input2_value_value;
+    	let t8;
+    	let small2;
+    	let t9_value = /*$msg*/ ctx[8].day + "";
+    	let t9;
+    	let t10;
+    	let div3;
+    	let button;
+    	let t11_value = /*$msg*/ ctx[8].today + "";
+    	let t11;
+    	let t12;
+    	let div6;
+    	let updating_value;
+    	let t13;
+    	let p0;
+    	let t15;
+    	let div11;
+    	let div7;
+    	let updating_value_1;
+    	let t16;
+    	let updating_value_2;
+    	let t17;
+    	let updating_value_3;
+    	let t18;
+    	let p1;
+    	let t19;
+    	let b;
+    	let t20;
+    	let t21;
+    	let t22_value = /*$contextMaxYear*/ ctx[11] - 1 + "";
+    	let t22;
+    	let t23;
+    	let t24;
+    	let div8;
+    	let label0;
+    	let t26;
+    	let select0;
+    	let t27;
+    	let label1;
+    	let t29;
+    	let input3;
+    	let input3_max_value;
+    	let input3_updating = false;
+    	let t30;
+    	let div9;
+    	let label2;
+    	let t32;
+    	let select1;
+    	let option0;
+    	let option0_value_value;
+    	let option1;
+    	let option1_value_value;
+    	let option2;
+    	let option2_value_value;
+    	let option3;
+    	let option3_value_value;
+    	let t37;
+    	let div10;
+    	let label3;
+    	let small3;
+    	let t39;
+    	let select2;
+    	let t40;
+    	let label4;
+    	let small4;
+    	let current;
+    	let dispose;
+
+    	const basechart = new BaseChart({
+    			props: {
+    				data: /*data*/ ctx[0],
+    				layers: /*layers*/ ctx[4]
+    			},
+    			$$inline: true
+    		});
+
+    	function checkbox0_value_binding(value) {
+    		/*checkbox0_value_binding*/ ctx[27].call(null, value);
+    	}
+
+    	let checkbox0_props = {
+    		label: "Absolute Höchst- und Tiefstwerte"
+    	};
+
+    	if (/*layerRecord*/ ctx[1] !== void 0) {
+    		checkbox0_props.value = /*layerRecord*/ ctx[1];
+    	}
+
+    	const checkbox0 = new Checkbox({ props: checkbox0_props, $$inline: true });
+    	binding_callbacks.push(() => bind(checkbox0, "value", checkbox0_value_binding));
+
+    	function checkbox1_value_binding(value_1) {
+    		/*checkbox1_value_binding*/ ctx[28].call(null, value_1);
+    	}
+
+    	let checkbox1_props = { label: "Mittlere Höchst und Tiefstwerte" };
+
+    	if (/*layerNormalRange*/ ctx[3] !== void 0) {
+    		checkbox1_props.value = /*layerNormalRange*/ ctx[3];
+    	}
+
+    	const checkbox1 = new Checkbox({ props: checkbox1_props, $$inline: true });
+    	binding_callbacks.push(() => bind(checkbox1, "value", checkbox1_value_binding));
+
+    	function checkbox2_value_binding(value_2) {
+    		/*checkbox2_value_binding*/ ctx[29].call(null, value_2);
+    	}
+
+    	let checkbox2_props = { label: "Mittlere Tagesmitteltemperatur" };
+
+    	if (/*layerNormal*/ ctx[2] !== void 0) {
+    		checkbox2_props.value = /*layerNormal*/ ctx[2];
+    	}
+
+    	const checkbox2 = new Checkbox({ props: checkbox2_props, $$inline: true });
+    	binding_callbacks.push(() => bind(checkbox2, "value", checkbox2_value_binding));
+
+    	function checkbox3_value_binding(value_3) {
+    		/*checkbox3_value_binding*/ ctx[30].call(null, value_3);
+    	}
+
+    	let checkbox3_props = { label: "Anomalien hervorheben" };
+
+    	if (/*$showAnomalies*/ ctx[9] !== void 0) {
+    		checkbox3_props.value = /*$showAnomalies*/ ctx[9];
+    	}
+
+    	const checkbox3 = new Checkbox({ props: checkbox3_props, $$inline: true });
+    	binding_callbacks.push(() => bind(checkbox3, "value", checkbox3_value_binding));
+    	let each_value_1 = [5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80];
+    	let each_blocks_1 = [];
+
+    	for (let i = 0; i < 12; i += 1) {
+    		each_blocks_1[i] = create_each_block_1$1(get_each_context_1$1(ctx, each_value_1, i));
+    	}
+
+    	function input3_input_handler() {
+    		input3_updating = true;
+    		/*input3_input_handler*/ ctx[32].call(input3);
+    	}
+
+    	let each_value = [0, 1, 2, 3, 4, 5, 7, 15];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < 8; i += 1) {
+    		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			create_component(basechart.$$.fragment);
+    			t0 = space();
+    			hr = element("hr");
+    			t1 = space();
+    			div12 = element("div");
+    			div5 = element("div");
+    			div4 = element("div");
+    			div0 = element("div");
+    			input0 = element("input");
+    			t2 = space();
+    			small0 = element("small");
+    			t3 = text(t3_value);
+    			t4 = space();
+    			div1 = element("div");
+    			input1 = element("input");
+    			t5 = space();
+    			small1 = element("small");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			div2 = element("div");
+    			input2 = element("input");
+    			t8 = space();
+    			small2 = element("small");
+    			t9 = text(t9_value);
+    			t10 = space();
+    			div3 = element("div");
+    			button = element("button");
+    			t11 = text(t11_value);
+    			t12 = space();
+    			div6 = element("div");
+    			create_component(checkbox0.$$.fragment);
+    			t13 = space();
+    			p0 = element("p");
+    			p0.textContent = "Bezogen auf gesamten verfügbaren Zeitraum";
+    			t15 = space();
+    			div11 = element("div");
+    			div7 = element("div");
+    			create_component(checkbox1.$$.fragment);
+    			t16 = space();
+    			create_component(checkbox2.$$.fragment);
+    			t17 = space();
+    			create_component(checkbox3.$$.fragment);
+    			t18 = space();
+    			p1 = element("p");
+    			t19 = text("Gemittelte Werte beziehen sich auf den Vergleichszeitraum ");
+    			b = element("b");
+    			t20 = text(/*$contextMinYear*/ ctx[10]);
+    			t21 = text(" - ");
+    			t22 = text(t22_value);
+    			t23 = text(". Anomalien bezeichnen Tagestemperaturen ober- und unterhalb der gemittelten Tageshöchst- und Tiefstwerte");
+    			t24 = space();
+    			div8 = element("div");
+    			label0 = element("label");
+    			label0.textContent = "Vergleichszeitraum ändern:";
+    			t26 = space();
+    			select0 = element("select");
+
+    			for (let i = 0; i < 12; i += 1) {
+    				each_blocks_1[i].c();
+    			}
+
+    			t27 = space();
+    			label1 = element("label");
+    			label1.textContent = "Jahre ab";
+    			t29 = space();
+    			input3 = element("input");
+    			t30 = space();
+    			div9 = element("div");
+    			label2 = element("label");
+    			label2.textContent = "Normalbereich:";
+    			t32 = space();
+    			select1 = element("select");
+    			option0 = element("option");
+    			option0.textContent = "Median (Tiefst- u. Höchstwert)";
+    			option1 = element("option");
+    			option1.textContent = "35pct. Tiefst - 65pct Höchst";
+    			option2 = element("option");
+    			option2.textContent = "25pct. Tiefst - 75pct Höchst";
+    			option3 = element("option");
+    			option3.textContent = "keiner";
+    			t37 = space();
+    			div10 = element("div");
+    			label3 = element("label");
+    			small3 = element("small");
+    			small3.textContent = "Glättung: ±";
+    			t39 = space();
+    			select2 = element("select");
+
+    			for (let i = 0; i < 8; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			t40 = space();
+    			label4 = element("label");
+    			small4 = element("small");
+    			small4.textContent = "Tage";
+    			add_location(hr, file$7, 95, 0, 2657);
+    			attr_dev(input0, "class", "form-control form-control-sm svelte-5kb5qa");
+    			attr_dev(input0, "type", "number");
+    			input0.value = input0_value_value = /*$maxDate*/ ctx[7].getFullYear();
+    			add_location(input0, file$7, 102, 16, 2918);
+    			attr_dev(small0, "class", "form-text text-muted svelte-5kb5qa");
+    			add_location(small0, file$7, 103, 16, 3026);
+    			attr_dev(div0, "class", "col-auto form-group svelte-5kb5qa");
+    			add_location(div0, file$7, 100, 12, 2753);
+    			attr_dev(input1, "class", "form-control form-control-sm svelte-5kb5qa");
+    			attr_dev(input1, "type", "number");
+    			input1.value = input1_value_value = /*$maxDate*/ ctx[7].getMonth() + 1;
+    			add_location(input1, file$7, 106, 16, 3163);
+    			attr_dev(small1, "class", "form-text text-muted svelte-5kb5qa");
+    			add_location(small1, file$7, 107, 16, 3270);
+    			attr_dev(div1, "class", "col-auto form-group svelte-5kb5qa");
+    			add_location(div1, file$7, 105, 12, 3113);
+    			attr_dev(input2, "class", "form-control form-control-sm svelte-5kb5qa");
+    			attr_dev(input2, "type", "number");
+    			input2.value = input2_value_value = /*$maxDate*/ ctx[7].getDate();
+    			add_location(input2, file$7, 110, 16, 3408);
+    			attr_dev(small2, "class", "form-text text-muted svelte-5kb5qa");
+    			add_location(small2, file$7, 111, 16, 3512);
+    			attr_dev(div2, "class", "col-auto form-group svelte-5kb5qa");
+    			add_location(div2, file$7, 109, 12, 3358);
+    			attr_dev(button, "class", "btn btn-sm btn-outline-secondary");
+    			add_location(button, file$7, 115, 16, 3751);
+    			attr_dev(div3, "class", "col-auto");
+    			add_location(div3, file$7, 114, 12, 3712);
+    			attr_dev(div4, "class", "form-row");
+    			add_location(div4, file$7, 99, 8, 2718);
+    			attr_dev(div5, "class", "col-md-3");
+    			add_location(div5, file$7, 98, 4, 2687);
+    			attr_dev(p0, "class", "text-muted");
+    			add_location(p0, file$7, 121, 8, 4034);
+    			attr_dev(div6, "class", "col-md-3");
+    			add_location(div6, file$7, 119, 4, 3916);
+    			attr_dev(div7, "class", "form-inline svelte-5kb5qa");
+    			add_location(div7, file$7, 124, 8, 4148);
+    			add_location(b, file$7, 129, 88, 4544);
+    			attr_dev(p1, "class", "text-muted");
+    			add_location(p1, file$7, 129, 8, 4464);
+    			attr_dev(label0, "class", "my-1 mr-2");
+    			add_location(label0, file$7, 132, 12, 4749);
+    			attr_dev(select0, "class", "custom-select custom-select-sm");
+    			if (/*$contextRange*/ ctx[12] === void 0) add_render_callback(() => /*select0_change_handler*/ ctx[31].call(select0));
+    			add_location(select0, file$7, 133, 12, 4821);
+    			attr_dev(label1, "class", "my-1 mr-1 ml-1 text-muted");
+    			add_location(label1, file$7, 138, 12, 5072);
+    			attr_dev(input3, "type", "number");
+    			attr_dev(input3, "class", "form-control form-control-sm svelte-5kb5qa");
+    			attr_dev(input3, "min", /*globalMinYear*/ ctx[5]);
+    			attr_dev(input3, "max", input3_max_value = /*globalMaxYear*/ ctx[6] - /*$contextRange*/ ctx[12]);
+    			add_location(input3, file$7, 139, 12, 5142);
+    			attr_dev(div8, "class", "form-inline svelte-5kb5qa");
+    			add_location(div8, file$7, 131, 8, 4711);
+    			attr_dev(label2, "class", "my-1 mr-2");
+    			add_location(label2, file$7, 148, 12, 5450);
+    			option0.__value = option0_value_value = 50;
+    			option0.value = option0.__value;
+    			add_location(option0, file$7, 150, 16, 5600);
+    			option1.__value = option1_value_value = 35;
+    			option1.value = option1.__value;
+    			add_location(option1, file$7, 151, 16, 5677);
+    			option2.__value = option2_value_value = 25;
+    			option2.value = option2.__value;
+    			add_location(option2, file$7, 152, 16, 5752);
+    			option3.__value = option3_value_value = 100;
+    			option3.value = option3.__value;
+    			add_location(option3, file$7, 153, 16, 5827);
+    			attr_dev(select1, "class", "custom-select custom-select-sm");
+    			if (/*$normalRange*/ ctx[13] === void 0) add_render_callback(() => /*select1_change_handler*/ ctx[33].call(select1));
+    			add_location(select1, file$7, 149, 12, 5510);
+    			attr_dev(div9, "class", "form-inline svelte-5kb5qa");
+    			add_location(div9, file$7, 147, 8, 5412);
+    			add_location(small3, file$7, 158, 37, 5974);
+    			attr_dev(label3, "class", "my-1 mr-2");
+    			add_location(label3, file$7, 158, 12, 5949);
+    			attr_dev(select2, "class", "custom-select custom-select-sm");
+    			if (/*$smoothNormalRangeWidth*/ ctx[14] === void 0) add_render_callback(() => /*select2_change_handler*/ ctx[34].call(select2));
+    			add_location(select2, file$7, 159, 12, 6028);
+    			add_location(small4, file$7, 164, 53, 6312);
+    			attr_dev(label4, "class", "my-1 mr-1 ml-1 text-muted");
+    			add_location(label4, file$7, 164, 12, 6271);
+    			attr_dev(div10, "class", "form-inline svelte-5kb5qa");
+    			add_location(div10, file$7, 157, 8, 5911);
+    			attr_dev(div11, "class", "col-md-6");
+    			add_location(div11, file$7, 123, 4, 4117);
+    			attr_dev(div12, "class", "row");
+    			add_location(div12, file$7, 97, 0, 2665);
+
+    			dispose = [
+    				listen_dev(window, "mouseup", /*stop*/ ctx[15], false, false, false),
+    				listen_dev(button, "mousedown", /*mousedown_handler*/ ctx[26], false, false, false),
+    				listen_dev(select0, "change", /*select0_change_handler*/ ctx[31]),
+    				listen_dev(input3, "input", input3_input_handler),
+    				listen_dev(select1, "change", /*select1_change_handler*/ ctx[33]),
+    				listen_dev(select2, "change", /*select2_change_handler*/ ctx[34])
+    			];
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(basechart, target, anchor);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, hr, anchor);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, div12, anchor);
+    			append_dev(div12, div5);
+    			append_dev(div5, div4);
+    			append_dev(div4, div0);
+    			append_dev(div0, input0);
+    			append_dev(div0, t2);
+    			append_dev(div0, small0);
+    			append_dev(small0, t3);
+    			append_dev(div4, t4);
+    			append_dev(div4, div1);
+    			append_dev(div1, input1);
+    			append_dev(div1, t5);
+    			append_dev(div1, small1);
+    			append_dev(small1, t6);
+    			append_dev(div4, t7);
+    			append_dev(div4, div2);
+    			append_dev(div2, input2);
+    			append_dev(div2, t8);
+    			append_dev(div2, small2);
+    			append_dev(small2, t9);
+    			append_dev(div4, t10);
+    			append_dev(div4, div3);
+    			append_dev(div3, button);
+    			append_dev(button, t11);
+    			append_dev(div12, t12);
+    			append_dev(div12, div6);
+    			mount_component(checkbox0, div6, null);
+    			append_dev(div6, t13);
+    			append_dev(div6, p0);
+    			append_dev(div12, t15);
+    			append_dev(div12, div11);
+    			append_dev(div11, div7);
+    			mount_component(checkbox1, div7, null);
+    			append_dev(div7, t16);
+    			mount_component(checkbox2, div7, null);
+    			append_dev(div7, t17);
+    			mount_component(checkbox3, div7, null);
+    			append_dev(div11, t18);
+    			append_dev(div11, p1);
+    			append_dev(p1, t19);
+    			append_dev(p1, b);
+    			append_dev(b, t20);
+    			append_dev(b, t21);
+    			append_dev(b, t22);
+    			append_dev(p1, t23);
+    			append_dev(div11, t24);
+    			append_dev(div11, div8);
+    			append_dev(div8, label0);
+    			append_dev(div8, t26);
+    			append_dev(div8, select0);
+
+    			for (let i = 0; i < 12; i += 1) {
+    				each_blocks_1[i].m(select0, null);
+    			}
+
+    			select_option(select0, /*$contextRange*/ ctx[12]);
+    			append_dev(div8, t27);
+    			append_dev(div8, label1);
+    			append_dev(div8, t29);
+    			append_dev(div8, input3);
+    			set_input_value(input3, /*$contextMinYear*/ ctx[10]);
+    			append_dev(div11, t30);
+    			append_dev(div11, div9);
+    			append_dev(div9, label2);
+    			append_dev(div9, t32);
+    			append_dev(div9, select1);
+    			append_dev(select1, option0);
+    			append_dev(select1, option1);
+    			append_dev(select1, option2);
+    			append_dev(select1, option3);
+    			select_option(select1, /*$normalRange*/ ctx[13]);
+    			append_dev(div11, t37);
+    			append_dev(div11, div10);
+    			append_dev(div10, label3);
+    			append_dev(label3, small3);
+    			append_dev(div10, t39);
+    			append_dev(div10, select2);
+
+    			for (let i = 0; i < 8; i += 1) {
+    				each_blocks[i].m(select2, null);
+    			}
+
+    			select_option(select2, /*$smoothNormalRangeWidth*/ ctx[14]);
+    			append_dev(div10, t40);
+    			append_dev(div10, label4);
+    			append_dev(label4, small4);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			const basechart_changes = {};
+    			if (dirty[0] & /*data*/ 1) basechart_changes.data = /*data*/ ctx[0];
+    			if (dirty[0] & /*layers*/ 16) basechart_changes.layers = /*layers*/ ctx[4];
+    			basechart.$set(basechart_changes);
+
+    			if (!current || dirty[0] & /*$maxDate*/ 128 && input0_value_value !== (input0_value_value = /*$maxDate*/ ctx[7].getFullYear())) {
+    				prop_dev(input0, "value", input0_value_value);
+    			}
+
+    			if ((!current || dirty[0] & /*$msg*/ 256) && t3_value !== (t3_value = /*$msg*/ ctx[8].year + "")) set_data_dev(t3, t3_value);
+
+    			if (!current || dirty[0] & /*$maxDate*/ 128 && input1_value_value !== (input1_value_value = /*$maxDate*/ ctx[7].getMonth() + 1)) {
+    				prop_dev(input1, "value", input1_value_value);
+    			}
+
+    			if ((!current || dirty[0] & /*$msg*/ 256) && t6_value !== (t6_value = /*$msg*/ ctx[8].month + "")) set_data_dev(t6, t6_value);
+
+    			if (!current || dirty[0] & /*$maxDate*/ 128 && input2_value_value !== (input2_value_value = /*$maxDate*/ ctx[7].getDate())) {
+    				prop_dev(input2, "value", input2_value_value);
+    			}
+
+    			if ((!current || dirty[0] & /*$msg*/ 256) && t9_value !== (t9_value = /*$msg*/ ctx[8].day + "")) set_data_dev(t9, t9_value);
+    			if ((!current || dirty[0] & /*$msg*/ 256) && t11_value !== (t11_value = /*$msg*/ ctx[8].today + "")) set_data_dev(t11, t11_value);
+    			const checkbox0_changes = {};
+
+    			if (!updating_value && dirty[0] & /*layerRecord*/ 2) {
+    				updating_value = true;
+    				checkbox0_changes.value = /*layerRecord*/ ctx[1];
+    				add_flush_callback(() => updating_value = false);
+    			}
+
+    			checkbox0.$set(checkbox0_changes);
+    			const checkbox1_changes = {};
+
+    			if (!updating_value_1 && dirty[0] & /*layerNormalRange*/ 8) {
+    				updating_value_1 = true;
+    				checkbox1_changes.value = /*layerNormalRange*/ ctx[3];
+    				add_flush_callback(() => updating_value_1 = false);
+    			}
+
+    			checkbox1.$set(checkbox1_changes);
+    			const checkbox2_changes = {};
+
+    			if (!updating_value_2 && dirty[0] & /*layerNormal*/ 4) {
+    				updating_value_2 = true;
+    				checkbox2_changes.value = /*layerNormal*/ ctx[2];
+    				add_flush_callback(() => updating_value_2 = false);
+    			}
+
+    			checkbox2.$set(checkbox2_changes);
+    			const checkbox3_changes = {};
+
+    			if (!updating_value_3 && dirty[0] & /*$showAnomalies*/ 512) {
+    				updating_value_3 = true;
+    				checkbox3_changes.value = /*$showAnomalies*/ ctx[9];
+    				add_flush_callback(() => updating_value_3 = false);
+    			}
+
+    			checkbox3.$set(checkbox3_changes);
+    			if (!current || dirty[0] & /*$contextMinYear*/ 1024) set_data_dev(t20, /*$contextMinYear*/ ctx[10]);
+    			if ((!current || dirty[0] & /*$contextMaxYear*/ 2048) && t22_value !== (t22_value = /*$contextMaxYear*/ ctx[11] - 1 + "")) set_data_dev(t22, t22_value);
+
+    			if (dirty[0] & /*$contextRange*/ 4096) {
+    				select_option(select0, /*$contextRange*/ ctx[12]);
+    			}
+
+    			if (!current || dirty[0] & /*globalMinYear*/ 32) {
+    				attr_dev(input3, "min", /*globalMinYear*/ ctx[5]);
+    			}
+
+    			if (!current || dirty[0] & /*globalMaxYear, $contextRange*/ 4160 && input3_max_value !== (input3_max_value = /*globalMaxYear*/ ctx[6] - /*$contextRange*/ ctx[12])) {
+    				attr_dev(input3, "max", input3_max_value);
+    			}
+
+    			if (!input3_updating && dirty[0] & /*$contextMinYear*/ 1024) {
+    				set_input_value(input3, /*$contextMinYear*/ ctx[10]);
+    			}
+
+    			input3_updating = false;
+
+    			if (dirty[0] & /*$normalRange*/ 8192) {
+    				select_option(select1, /*$normalRange*/ ctx[13]);
+    			}
+
+    			if (dirty[0] & /*$smoothNormalRangeWidth*/ 16384) {
+    				select_option(select2, /*$smoothNormalRangeWidth*/ ctx[14]);
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(basechart.$$.fragment, local);
+    			transition_in(checkbox0.$$.fragment, local);
+    			transition_in(checkbox1.$$.fragment, local);
+    			transition_in(checkbox2.$$.fragment, local);
+    			transition_in(checkbox3.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(basechart.$$.fragment, local);
+    			transition_out(checkbox0.$$.fragment, local);
+    			transition_out(checkbox1.$$.fragment, local);
+    			transition_out(checkbox2.$$.fragment, local);
+    			transition_out(checkbox3.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(basechart, detaching);
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(hr);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(div12);
+    			destroy_component(checkbox0);
+    			destroy_component(checkbox1);
+    			destroy_component(checkbox2);
+    			destroy_component(checkbox3);
+    			destroy_each(each_blocks_1, detaching);
+    			destroy_each(each_blocks, detaching);
+    			run_all(dispose);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$7.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$7($$self, $$props, $$invalidate) {
     	let $maxDate;
     	let $language;
     	let $msg;
     	let $showAnomalies;
-    	let $contextRange;
     	let $contextMinYear;
     	let $contextMaxYear;
+    	let $contextRange;
     	let $normalRange;
     	let $smoothNormalRangeWidth;
     	validate_store(maxDate, "maxDate");
     	component_subscribe($$self, maxDate, $$value => $$invalidate(7, $maxDate = $$value));
     	validate_store(language, "language");
-    	component_subscribe($$self, language, $$value => $$invalidate(8, $language = $$value));
+    	component_subscribe($$self, language, $$value => $$invalidate(17, $language = $$value));
     	validate_store(msg, "msg");
-    	component_subscribe($$self, msg, $$value => $$invalidate(9, $msg = $$value));
+    	component_subscribe($$self, msg, $$value => $$invalidate(8, $msg = $$value));
     	validate_store(showAnomalies, "showAnomalies");
-    	component_subscribe($$self, showAnomalies, $$value => $$invalidate(10, $showAnomalies = $$value));
-    	validate_store(contextRange, "contextRange");
-    	component_subscribe($$self, contextRange, $$value => $$invalidate(11, $contextRange = $$value));
+    	component_subscribe($$self, showAnomalies, $$value => $$invalidate(9, $showAnomalies = $$value));
     	validate_store(contextMinYear, "contextMinYear");
-    	component_subscribe($$self, contextMinYear, $$value => $$invalidate(12, $contextMinYear = $$value));
+    	component_subscribe($$self, contextMinYear, $$value => $$invalidate(10, $contextMinYear = $$value));
     	validate_store(contextMaxYear, "contextMaxYear");
-    	component_subscribe($$self, contextMaxYear, $$value => $$invalidate(13, $contextMaxYear = $$value));
+    	component_subscribe($$self, contextMaxYear, $$value => $$invalidate(11, $contextMaxYear = $$value));
+    	validate_store(contextRange, "contextRange");
+    	component_subscribe($$self, contextRange, $$value => $$invalidate(12, $contextRange = $$value));
     	validate_store(normalRange, "normalRange");
-    	component_subscribe($$self, normalRange, $$value => $$invalidate(14, $normalRange = $$value));
+    	component_subscribe($$self, normalRange, $$value => $$invalidate(13, $normalRange = $$value));
     	validate_store(smoothNormalRangeWidth, "smoothNormalRangeWidth");
-    	component_subscribe($$self, smoothNormalRangeWidth, $$value => $$invalidate(15, $smoothNormalRangeWidth = $$value));
+    	component_subscribe($$self, smoothNormalRangeWidth, $$value => $$invalidate(14, $smoothNormalRangeWidth = $$value));
     	let { data } = $$props;
     	let repeat;
 
@@ -6700,43 +7085,43 @@ var app = (function () {
 
     	const mousedown_handler = () => set_store_value(maxDate, $maxDate = new Date());
 
-    	function input0_change_handler() {
-    		layerRecord = this.checked;
+    	function checkbox0_value_binding(value) {
+    		layerRecord = value;
     		$$invalidate(1, layerRecord);
     	}
 
-    	function input1_change_handler() {
-    		layerNormalRange = this.checked;
+    	function checkbox1_value_binding(value_1) {
+    		layerNormalRange = value_1;
     		$$invalidate(3, layerNormalRange);
     	}
 
-    	function input2_change_handler() {
-    		layerNormal = this.checked;
+    	function checkbox2_value_binding(value_2) {
+    		layerNormal = value_2;
     		$$invalidate(2, layerNormal);
     	}
 
-    	function input3_change_handler() {
-    		$showAnomalies = this.checked;
+    	function checkbox3_value_binding(value_3) {
+    		$showAnomalies = value_3;
     		showAnomalies.set($showAnomalies);
     	}
 
-    	function input0_input_handler() {
-    		$contextRange = to_number(this.value);
+    	function select0_change_handler() {
+    		$contextRange = select_value(this);
     		contextRange.set($contextRange);
     	}
 
-    	function input1_input_handler() {
+    	function input3_input_handler() {
     		$contextMinYear = to_number(this.value);
     		contextMinYear.set($contextMinYear);
     	}
 
-    	function input2_change_input_handler() {
-    		$normalRange = to_number(this.value);
+    	function select1_change_handler() {
+    		$normalRange = select_value(this);
     		normalRange.set($normalRange);
     	}
 
-    	function input4_change_input_handler() {
-    		$smoothNormalRangeWidth = to_number(this.value);
+    	function select2_change_handler() {
+    		$smoothNormalRangeWidth = select_value(this);
     		smoothNormalRangeWidth.set($smoothNormalRangeWidth);
     	}
 
@@ -6758,9 +7143,9 @@ var app = (function () {
     			$language,
     			$msg,
     			$showAnomalies,
-    			$contextRange,
     			$contextMinYear,
     			$contextMaxYear,
+    			$contextRange,
     			$normalRange,
     			$smoothNormalRangeWidth
     		};
@@ -6779,9 +7164,9 @@ var app = (function () {
     		if ("$language" in $$props) language.set($language = $$props.$language);
     		if ("$msg" in $$props) msg.set($msg = $$props.$msg);
     		if ("$showAnomalies" in $$props) showAnomalies.set($showAnomalies = $$props.$showAnomalies);
-    		if ("$contextRange" in $$props) contextRange.set($contextRange = $$props.$contextRange);
     		if ("$contextMinYear" in $$props) contextMinYear.set($contextMinYear = $$props.$contextMinYear);
     		if ("$contextMaxYear" in $$props) contextMaxYear.set($contextMaxYear = $$props.$contextMaxYear);
+    		if ("$contextRange" in $$props) contextRange.set($contextRange = $$props.$contextRange);
     		if ("$normalRange" in $$props) normalRange.set($normalRange = $$props.$normalRange);
     		if ("$smoothNormalRangeWidth" in $$props) smoothNormalRangeWidth.set($smoothNormalRangeWidth = $$props.$smoothNormalRangeWidth);
     	};
@@ -6825,46 +7210,46 @@ var app = (function () {
     		globalMinYear,
     		globalMaxYear,
     		$maxDate,
-    		$language,
     		$msg,
     		$showAnomalies,
-    		$contextRange,
     		$contextMinYear,
     		$contextMaxYear,
+    		$contextRange,
     		$normalRange,
     		$smoothNormalRangeWidth,
+    		stop,
+    		repeat,
+    		$language,
+    		changeDate,
     		prevDay,
     		nextDay,
     		prevMonth,
     		nextMonth,
     		prevYear,
     		nextYear,
-    		stop,
     		switchLanguage,
-    		repeat,
-    		changeDate,
     		mousedown_handler,
-    		input0_change_handler,
-    		input1_change_handler,
-    		input2_change_handler,
-    		input3_change_handler,
-    		input0_input_handler,
-    		input1_input_handler,
-    		input2_change_input_handler,
-    		input4_change_input_handler
+    		checkbox0_value_binding,
+    		checkbox1_value_binding,
+    		checkbox2_value_binding,
+    		checkbox3_value_binding,
+    		select0_change_handler,
+    		input3_input_handler,
+    		select1_change_handler,
+    		select2_change_handler
     	];
     }
 
     class DataLoaded extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$6, create_fragment$6, safe_not_equal, { data: 0 }, [-1, -1]);
+    		init(this, options, instance$7, create_fragment$7, safe_not_equal, { data: 0 }, [-1, -1]);
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "DataLoaded",
     			options,
-    			id: create_fragment$6.name
+    			id: create_fragment$7.name
     		});
 
     		const { ctx } = this.$$;
@@ -6884,26 +7269,532 @@ var app = (function () {
     	}
     }
 
+    /* src/partials/LanguageSelect.svelte generated by Svelte v3.16.7 */
+    const file$8 = "src/partials/LanguageSelect.svelte";
+
+    function get_each_context$3(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[4] = list[i];
+    	return child_ctx;
+    }
+
+    // (6:4) {#each options as opt}
+    function create_each_block$3(ctx) {
+    	let label;
+    	let input;
+    	let input_value_value;
+    	let t0;
+    	let t1_value = /*opt*/ ctx[4].toUpperCase() + "";
+    	let t1;
+    	let t2;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			label = element("label");
+    			input = element("input");
+    			t0 = space();
+    			t1 = text(t1_value);
+    			t2 = space();
+    			input.__value = input_value_value = /*opt*/ ctx[4];
+    			input.value = input.__value;
+    			attr_dev(input, "type", "radio");
+    			attr_dev(input, "name", "options");
+    			/*$$binding_groups*/ ctx[3][0].push(input);
+    			add_location(input, file$8, 7, 8, 266);
+    			attr_dev(label, "class", "btn btn-outline-secondary");
+    			toggle_class(label, "active", /*$language*/ ctx[0] === /*opt*/ ctx[4]);
+    			add_location(label, file$8, 6, 4, 183);
+    			dispose = listen_dev(input, "change", /*input_change_handler*/ ctx[2]);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, label, anchor);
+    			append_dev(label, input);
+    			input.checked = input.__value === /*$language*/ ctx[0];
+    			append_dev(label, t0);
+    			append_dev(label, t1);
+    			append_dev(label, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$language*/ 1) {
+    				input.checked = input.__value === /*$language*/ ctx[0];
+    			}
+
+    			if (dirty & /*$language, options*/ 3) {
+    				toggle_class(label, "active", /*$language*/ ctx[0] === /*opt*/ ctx[4]);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(label);
+    			/*$$binding_groups*/ ctx[3][0].splice(/*$$binding_groups*/ ctx[3][0].indexOf(input), 1);
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block$3.name,
+    		type: "each",
+    		source: "(6:4) {#each options as opt}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$8(ctx) {
+    	let div;
+    	let each_value = /*options*/ ctx[1];
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$3(get_each_context$3(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr_dev(div, "class", "btn-group btn-group-toggle");
+    			attr_dev(div, "data-toggle", "buttons");
+    			add_location(div, file$8, 4, 0, 89);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div, null);
+    			}
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*$language, options*/ 3) {
+    				each_value = /*options*/ ctx[1];
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$3(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$3(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(div, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$8.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$8($$self, $$props, $$invalidate) {
+    	let $language;
+    	validate_store(language, "language");
+    	component_subscribe($$self, language, $$value => $$invalidate(0, $language = $$value));
+    	const options = ["de", "en"];
+    	const $$binding_groups = [[]];
+
+    	function input_change_handler() {
+    		$language = this.__value;
+    		language.set($language);
+    	}
+
+    	$$self.$capture_state = () => {
+    		return {};
+    	};
+
+    	$$self.$inject_state = $$props => {
+    		if ("$language" in $$props) language.set($language = $$props.$language);
+    	};
+
+    	return [$language, options, input_change_handler, $$binding_groups];
+    }
+
+    class LanguageSelect extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$8, create_fragment$8, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "LanguageSelect",
+    			options,
+    			id: create_fragment$8.name
+    		});
+    	}
+    }
+
+    /* src/partials/StationInfo.svelte generated by Svelte v3.16.7 */
+    const file$9 = "src/partials/StationInfo.svelte";
+
+    // (6:0) {#if station}
+    function create_if_block$2(ctx) {
+    	let h2;
+    	let t0_value = /*station*/ ctx[0].name + "";
+    	let t0;
+    	let t1;
+    	let t2_value = /*station*/ ctx[0].state + "";
+    	let t2;
+    	let t3;
+    	let div5;
+    	let div4;
+    	let div0;
+    	let b0;
+    	let t5;
+    	let tt;
+    	let t6_value = /*station*/ ctx[0].id + "";
+    	let t6;
+    	let t7;
+    	let div1;
+    	let b1;
+    	let t8_value = /*$msg*/ ctx[1].timerange + "";
+    	let t8;
+    	let t9;
+    	let t10;
+    	let t11_value = /*$msg*/ ctx[1].monthLong[/*station*/ ctx[0].from.getMonth()] + "";
+    	let t11;
+    	let t12;
+    	let t13_value = /*station*/ ctx[0].from.getFullYear() + "";
+    	let t13;
+    	let t14;
+    	let t15_value = /*$msg*/ ctx[1].to + "";
+    	let t15;
+    	let t16;
+    	let t17_value = /*$msg*/ ctx[1].monthLong[/*station*/ ctx[0].to.getMonth()] + "";
+    	let t17;
+    	let t18;
+    	let t19_value = /*station*/ ctx[0].to.getFullYear() + "";
+    	let t19;
+    	let t20;
+    	let div2;
+    	let b2;
+    	let t22;
+    	let a;
+    	let t23_value = /*station*/ ctx[0].lat + "";
+    	let t23;
+    	let t24;
+    	let t25_value = /*station*/ ctx[0].lon + "";
+    	let t25;
+    	let a_href_value;
+    	let t26;
+    	let div3;
+    	let b3;
+    	let t27_value = /*$msg*/ ctx[1].altitude + "";
+    	let t27;
+    	let t28;
+    	let t29;
+    	let t30_value = /*station*/ ctx[0].altitude + "";
+    	let t30;
+    	let t31;
+
+    	const block = {
+    		c: function create() {
+    			h2 = element("h2");
+    			t0 = text(t0_value);
+    			t1 = text(", ");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			div5 = element("div");
+    			div4 = element("div");
+    			div0 = element("div");
+    			b0 = element("b");
+    			b0.textContent = "ID:";
+    			t5 = space();
+    			tt = element("tt");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			div1 = element("div");
+    			b1 = element("b");
+    			t8 = text(t8_value);
+    			t9 = text(":");
+    			t10 = space();
+    			t11 = text(t11_value);
+    			t12 = space();
+    			t13 = text(t13_value);
+    			t14 = space();
+    			t15 = text(t15_value);
+    			t16 = space();
+    			t17 = text(t17_value);
+    			t18 = space();
+    			t19 = text(t19_value);
+    			t20 = space();
+    			div2 = element("div");
+    			b2 = element("b");
+    			b2.textContent = "Lat/Lon:";
+    			t22 = space();
+    			a = element("a");
+    			t23 = text(t23_value);
+    			t24 = text(", ");
+    			t25 = text(t25_value);
+    			t26 = space();
+    			div3 = element("div");
+    			b3 = element("b");
+    			t27 = text(t27_value);
+    			t28 = text(":");
+    			t29 = space();
+    			t30 = text(t30_value);
+    			t31 = text("m");
+    			add_location(h2, file$9, 6, 0, 95);
+    			add_location(b0, file$9, 11, 12, 224);
+    			add_location(tt, file$9, 11, 23, 235);
+    			attr_dev(div0, "class", "col-sm-auto");
+    			add_location(div0, file$9, 10, 8, 186);
+    			add_location(b1, file$9, 13, 12, 309);
+    			attr_dev(div1, "class", "col-sm-auto");
+    			add_location(div1, file$9, 12, 14, 271);
+    			add_location(b2, file$9, 16, 12, 543);
+    			attr_dev(a, "target", "_blank");
+    			attr_dev(a, "href", a_href_value = "https://www.openstreetmap.org/#map=19/" + /*station*/ ctx[0].lat + "/" + /*station*/ ctx[0].lon);
+    			add_location(a, file$9, 16, 28, 559);
+    			attr_dev(div2, "class", "col-sm-auto");
+    			add_location(div2, file$9, 15, 8, 505);
+    			add_location(b3, file$9, 19, 12, 745);
+    			attr_dev(div3, "class", "col-sm-auto");
+    			add_location(div3, file$9, 18, 8, 707);
+    			attr_dev(div4, "class", "row");
+    			add_location(div4, file$9, 9, 4, 160);
+    			attr_dev(div5, "class", "info");
+    			add_location(div5, file$9, 7, 0, 136);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h2, anchor);
+    			append_dev(h2, t0);
+    			append_dev(h2, t1);
+    			append_dev(h2, t2);
+    			insert_dev(target, t3, anchor);
+    			insert_dev(target, div5, anchor);
+    			append_dev(div5, div4);
+    			append_dev(div4, div0);
+    			append_dev(div0, b0);
+    			append_dev(div0, t5);
+    			append_dev(div0, tt);
+    			append_dev(tt, t6);
+    			append_dev(div0, t7);
+    			append_dev(div4, div1);
+    			append_dev(div1, b1);
+    			append_dev(b1, t8);
+    			append_dev(b1, t9);
+    			append_dev(div1, t10);
+    			append_dev(div1, t11);
+    			append_dev(div1, t12);
+    			append_dev(div1, t13);
+    			append_dev(div1, t14);
+    			append_dev(div1, t15);
+    			append_dev(div1, t16);
+    			append_dev(div1, t17);
+    			append_dev(div1, t18);
+    			append_dev(div1, t19);
+    			append_dev(div4, t20);
+    			append_dev(div4, div2);
+    			append_dev(div2, b2);
+    			append_dev(div2, t22);
+    			append_dev(div2, a);
+    			append_dev(a, t23);
+    			append_dev(a, t24);
+    			append_dev(a, t25);
+    			append_dev(div4, t26);
+    			append_dev(div4, div3);
+    			append_dev(div3, b3);
+    			append_dev(b3, t27);
+    			append_dev(b3, t28);
+    			append_dev(div3, t29);
+    			append_dev(div3, t30);
+    			append_dev(div3, t31);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*station*/ 1 && t0_value !== (t0_value = /*station*/ ctx[0].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*station*/ 1 && t2_value !== (t2_value = /*station*/ ctx[0].state + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*station*/ 1 && t6_value !== (t6_value = /*station*/ ctx[0].id + "")) set_data_dev(t6, t6_value);
+    			if (dirty & /*$msg*/ 2 && t8_value !== (t8_value = /*$msg*/ ctx[1].timerange + "")) set_data_dev(t8, t8_value);
+    			if (dirty & /*$msg, station*/ 3 && t11_value !== (t11_value = /*$msg*/ ctx[1].monthLong[/*station*/ ctx[0].from.getMonth()] + "")) set_data_dev(t11, t11_value);
+    			if (dirty & /*station*/ 1 && t13_value !== (t13_value = /*station*/ ctx[0].from.getFullYear() + "")) set_data_dev(t13, t13_value);
+    			if (dirty & /*$msg*/ 2 && t15_value !== (t15_value = /*$msg*/ ctx[1].to + "")) set_data_dev(t15, t15_value);
+    			if (dirty & /*$msg, station*/ 3 && t17_value !== (t17_value = /*$msg*/ ctx[1].monthLong[/*station*/ ctx[0].to.getMonth()] + "")) set_data_dev(t17, t17_value);
+    			if (dirty & /*station*/ 1 && t19_value !== (t19_value = /*station*/ ctx[0].to.getFullYear() + "")) set_data_dev(t19, t19_value);
+    			if (dirty & /*station*/ 1 && t23_value !== (t23_value = /*station*/ ctx[0].lat + "")) set_data_dev(t23, t23_value);
+    			if (dirty & /*station*/ 1 && t25_value !== (t25_value = /*station*/ ctx[0].lon + "")) set_data_dev(t25, t25_value);
+
+    			if (dirty & /*station*/ 1 && a_href_value !== (a_href_value = "https://www.openstreetmap.org/#map=19/" + /*station*/ ctx[0].lat + "/" + /*station*/ ctx[0].lon)) {
+    				attr_dev(a, "href", a_href_value);
+    			}
+
+    			if (dirty & /*$msg*/ 2 && t27_value !== (t27_value = /*$msg*/ ctx[1].altitude + "")) set_data_dev(t27, t27_value);
+    			if (dirty & /*station*/ 1 && t30_value !== (t30_value = /*station*/ ctx[0].altitude + "")) set_data_dev(t30, t30_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h2);
+    			if (detaching) detach_dev(t3);
+    			if (detaching) detach_dev(div5);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$2.name,
+    		type: "if",
+    		source: "(6:0) {#if station}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$9(ctx) {
+    	let if_block_anchor;
+    	let if_block = /*station*/ ctx[0] && create_if_block$2(ctx);
+
+    	const block = {
+    		c: function create() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			if (if_block) if_block.m(target, anchor);
+    			insert_dev(target, if_block_anchor, anchor);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (/*station*/ ctx[0]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$2(ctx);
+    					if_block.c();
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+    		},
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (if_block) if_block.d(detaching);
+    			if (detaching) detach_dev(if_block_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$9.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$9($$self, $$props, $$invalidate) {
+    	let $msg;
+    	validate_store(msg, "msg");
+    	component_subscribe($$self, msg, $$value => $$invalidate(1, $msg = $$value));
+    	let { station } = $$props;
+    	const writable_props = ["station"];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<StationInfo> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$set = $$props => {
+    		if ("station" in $$props) $$invalidate(0, station = $$props.station);
+    	};
+
+    	$$self.$capture_state = () => {
+    		return { station, $msg };
+    	};
+
+    	$$self.$inject_state = $$props => {
+    		if ("station" in $$props) $$invalidate(0, station = $$props.station);
+    		if ("$msg" in $$props) msg.set($msg = $$props.$msg);
+    	};
+
+    	return [station, $msg];
+    }
+
+    class StationInfo extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$9, create_fragment$9, safe_not_equal, { station: 0 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "StationInfo",
+    			options,
+    			id: create_fragment$9.name
+    		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || ({});
+
+    		if (/*station*/ ctx[0] === undefined && !("station" in props)) {
+    			console.warn("<StationInfo> was created without expected prop 'station'");
+    		}
+    	}
+
+    	get station() {
+    		throw new Error("<StationInfo>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set station(value) {
+    		throw new Error("<StationInfo>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
     /* src/App.svelte generated by Svelte v3.16.7 */
-    const file$7 = "src/App.svelte";
 
-    function get_each_context_1$1(ctx, list, i) {
+    const { window: window_1 } = globals;
+    const file$a = "src/App.svelte";
+
+    function get_each_context_1$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[19] = list[i];
+    	child_ctx[20] = list[i];
     	return child_ctx;
     }
 
-    function get_each_context$2(ctx, list, i) {
+    function get_each_context$4(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[3] = list[i];
+    	child_ctx[4] = list[i];
     	return child_ctx;
     }
 
-    // (74:4) {:catch error}
+    // (105:16) {:catch error}
     function create_catch_block_1(ctx) {
     	let p;
     	let t0;
-    	let t1_value = /*error*/ ctx[15].message + "";
+    	let t1_value = /*error*/ ctx[16].message + "";
     	let t1;
 
     	const block = {
@@ -6911,7 +7802,7 @@ var app = (function () {
     			p = element("p");
     			t0 = text("Something went wrong: ");
     			t1 = text(t1_value);
-    			add_location(p, file$7, 75, 8, 2145);
+    			add_location(p, file$a, 106, 20, 3443);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -6928,44 +7819,65 @@ var app = (function () {
     		block,
     		id: create_catch_block_1.name,
     		type: "catch",
-    		source: "(74:4) {:catch error}",
+    		source: "(105:16) {:catch error}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:34)           <select bind:value={station}
+    // (93:46)                      <select class="custom-select" bind:value={station}
     function create_then_block_1(ctx) {
     	let select;
+    	let option;
+    	let option_value_value;
+    	let t1;
+    	let small;
+    	let t2_value = /*$msg*/ ctx[3].selectStation + "";
+    	let t2;
     	let dispose;
     	let each_value = /*groupedStations*/ ctx[2];
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
+    		each_blocks[i] = create_each_block$4(get_each_context$4(ctx, each_value, i));
     	}
 
     	const block = {
     		c: function create() {
     			select = element("select");
+    			option = element("option");
+    			option.textContent = "(select station)";
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			if (/*station*/ ctx[0] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[13].call(select));
-    			add_location(select, file$7, 64, 8, 1725);
-    			dispose = listen_dev(select, "change", /*select_change_handler*/ ctx[13]);
+    			t1 = space();
+    			small = element("small");
+    			t2 = text(t2_value);
+    			option.__value = option_value_value = null;
+    			option.value = option.__value;
+    			add_location(option, file$a, 94, 24, 2789);
+    			attr_dev(select, "class", "custom-select svelte-7v5xnf");
+    			if (/*station*/ ctx[0] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[14].call(select));
+    			add_location(select, file$a, 93, 20, 2713);
+    			attr_dev(small, "class", "form-text text-muted");
+    			add_location(small, file$a, 103, 20, 3277);
+    			dispose = listen_dev(select, "change", /*select_change_handler*/ ctx[14]);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, select, anchor);
+    			append_dev(select, option);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(select, null);
     			}
 
     			select_option(select, /*station*/ ctx[0]);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, small, anchor);
+    			append_dev(small, t2);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*groupedStations*/ 4) {
@@ -6973,12 +7885,12 @@ var app = (function () {
     				let i;
 
     				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$2(ctx, each_value, i);
+    					const child_ctx = get_each_context$4(ctx, each_value, i);
 
     					if (each_blocks[i]) {
     						each_blocks[i].p(child_ctx, dirty);
     					} else {
-    						each_blocks[i] = create_each_block$2(child_ctx);
+    						each_blocks[i] = create_each_block$4(child_ctx);
     						each_blocks[i].c();
     						each_blocks[i].m(select, null);
     					}
@@ -6994,10 +7906,14 @@ var app = (function () {
     			if (dirty & /*station*/ 1) {
     				select_option(select, /*station*/ ctx[0]);
     			}
+
+    			if (dirty & /*$msg*/ 8 && t2_value !== (t2_value = /*$msg*/ ctx[3].selectStation + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(select);
     			destroy_each(each_blocks, detaching);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(small);
     			dispose();
     		}
     	};
@@ -7006,23 +7922,23 @@ var app = (function () {
     		block,
     		id: create_then_block_1.name,
     		type: "then",
-    		source: "(63:34)           <select bind:value={station}",
+    		source: "(93:46)                      <select class=\\\"custom-select\\\" bind:value={station}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (68:16) {#each stations as s}
-    function create_each_block_1$1(ctx) {
+    // (98:28) {#each stations as s}
+    function create_each_block_1$2(ctx) {
     	let option;
-    	let t0_value = /*s*/ ctx[19].name + "";
+    	let t0_value = /*s*/ ctx[20].name + "";
     	let t0;
     	let t1;
-    	let t2_value = /*s*/ ctx[19].from.getFullYear() + "";
+    	let t2_value = /*s*/ ctx[20].from.getFullYear() + "";
     	let t2;
     	let t3;
-    	let t4_value = /*s*/ ctx[19].to.getFullYear() + "";
+    	let t4_value = /*s*/ ctx[20].to.getFullYear() + "";
     	let t4;
     	let t5;
     	let option_value_value;
@@ -7036,9 +7952,9 @@ var app = (function () {
     			t3 = text(" - ");
     			t4 = text(t4_value);
     			t5 = text(")");
-    			option.__value = option_value_value = /*s*/ ctx[19];
+    			option.__value = option_value_value = /*s*/ ctx[20];
     			option.value = option.__value;
-    			add_location(option, file$7, 68, 16, 1908);
+    			add_location(option, file$a, 98, 28, 3037);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -7050,11 +7966,11 @@ var app = (function () {
     			append_dev(option, t5);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*groupedStations*/ 4 && t0_value !== (t0_value = /*s*/ ctx[19].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*groupedStations*/ 4 && t2_value !== (t2_value = /*s*/ ctx[19].from.getFullYear() + "")) set_data_dev(t2, t2_value);
-    			if (dirty & /*groupedStations*/ 4 && t4_value !== (t4_value = /*s*/ ctx[19].to.getFullYear() + "")) set_data_dev(t4, t4_value);
+    			if (dirty & /*groupedStations*/ 4 && t0_value !== (t0_value = /*s*/ ctx[20].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*groupedStations*/ 4 && t2_value !== (t2_value = /*s*/ ctx[20].from.getFullYear() + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*groupedStations*/ 4 && t4_value !== (t4_value = /*s*/ ctx[20].to.getFullYear() + "")) set_data_dev(t4, t4_value);
 
-    			if (dirty & /*groupedStations*/ 4 && option_value_value !== (option_value_value = /*s*/ ctx[19])) {
+    			if (dirty & /*groupedStations*/ 4 && option_value_value !== (option_value_value = /*s*/ ctx[20])) {
     				prop_dev(option, "__value", option_value_value);
     			}
 
@@ -7067,24 +7983,24 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_each_block_1$1.name,
+    		id: create_each_block_1$2.name,
     		type: "each",
-    		source: "(68:16) {#each stations as s}",
+    		source: "(98:28) {#each stations as s}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (66:12) {#each groupedStations as stations}
-    function create_each_block$2(ctx) {
+    // (96:24) {#each groupedStations as stations}
+    function create_each_block$4(ctx) {
     	let optgroup;
     	let optgroup_label_value;
-    	let each_value_1 = /*stations*/ ctx[3];
+    	let each_value_1 = /*stations*/ ctx[4];
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value_1.length; i += 1) {
-    		each_blocks[i] = create_each_block_1$1(get_each_context_1$1(ctx, each_value_1, i));
+    		each_blocks[i] = create_each_block_1$2(get_each_context_1$2(ctx, each_value_1, i));
     	}
 
     	const block = {
@@ -7095,8 +8011,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(optgroup, "label", optgroup_label_value = /*stations*/ ctx[3][0].state);
-    			add_location(optgroup, file$7, 66, 12, 1815);
+    			attr_dev(optgroup, "label", optgroup_label_value = /*stations*/ ctx[4][0].state);
+    			add_location(optgroup, file$a, 96, 24, 2920);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, optgroup, anchor);
@@ -7107,16 +8023,16 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*groupedStations*/ 4) {
-    				each_value_1 = /*stations*/ ctx[3];
+    				each_value_1 = /*stations*/ ctx[4];
     				let i;
 
     				for (i = 0; i < each_value_1.length; i += 1) {
-    					const child_ctx = get_each_context_1$1(ctx, each_value_1, i);
+    					const child_ctx = get_each_context_1$2(ctx, each_value_1, i);
 
     					if (each_blocks[i]) {
     						each_blocks[i].p(child_ctx, dirty);
     					} else {
-    						each_blocks[i] = create_each_block_1$1(child_ctx);
+    						each_blocks[i] = create_each_block_1$2(child_ctx);
     						each_blocks[i].c();
     						each_blocks[i].m(optgroup, null);
     					}
@@ -7129,7 +8045,7 @@ var app = (function () {
     				each_blocks.length = each_value_1.length;
     			}
 
-    			if (dirty & /*groupedStations*/ 4 && optgroup_label_value !== (optgroup_label_value = /*stations*/ ctx[3][0].state)) {
+    			if (dirty & /*groupedStations*/ 4 && optgroup_label_value !== (optgroup_label_value = /*stations*/ ctx[4][0].state)) {
     				attr_dev(optgroup, "label", optgroup_label_value);
     			}
     		},
@@ -7141,9 +8057,9 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_each_block$2.name,
+    		id: create_each_block$4.name,
     		type: "each",
-    		source: "(66:12) {#each groupedStations as stations}",
+    		source: "(96:24) {#each groupedStations as stations}",
     		ctx
     	});
 
@@ -7165,7 +8081,7 @@ var app = (function () {
     	return block;
     }
 
-    // (79:4) {#if promise}
+    // (118:4) {#if promise}
     function create_if_block$3(ctx) {
     	let await_block_anchor;
     	let promise_1;
@@ -7178,8 +8094,8 @@ var app = (function () {
     		pending: create_pending_block,
     		then: create_then_block,
     		catch: create_catch_block,
-    		value: 14,
-    		error: 15,
+    		value: 15,
+    		error: 16,
     		blocks: [,,,]
     	};
 
@@ -7203,7 +8119,7 @@ var app = (function () {
 
     			if (dirty & /*promise*/ 2 && promise_1 !== (promise_1 = /*promise*/ ctx[1]) && handle_promise(promise_1, info)) ; else {
     				const child_ctx = ctx.slice();
-    				child_ctx[14] = info.resolved;
+    				child_ctx[15] = info.resolved;
     				info.block.p(child_ctx, dirty);
     			}
     		},
@@ -7232,18 +8148,18 @@ var app = (function () {
     		block,
     		id: create_if_block$3.name,
     		type: "if",
-    		source: "(79:4) {#if promise}",
+    		source: "(118:4) {#if promise}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (85:8) {:catch error}
+    // (124:8) {:catch error}
     function create_catch_block(ctx) {
     	let p;
     	let t0;
-    	let t1_value = /*error*/ ctx[15].message + "";
+    	let t1_value = /*error*/ ctx[16].message + "";
     	let t1;
 
     	const block = {
@@ -7251,7 +8167,7 @@ var app = (function () {
     			p = element("p");
     			t0 = text("Something went wrong: ");
     			t1 = text(t1_value);
-    			add_location(p, file$7, 86, 12, 2462);
+    			add_location(p, file$a, 125, 12, 3960);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -7259,7 +8175,7 @@ var app = (function () {
     			append_dev(p, t1);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*promise*/ 2 && t1_value !== (t1_value = /*error*/ ctx[15].message + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*promise*/ 2 && t1_value !== (t1_value = /*error*/ ctx[16].message + "")) set_data_dev(t1, t1_value);
     		},
     		i: noop,
     		o: noop,
@@ -7272,19 +8188,19 @@ var app = (function () {
     		block,
     		id: create_catch_block.name,
     		type: "catch",
-    		source: "(85:8) {:catch error}",
+    		source: "(124:8) {:catch error}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (83:8) {:then data}
+    // (122:8) {:then data}
     function create_then_block(ctx) {
     	let current;
 
     	const dataloaded = new DataLoaded({
-    			props: { data: /*data*/ ctx[14] },
+    			props: { data: /*data*/ ctx[15] },
     			$$inline: true
     		});
 
@@ -7298,7 +8214,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const dataloaded_changes = {};
-    			if (dirty & /*promise*/ 2) dataloaded_changes.data = /*data*/ ctx[14];
+    			if (dirty & /*promise*/ 2) dataloaded_changes.data = /*data*/ ctx[15];
     			dataloaded.$set(dataloaded_changes);
     		},
     		i: function intro(local) {
@@ -7319,14 +8235,14 @@ var app = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(83:8) {:then data}",
+    		source: "(122:8) {:then data}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:24)              <!-- promise is pending -->             <p>Daten werden geladen...</p>         {:then data}
+    // (119:24)              <!-- promise is pending -->             <p>Daten werden geladen...</p>         {:then data}
     function create_pending_block(ctx) {
     	let p;
 
@@ -7334,7 +8250,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "Daten werden geladen...";
-    			add_location(p, file$7, 81, 12, 2299);
+    			add_location(p, file$a, 120, 12, 3797);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -7351,18 +8267,33 @@ var app = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(80:24)              <!-- promise is pending -->             <p>Daten werden geladen...</p>         {:then data}",
+    		source: "(119:24)              <!-- promise is pending -->             <p>Daten werden geladen...</p>         {:then data}",
     		ctx
     	});
 
     	return block;
     }
 
-    function create_fragment$7(ctx) {
-    	let main;
+    function create_fragment$a(ctx) {
+    	let header;
+    	let div5;
+    	let div0;
+    	let t0;
+    	let div4;
+    	let div3;
+    	let div1;
     	let promise_1;
-    	let t;
+    	let t1;
+    	let div2;
+    	let t2;
+    	let main;
     	let current;
+    	let dispose;
+
+    	const stationinfo = new StationInfo({
+    			props: { station: /*station*/ ctx[0] },
+    			$$inline: true
+    		});
 
     	let info = {
     		ctx,
@@ -7371,40 +8302,81 @@ var app = (function () {
     		pending: create_pending_block_1,
     		then: create_then_block_1,
     		catch: create_catch_block_1,
-    		value: 16,
-    		error: 15
+    		value: 17,
+    		error: 16
     	};
 
-    	handle_promise(promise_1 = /*loadStations*/ ctx[4], info);
+    	handle_promise(promise_1 = /*loadStations*/ ctx[5], info);
+    	const languageselect = new LanguageSelect({ $$inline: true });
     	let if_block = /*promise*/ ctx[1] && create_if_block$3(ctx);
 
     	const block = {
     		c: function create() {
-    			main = element("main");
+    			header = element("header");
+    			div5 = element("div");
+    			div0 = element("div");
+    			create_component(stationinfo.$$.fragment);
+    			t0 = space();
+    			div4 = element("div");
+    			div3 = element("div");
+    			div1 = element("div");
     			info.block.c();
-    			t = space();
+    			t1 = space();
+    			div2 = element("div");
+    			create_component(languageselect.$$.fragment);
+    			t2 = space();
+    			main = element("main");
     			if (if_block) if_block.c();
-    			attr_dev(main, "class", "svelte-1kncfav");
-    			add_location(main, file$7, 60, 0, 1673);
+    			attr_dev(div0, "class", "col-sm");
+    			add_location(div0, file$a, 86, 8, 2469);
+    			attr_dev(div1, "class", "col-lg");
+    			add_location(div1, file$a, 91, 16, 2625);
+    			attr_dev(div2, "class", "col-lg-auto");
+    			add_location(div2, file$a, 109, 16, 3552);
+    			attr_dev(div3, "class", "form-row");
+    			add_location(div3, file$a, 90, 12, 2586);
+    			attr_dev(div4, "class", "col-sm-4");
+    			add_location(div4, file$a, 89, 8, 2551);
+    			attr_dev(div5, "class", "row");
+    			add_location(div5, file$a, 85, 4, 2443);
+    			attr_dev(header, "class", "container-fluid");
+    			add_location(header, file$a, 84, 0, 2406);
+    			attr_dev(main, "class", "svelte-7v5xnf");
+    			add_location(main, file$a, 116, 0, 3695);
+    			dispose = listen_dev(window_1, "hashchange", /*hashChange*/ ctx[6], false, false, false);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
+    			insert_dev(target, header, anchor);
+    			append_dev(header, div5);
+    			append_dev(div5, div0);
+    			mount_component(stationinfo, div0, null);
+    			append_dev(div5, t0);
+    			append_dev(div5, div4);
+    			append_dev(div4, div3);
+    			append_dev(div3, div1);
+    			info.block.m(div1, info.anchor = null);
+    			info.mount = () => div1;
+    			info.anchor = null;
+    			append_dev(div3, t1);
+    			append_dev(div3, div2);
+    			mount_component(languageselect, div2, null);
+    			insert_dev(target, t2, anchor);
     			insert_dev(target, main, anchor);
-    			info.block.m(main, info.anchor = null);
-    			info.mount = () => main;
-    			info.anchor = t;
-    			append_dev(main, t);
     			if (if_block) if_block.m(main, null);
     			current = true;
     		},
     		p: function update(new_ctx, [dirty]) {
     			ctx = new_ctx;
+    			const stationinfo_changes = {};
+    			if (dirty & /*station*/ 1) stationinfo_changes.station = /*station*/ ctx[0];
+    			stationinfo.$set(stationinfo_changes);
 
     			{
     				const child_ctx = ctx.slice();
-    				child_ctx[16] = info.resolved;
+    				child_ctx[17] = info.resolved;
     				info.block.p(child_ctx, dirty);
     			}
 
@@ -7430,25 +8402,34 @@ var app = (function () {
     		},
     		i: function intro(local) {
     			if (current) return;
+    			transition_in(stationinfo.$$.fragment, local);
+    			transition_in(languageselect.$$.fragment, local);
     			transition_in(if_block);
     			current = true;
     		},
     		o: function outro(local) {
+    			transition_out(stationinfo.$$.fragment, local);
+    			transition_out(languageselect.$$.fragment, local);
     			transition_out(if_block);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(main);
+    			if (detaching) detach_dev(header);
+    			destroy_component(stationinfo);
     			info.block.d();
     			info.token = null;
     			info = null;
+    			destroy_component(languageselect);
+    			if (detaching) detach_dev(t2);
+    			if (detaching) detach_dev(main);
     			if (if_block) if_block.d();
+    			dispose();
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$7.name,
+    		id: create_fragment$a.name,
     		type: "component",
     		source: "",
     		ctx
@@ -7457,12 +8438,15 @@ var app = (function () {
     	return block;
     }
 
-    function instance$7($$self, $$props, $$invalidate) {
+    function instance$a($$self, $$props, $$invalidate) {
     	let $maxDate;
+    	let $msg;
     	validate_store(maxDate, "maxDate");
-    	component_subscribe($$self, maxDate, $$value => $$invalidate(7, $maxDate = $$value));
+    	component_subscribe($$self, maxDate, $$value => $$invalidate(9, $maxDate = $$value));
+    	validate_store(msg, "msg");
+    	component_subscribe($$self, msg, $$value => $$invalidate(3, $msg = $$value));
     	let { name } = $$props;
-    	const tfmt = timeFormat("%Y%m%d");
+    	const tfmt = timeFormat("%Y/%m/%d");
 
     	const parseRow = d => ({
     		date: new Date(d.date),
@@ -7483,13 +8467,15 @@ var app = (function () {
     	let station;
     	let stations = [];
     	let promise;
-    	let stationId = "00430";
 
-    	let loadStations = csv$1("/data/stations.csv", parseStations).then(res => {
-    		$$invalidate(3, stations = res.filter(d => d.from.getFullYear() <= 1980 && d.to.getFullYear() >= 2019).sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0));
+    	let loadStations = csv$1("/data/stations.csv", parseStations).then(async res => {
+    		$$invalidate(4, stations = res.filter(d => d.from.getFullYear() <= 1980 && d.to.getFullYear() >= 2019).sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0));
+    		await tick();
+    		hashChange();
     	});
 
     	const load = () => {
+    		if (!station) return;
     		$$invalidate(1, promise = csv$1(`/data/stations/${station.id}.csv`, parseRow));
     	};
 
@@ -7500,6 +8486,20 @@ var app = (function () {
     		}
     	});
 
+    	function hashChange() {
+    		const match = window.location.hash.match(/^#\/(\d{5})\/[^\/]+(?:\/(\d{4}\/\d{2}\/\d{2}))?/);
+
+    		if (match) {
+    			if (!station || match[1] !== station.id) {
+    				$$invalidate(0, station = stations.find(d => d.id === match[1]));
+    			}
+
+    			if (match[2]) {
+    				set_store_value(maxDate, $maxDate = new Date(match[2]));
+    			}
+    		}
+    	}
+
     	const writable_props = ["name"];
 
     	Object.keys($$props).forEach(key => {
@@ -7509,11 +8509,11 @@ var app = (function () {
     	function select_change_handler() {
     		station = select_value(this);
     		$$invalidate(0, station);
-    		($$invalidate(2, groupedStations), $$invalidate(3, stations));
+    		($$invalidate(2, groupedStations), $$invalidate(4, stations));
     	}
 
     	$$self.$set = $$props => {
-    		if ("name" in $$props) $$invalidate(5, name = $$props.name);
+    		if ("name" in $$props) $$invalidate(7, name = $$props.name);
     	};
 
     	$$self.$capture_state = () => {
@@ -7523,39 +8523,39 @@ var app = (function () {
     			station,
     			stations,
     			promise,
-    			stationId,
     			loadStations,
     			groupedStations,
-    			$maxDate
+    			$maxDate,
+    			$msg
     		};
     	};
 
     	$$self.$inject_state = $$props => {
-    		if ("name" in $$props) $$invalidate(5, name = $$props.name);
+    		if ("name" in $$props) $$invalidate(7, name = $$props.name);
     		if ("_station" in $$props) _station = $$props._station;
     		if ("station" in $$props) $$invalidate(0, station = $$props.station);
-    		if ("stations" in $$props) $$invalidate(3, stations = $$props.stations);
+    		if ("stations" in $$props) $$invalidate(4, stations = $$props.stations);
     		if ("promise" in $$props) $$invalidate(1, promise = $$props.promise);
-    		if ("stationId" in $$props) stationId = $$props.stationId;
-    		if ("loadStations" in $$props) $$invalidate(4, loadStations = $$props.loadStations);
+    		if ("loadStations" in $$props) $$invalidate(5, loadStations = $$props.loadStations);
     		if ("groupedStations" in $$props) $$invalidate(2, groupedStations = $$props.groupedStations);
     		if ("$maxDate" in $$props) maxDate.set($maxDate = $$props.$maxDate);
+    		if ("$msg" in $$props) msg.set($msg = $$props.$msg);
     	};
 
     	let groupedStations;
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*stations*/ 8) {
+    		if ($$self.$$.dirty & /*stations*/ 16) {
     			 $$invalidate(2, groupedStations = Array.from(group(stations, d => d.state)).map(([k, v]) => v).sort((a, b) => a[0].state > b[0].state
     			? 1
     			: a[0].state < b[0].state ? -1 : 0));
     		}
 
-    		if ($$self.$$.dirty & /*station, $maxDate*/ 129) {
+    		if ($$self.$$.dirty & /*station, $maxDate*/ 513) {
     			 {
-    				window.location.hash = station
-    				? `#/${station.id}/${station.name.toLowerCase().split("(")[0].trim().replace(/[^a-z-]/g, "")}/${tfmt($maxDate)}`
-    				: "";
+    				if (station && station.name) {
+    					window.location.hash = `#/${station.id}/${station.name.toLowerCase().split("(")[0].trim().replace(/[^a-z-]/g, "")}/${tfmt($maxDate)}`;
+    				}
     			}
     		}
     	};
@@ -7564,15 +8564,16 @@ var app = (function () {
     		station,
     		promise,
     		groupedStations,
+    		$msg,
     		stations,
     		loadStations,
+    		hashChange,
     		name,
     		_station,
     		$maxDate,
     		tfmt,
     		parseRow,
     		parseStations,
-    		stationId,
     		load,
     		select_change_handler
     	];
@@ -7581,19 +8582,19 @@ var app = (function () {
     class App extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$7, create_fragment$7, safe_not_equal, { name: 5 });
+    		init(this, options, instance$a, create_fragment$a, safe_not_equal, { name: 7 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "App",
     			options,
-    			id: create_fragment$7.name
+    			id: create_fragment$a.name
     		});
 
     		const { ctx } = this.$$;
     		const props = options.props || ({});
 
-    		if (/*name*/ ctx[5] === undefined && !("name" in props)) {
+    		if (/*name*/ ctx[7] === undefined && !("name" in props)) {
     			console.warn("<App> was created without expected prop 'name'");
     		}
     	}
