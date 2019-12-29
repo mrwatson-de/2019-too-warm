@@ -30,10 +30,10 @@
                 {station.altitude}m
             </div>
             {#if station.dist}
-            <div class="col-sm-auto">
-                <b>{$msg.distance}:</b>
-                {station.dist.toFixed()}km
-            </div>
+                <div class="col-sm-auto">
+                    <b>{$msg.distance}:</b>
+                    {station.dist.toFixed()}km
+                </div>
             {/if}
         </div>
     </div>

@@ -99,7 +99,7 @@
     }
     .btn i.im {
         font-size: 10px;
-        letter-spacing: -2px;
+        margin: 0 -3px;
     }
 </style>
 
