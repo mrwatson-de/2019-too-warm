@@ -1,7 +1,6 @@
 <script>
     export let xScale;
     export let yScale;
-    export let data;
     export let grouped;
 
     import { normalRange } from '../stores';
@@ -16,7 +15,6 @@
         .x(d => xScale(d.date))
         .y(d => yScale(d.tAvg))
         .curve(curveBasis);
-
 </script>
 
 <style>
