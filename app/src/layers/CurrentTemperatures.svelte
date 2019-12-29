@@ -101,7 +101,7 @@
         --hotter-color: #d00;
         --normal-color: #777;
         --colder-color: #09d;
-        --def-color: #9d4ae1;
+        --def-color: #c30;
     }
     circle {
         fill: var(--def-color);
