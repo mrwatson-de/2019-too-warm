@@ -91,7 +91,7 @@
             <div class="form-row">
                 <div class="col-lg">
                 {#await loadStations then res}
-                    <select class="custom-select" bind:value={station}>
+                    <select class="custom-select custom-select-sm" bind:value={station}>
                         <option value={null}>(select station)</option>
                         {#each groupedStations as stations}
                         <optgroup label="{stations[0].state}">

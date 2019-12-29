@@ -6,6 +6,7 @@
     import CurrentTemperatures from './layers/CurrentTemperatures.svelte';
     import Switch from './components/Switch.svelte';
     import Checkbox from './components/Checkbox.svelte';
+    import { timeFormat } from 'd3-time-format';
 
     $: layerRecord = true;
     $: layerNormal = true;
@@ -54,12 +55,20 @@
     const prevYear = () => changeDate('FullYear', -1);
     const nextYear = () => changeDate('FullYear', +1);
 
+    const tfmt = timeFormat('%Y-%m-%d');
+
+    $: maxDateStr = tfmt($maxDate);
+
     function stop() {
         clearInterval(repeat);
     }
 
     function switchLanguage() {
         $language = $language === 'de' ? 'en' : 'de';
+    }
+
+    function handleDateChange(event) {
+        $maxDate = new Date(event.target.value);
     }
 </script>
 
@@ -93,30 +102,43 @@
 <svelte:window on:mouseup={stop} />
 <BaseChart {data} {layers} />
 
-<hr />
 
-<div class="row">
-    <div class="col-md-3">
+<div class="row justify-content-between">
+    <div class="col-auto">
+        {$msg.source}: <a href="https://www.dwd.de/{$language.toUpperCase()}" target="_blank">Deutscher Wetterdienst</a> / <a target="_blank" href="{$msg.cdcUrl}">Climate Data Center</a>
+    </div>
+    <div class="col-auto">
         <div class="form-row">
+            <div class="col-auto">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <button class="btn btn-outline-secondary" on:mousedown={prevYear}>◂◂◂</button>
+                    <button class="btn btn-outline-secondary" on:mousedown={prevMonth}>◂◂</button>
+                    <button class="btn btn-outline-secondary" on:mousedown={prevDay}>◂</button>
+                </div>
+            </div>
             <div class="col-auto form-group">
                 <!-- <button class="btn btn-sm btn-outline-secondary" on:mousedown={prevYear}>&minus;</button> -->
-                <input class="form-control form-control-sm" type="number" value="{$maxDate.getFullYear()}">
-                <small class="form-text text-muted">{$msg.year}</small>
+                <input class="form-control" type="date" value="{maxDateStr}" required on:change="{handleDateChange}">
+
             </div>
-            <div class="col-auto form-group">
-                <input class="form-control form-control-sm" type="number" value="{$maxDate.getMonth()+1}">
-                <small class="form-text text-muted">{$msg.month}</small>
-            </div>
-            <div class="col-auto form-group">
-                <input class="form-control form-control-sm" type="number" value="{$maxDate.getDate()}">
-                <small class="form-text text-muted">{$msg.day}</small>
-                <!-- <button class="btn btn-sm btn-outline-secondary" on:mousedown={nextYear}>&plus;</button> -->
+
+            <div class="col-auto">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <button class="btn btn-outline-secondary" on:mousedown={nextDay}>▸</button>
+                    <button class="btn btn-outline-secondary" on:mousedown={nextMonth}>▸▸</button>
+                    <button class="btn btn-outline-secondary" on:mousedown={nextYear}>▸▸▸</button>
+                </div>
             </div>
             <div class="col-auto">
-                <button class="btn btn-sm btn-outline-secondary" on:mousedown={() => ($maxDate = new Date())}>{$msg.today}</button>
+                <button class="btn btn-outline-secondary" on:mousedown={() => ($maxDate = new Date())}>{$msg.today}</button>
             </div>
         </div>
     </div>
+
+</div>
+
+<div class="row">
+
     <div class="col-md-3">
         <Checkbox label="Absolute Höchst- und Tiefstwerte" bind:value={layerRecord} />
         <p class="text-muted">Bezogen auf gesamten verfügbaren Zeitraum</p>

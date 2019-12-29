@@ -45,6 +45,8 @@ export const msg = derived(language, lang => {
             monthLong: 'Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember'.split(
                 ','
             ),
+            source: 'Quelle',
+            cdcUrl: 'https://www.dwd.de/DE/klimaumwelt/cdc/cdc_node.html',
             monthShort: 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sept.,Okt.,Nov.,Dez.'.split(',')
         };
     return {
@@ -57,6 +59,8 @@ export const msg = derived(language, lang => {
         selectStation: 'Select weather station',
         altitude: 'Station altitude',
         tooltipDateFormat: '%b %d',
+        source: 'Source',
+        cdcUrl: 'https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html',
         monthLong: 'January,February,March,April,May,June,July,August,September,October,November,December'.split(
             ','
         ),

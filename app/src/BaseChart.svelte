@@ -1,6 +1,6 @@
 <script>
     import { scaleTime, scaleLinear } from 'd3-scale';
-    import { timeMonth, timeDays } from 'd3-time';
+    import { timeMonth, timeDay, timeDays } from 'd3-time';
     import { timeFormat } from 'd3-time-format';
     import { mean, quantileSorted, group, ascending, max, min } from 'd3-array';
     import {
@@ -56,7 +56,7 @@
               })
             : dataClean;
 
-    $: padding = { top: 20, right: 5, bottom: 20, left: innerWidth < 400 ? 30 : 40 };
+    $: padding = { top: 20, right: 5, bottom: 40, left: innerWidth < 400 ? 30 : 40 };
 
     $: xScale = scaleTime()
         .domain([$minDate, $maxDate])
@@ -95,7 +95,7 @@
         tMin = 99;
         tMax = -99;
 
-        grouped = timeDays($minDate, $maxDate).map(day => {
+        grouped = timeDays($minDate, timeDay.offset($maxDate,1)).map(day => {
             const dayFmt = fmt(day);
             const groupedAll = cache.get(dayFmt);
             const grouped = cacheSmooth.get(dayFmt).filter(
@@ -164,13 +164,12 @@
                 <g class="tick tick-{tick}" transform="translate({xScale(tick)},{height})">
                     <line y1="-{height}" y2="-{padding.bottom}" x1="0" x2="0" />
                     {#if midMonth(tick) < $maxDate}
-                        <g transform="translate({xScale(midMonth(tick)) - xScale(tick)},0)">
+                        <g transform="translate({xScale(midMonth(tick)) - xScale(tick)},-40)">
                             <text y="0">
                                 {innerWidth > 400 ? format(tick, i) : formatMobile(tick, i)}
                             </text>
-                            {#if (!i && tick.getMonth() < 10) || !tick.getMonth()}
-                                <text class="year buffer" y="-20">{tick.getFullYear()}</text>
-                                <text class="year" y="-20">{tick.getFullYear()}</text>
+                            {#if (!i && tick.getMonth() < 11) || !tick.getMonth()}
+                                <text class="year" y="20">{tick.getFullYear()}</text>
                             {/if}
                         </g>
                     {/if}
@@ -225,16 +224,7 @@
         dominant-baseline: text-after-edge;
     }
 
-    .x-axis .tick text.year {
-        font-size: 20px;
-        font-weight: 400;
-    }
-    .x-axis .tick text.year.buffer {
-        stroke: #eee;
-        stroke-linejoin: round;
-        stroke-width: 10;
-        fill: #eee;
-    }
+
     line.zero {
         shape-rendering: crispEdges;
         stroke: black;

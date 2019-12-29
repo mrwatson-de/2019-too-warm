@@ -14,11 +14,13 @@
             ? `${date.getDate()}. ${$msg.monthShort[date.getMonth()]}`
             : `${$msg.monthShort[date.getMonth()]} ${date.getDate()}`;
 
+    const compFmt = timeFormat('%Y-%m-%d');
+
     let layer;
     let highlight;
 
     $: currentTempData = data
-        .filter(d => d.date >= $minDate && d.date <= $maxDate)
+        .filter(d => d.dateRaw >= compFmt($minDate) && d.dateRaw <= compFmt($maxDate))
         .map(d => {
             if ($showAnomalies) {
                 const m = grouped.find(e => e.dateRaw === d.dateRaw);

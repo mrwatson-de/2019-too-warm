@@ -4,7 +4,7 @@
 </script>
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
     {#each options as opt}
-    <label class="btn btn-outline-secondary" class:active={$language === opt}>
+    <label class="btn btn-sm btn-outline-secondary" class:active={$language === opt}>
         <input bind:group={$language} value="{opt}" type="radio" name="options"> {opt.toUpperCase()}
     </label>
     {/each}
