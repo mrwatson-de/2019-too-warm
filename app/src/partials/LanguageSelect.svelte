@@ -9,3 +9,10 @@
     </label>
     {/each}
 </div>
+
+<style>
+	.btn-group {
+		position: relative;
+		top: 10px;
+	}
+</style>

@@ -29,7 +29,8 @@
         contextRange,
         normalRange,
         showAnomalies,
-        smoothNormalRangeWidth
+        smoothNormalRangeWidth,
+        labelRecordTemperatures
     } from './stores';
 
     export let data;
@@ -142,53 +143,67 @@
 
 <div class="row">
 
-    <div class="col-md-3">
-        <Checkbox label="Absolute Höchst- und Tiefstwerte" bind:value={layerRecord} />
-        <p class="text-muted">Bezogen auf gesamten verfügbaren Zeitraum</p>
+    <div class="col-md-6 col-lg-4 col-xl-4">
+        <p>{@html $msg.intro}</p>
     </div>
-    <div class="col-md-6">
-        <div class="form-inline">
-            <Checkbox label="Mittlere Höchst und Tiefstwerte" bind:value={layerNormalRange} />
-            <Checkbox label="Mittlere Tagesmitteltemperatur" bind:value={layerNormal} />
-            <Checkbox label="Anomalien hervorheben" bind:value={$showAnomalies} />
-        </div>
-        <p class="text-muted">Gemittelte Werte beziehen sich auf den Vergleichszeitraum <b>{$contextMinYear} - {$contextMaxYear - 1}</b>. Anomalien bezeichnen Tagestemperaturen ober- und unterhalb der gemittelten Tageshöchst- und Tiefstwerte</p>
+    <div class="col-md-6 col-lg-8 col-xl-8">
+        <div class="row">
+            <div class="col-xl-4">
+                <Checkbox label="{$msg.absRecords}" bind:value={layerRecord} />
+                <p class="text-muted">{$msg.overFullPeriod}</p>
+                <Checkbox label="{$msg.showAnomalies}" bind:value={$showAnomalies} />
+                <p class="text-muted">{$msg.anomaliesNote}</p>
+                <Checkbox label="{$msg.showRecords}" bind:value={$labelRecordTemperatures} />
+                <p class="text-muted">{$msg.recordsNote}</p>
+            </div>
+            <div class="col-xl">
+                <div class="form-inline">
+                    <Checkbox label="{$msg.avgHighLow}" bind:value={layerNormalRange} />
+                    <Checkbox label="{$msg.avgMedian}" bind:value={layerNormal} />
 
-        <div class="form-inline">
-            <label class="my-1 mr-2">Vergleichszeitraum ändern:</label>
-            <select bind:value={$contextRange} class="custom-select custom-select-sm">
-                {#each [5,10,15,20,25,30,35,40,50,60,70,80] as yr}
-                <option value="{yr}">{yr}</option>
-                {/each}
-            </select>
-            <label class="my-1 mr-1 ml-1 text-muted">Jahre ab</label>
-            <input
-                    type="number"
-                    class="form-control form-control-sm"
-                    min={globalMinYear}
-                    max={globalMaxYear - $contextRange}
-                    bind:value={$contextMinYear} />
+                </div>
+                <p class="text-muted">{$msg.overPeriod} <b>{$contextMinYear} - {$contextMaxYear - 1}</b>.</p>
+
+                <div class="form-inline">
+                    <label class="my-1 mr-2">Vergleichszeitraum ändern:</label>
+                    <select bind:value={$contextRange} class="custom-select custom-select-sm">
+                        {#each [5,10,15,20,25,30,35,40,50,60,70,80] as yr}
+                        <option value="{yr}">{yr}</option>
+                        {/each}
+                    </select>
+                    <label class="my-1 mr-1 ml-1 text-muted">Jahre ab</label>
+                    <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            min={globalMinYear}
+                            max={globalMaxYear - $contextRange}
+                            bind:value={$contextMinYear} />
+                </div>
+
+                <div class="form-inline">
+                    <label class="my-1 mr-2">Normalbereich:</label>
+                    <select bind:value={$normalRange} class="custom-select custom-select-sm">
+                        <option value="{50}">Median (Tiefst- u. Höchstwert)</option>
+                        <option value="{35}">35pct. Tiefst - 65pct Höchst</option>
+                        <option value="{25}">25pct. Tiefst - 75pct Höchst</option>
+                        <option value="{100}">keiner</option>
+                    </select>
+                </div>
+
+                <div class="form-inline">
+                    <label class="my-1 mr-2">Glättung: &plusmn;</label>
+                    <select bind:value={$smoothNormalRangeWidth} class="custom-select custom-select-sm">
+                        {#each [0,1,2,3,4,5,7,15] as dy}
+                        <option value="{dy}">{dy}</option>
+                        {/each}
+                    </select>
+                    <label class="my-1 mr-1 ml-1 text-muted">{$smoothNormalRangeWidth === 1 ? $msg.day : $msg.days}</label>
+                </div>
+            </div>
         </div>
 
-        <div class="form-inline">
-            <label class="my-1 mr-2">Normalbereich:</label>
-            <select bind:value={$normalRange} class="custom-select custom-select-sm">
-                <option value="{50}">Median (Tiefst- u. Höchstwert)</option>
-                <option value="{35}">35pct. Tiefst - 65pct Höchst</option>
-                <option value="{25}">25pct. Tiefst - 75pct Höchst</option>
-                <option value="{100}">keiner</option>
-            </select>
-        </div>
 
-        <div class="form-inline">
-            <label class="my-1 mr-2"><small>Glättung: &plusmn;</small></label>
-            <select bind:value={$smoothNormalRangeWidth} class="custom-select custom-select-sm">
-                {#each [0,1,2,3,4,5,7,15] as dy}
-                <option value="{dy}">{dy}</option>
-                {/each}
-            </select>
-            <label class="my-1 mr-1 ml-1 text-muted"><small>Tage</small></label>
-        </div>
+
     </div>
 
 </div>

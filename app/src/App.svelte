@@ -1,5 +1,4 @@
 <script>
-    export let name;
     import { csv } from 'd3-fetch';
     import { group } from 'd3-array';
     import { beforeUpdate, onMount, tick } from 'svelte';
@@ -52,7 +51,7 @@
 
     $: {
         if (station && station.name) {
-            window.location.hash = `#/${station.id}/${station.name.toLowerCase().split('(')[0].trim().replace(/[^a-z-]/g, '')}/${tfmt($maxDate)}`;
+            window.location.hash = `#/${$language}/${station.id}/${station.name.toLowerCase().split('(')[0].trim().replace(/[^a-z-]/g, '')}${tfmt($maxDate) < tfmt(new Date()) ? `/${tfmt($maxDate)}` : ''}`;
         }
 
     }
@@ -66,15 +65,18 @@
     });
 
     function hashChange() {
-        const match = window.location.hash.match(/^#\/(\d{5})\/[^\/]+(?:\/(\d{4}\/\d{2}\/\d{2}))?/);
+        const match = window.location.hash.match(/^#\/(de|en)\/(\d{5})\/[^\/]+(?:\/(\d{4}\/\d{2}\/\d{2}))?/);
         if (match) {
-            if (!station || match[1] !== station.id) {
-                station = stations.find(d => d.id === match[1]);
+            const [lang,sid,date] = match.slice(1);
+            if (lang) $language = lang;
+
+            if (!station || sid !== station.id) {
+                station = stations.find(d => d.id === sid);
             }
 
-            if (match[2]) {
+            if (date) {
                 // restore maxDate
-                $maxDate = new Date(match[2]);
+                $maxDate = new Date(date);
             }
         }
 
@@ -82,7 +84,18 @@
 </script>
 
 <svelte:window on:hashchange="{hashChange}" />
+
 <header class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1><span>weather.</span>vis4.net</h1>
+        </div>
+        <div class="col-auto">
+            <LanguageSelect />
+        </div>
+</header>
+
+<div class="container-fluid">
     <div class="row">
         <div class="col-sm">
             <StationInfo {station} />
@@ -91,7 +104,8 @@
             <div class="form-row">
                 <div class="col-lg">
                 {#await loadStations then res}
-                    <select class="custom-select custom-select-sm" bind:value={station}>
+                    <small class="form-text text-muted">{$msg.selectStation}</small>
+                    <select class="custom-select" bind:value={station}>
                         <option value={null}>(select station)</option>
                         {#each groupedStations as stations}
                         <optgroup label="{stations[0].state}">
@@ -101,19 +115,16 @@
                         </optgroup>
                         {/each}
                     </select>
-                    <small class="form-text text-muted">{$msg.selectStation}</small>
+
                 {:catch error}
                     <!-- promise was rejected -->
                     <p>Something went wrong: {error.message}</p>
                 {/await}
                 </div>
-                <div class="col-lg-auto">
-                    <LanguageSelect />
-                </div>
             </div>
         </div>
     </div>
-</header>
+</div>
 <main>
     {#if promise}
         {#await promise}
@@ -130,15 +141,28 @@
 </main>
 
 <style>
+    h1 {
+        letter-spacing: 0.01em;
+        font-size: 1rem;
+        line-height: 2rem;
+        font-style: normal;
+        font-weight: 400;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    h1 span {
+        color: #900;
+    }
+
+    header {
+        margin-bottom: 20px;
+    }
+
     main {
         padding: 1em;
         margin: 0 auto;
-    }
-
-    h1 {
-        color: #ff3e00;
-        font-size: 4em;
-        font-weight: 100;
     }
 
     @media (max-width: 400px) {

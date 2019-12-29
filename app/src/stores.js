@@ -1,5 +1,6 @@
 import { writable, derived } from 'svelte/store';
 import { timeMonth, timeDay } from 'd3-time';
+import { de, en } from './locale';
 
 export const contextMinYear = writable(1981);
 export const contextRange = writable(30); // years
@@ -29,45 +30,10 @@ export const minDate = derived([maxDate, chartWidth], ([$a, $cw]) => {
 export const language = writable('de');
 
 export const showAnomalies = writable(true);
-
-export const msg = derived(language, lang => {
-    if (lang === 'de')
-        return {
-            today: 'Heute',
-            year: 'Jahr',
-            month: 'Monat',
-            day: 'Tag',
-            timerange: 'Zeitraum',
-            to: 'bis',
-            selectStation: 'Wetterstation auswählen',
-            altitude: 'Stationshöhe',
-            tooltipDateFormat: '%d. %b',
-            monthLong: 'Januar,Februar,März,April,Mai,Juni,Juli,August,September,Oktober,November,Dezember'.split(
-                ','
-            ),
-            source: 'Quelle',
-            visBy: 'Visualisierung',
-            cdcUrl: 'https://www.dwd.de/DE/klimaumwelt/cdc/cdc_node.html',
-            monthShort: 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sept.,Okt.,Nov.,Dez.'.split(',')
-        };
-    return {
-        today: 'Today',
-        year: 'Year',
-        month: 'Month',
-        day: 'Day',
-        timerange: 'Range',
-        to: 'to',
-        selectStation: 'Select weather station',
-        altitude: 'Station altitude',
-        tooltipDateFormat: '%b %d',
-        source: 'Source',
-        visBy: 'Visualization',
-        cdcUrl: 'https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html',
-        monthLong: 'January,February,March,April,May,June,July,August,September,October,November,December'.split(
-            ','
-        ),
-        monthShort: 'Jan.,Feb.,March,April,May,June,July,Aug.,Sept.,Oct.,Nov.,Dec.'.split(',')
-    };
-});
+export const labelRecordTemperatures = writable(true);
 
 export const smoothNormalRangeWidth = writable(0);
+
+export const msg = derived(language, lang => {
+    return lang === 'de' ? de : en;
+});

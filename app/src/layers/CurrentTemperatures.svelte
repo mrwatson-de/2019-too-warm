@@ -5,7 +5,7 @@
     export let grouped;
     import { timeFormat } from 'd3-time-format';
 
-    import { msg, language, minDate, maxDate, showAnomalies } from '../stores';
+    import { msg, language, minDate, maxDate, showAnomalies, labelRecordTemperatures } from '../stores';
     import { clientPoint } from 'd3-selection';
     import Steps from './Steps.svelte';
 
@@ -19,8 +19,10 @@
     let layer;
     let highlight;
 
-    $: currentTempData = data
-        .filter(d => d.dateRaw >= compFmt($minDate) && d.dateRaw <= compFmt($maxDate))
+    $: filteredData = data
+        .filter(d => d.dateRaw >= compFmt($minDate) && d.dateRaw <= compFmt($maxDate));
+
+    $: currentTempData = filteredData
         .map(d => {
             if ($showAnomalies) {
                 const m = grouped.find(e => e.dateRaw === d.dateRaw);
@@ -28,6 +30,34 @@
                 if (m) {
                     d.trendMin = m.tMin;
                     d.trendMax = m.tMax;
+                    d.tMinAbs = m.tMinAbs;
+                    d.tMaxAbs = m.tMaxAbs;
+                }
+            }
+            return d;
+        })
+        .map((d,i) => {
+            if ($labelRecordTemperatures) {
+                if (d.tMax > d.tMaxAbs || d.tMin < d.tMinAbs) {
+                    d.labelMaxRecord = true;
+                    d.labelMinRecord = true;
+                    // check if we're a local max
+                    filteredData
+                        .slice(Math.max(0, i - 7), i + 8)
+                        .forEach(e => {
+                            if (d != e && e.tMax > e.tMaxAbs) {
+                                // e is also a record
+                                if (e.tMax >= d.tMax) {
+                                    d.labelMaxRecord = false;
+                                }
+                            }
+                            if (d != e && e.tMin < e.tMinAbs) {
+                                // e is also a record
+                                if (e.tMin <= d.tMin) {
+                                    d.labelMinRecord = false;
+                                }
+                            }
+                        })
                 }
             }
             return d;
@@ -92,6 +122,25 @@
                     <text class="avg" x="5" y={yScale(d.tAvg)}>{d.tAvg}°C</text>
                 {/if}
             {/if}
+
+            {#if $labelRecordTemperatures && !highlight}
+                {#if d.tMax > d.tMaxAbs}
+                <g class="record high" transform="translate(0, {yScale(d.tMax)-7})">
+                    {#if d.labelMaxRecord}
+                    <text y="-15">{d.tMax}</text>
+                    {/if}
+                    <path d="M0,0 L-4,-4 L 4,-4 Z" />
+                </g>
+                {/if}
+                {#if d.tMin < d.tMinAbs}
+                <g class="record low" transform="translate(0, {yScale(d.tMin)+7})">
+                    {#if d.labelMinRecord}
+                    <text y="15">{d.tMin}</text>
+                    {/if}
+                    <path d="M0,0 L-4,4 L 4,4 Z" />
+                </g>
+                {/if}
+            {/if}
         </g>
     {/each}
 </g>
@@ -111,10 +160,10 @@
         stroke-width: 2;
         shape-rendering: crispEdges;
     }
-    circle.hotter {
+    circle.hotter, .record.high path, .record.high text {
         fill: var(--hotter-color);
     }
-    circle.colder {
+    circle.colder, .record.low path, .record.low text{
         fill: var(--colder-color);
     }
     circle.normal {
@@ -134,6 +183,11 @@
     }
     g.highlight g.day.sameMonth {
         opacity: 0.3;
+    }
+    g.record text {
+        font-weight: 400;
+        font-size: 13px;
+        dominant-baseline: central;
     }
     g.highlight g.day.highlight {
         opacity: 1;

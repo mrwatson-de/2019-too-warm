@@ -10,7 +10,7 @@ body {
 	background: #eee;
 	padding: 8px;
 	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, 'Roboto', "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 a {
@@ -30,4 +30,11 @@ a:visited {
 /** bootstrap overrides **/
 .form-text {
 	margin-top: 0;
+	margin-bottom: 3px;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+	border-color:#c30;
+	background-color:#c30;
 }
