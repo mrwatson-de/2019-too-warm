@@ -16,10 +16,10 @@ export const maxDate = writable(new Date());
 export const innerWidth = writable(window.innerWidth);
 export const chartWidth = writable(1000);
 
-export const showDays = derived(chartWidth, $cw => Math.round($cw / 4));
+export const showDays = derived(chartWidth, $cw => Math.round(($cw - 50) / 4));
 
-export const minDate = derived([maxDate, chartWidth], ([$a, $cw]) => {
-    const approxDays = Math.round(($cw - 50) / 4);
+export const minDate = derived([maxDate, chartWidth, showDays], ([$a, $cw, $showDays]) => {
+    const approxDays = $showDays;
     // compute exact days to match days
     const lastD = timeMonth.ceil($a);
     const minD = timeMonth.floor(new Date(lastD.getTime() - approxDays * 864e5));

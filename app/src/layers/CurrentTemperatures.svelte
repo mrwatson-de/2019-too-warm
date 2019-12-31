@@ -90,12 +90,6 @@
 </script>
 
 <style>
-    g {
-        --hotter-color: #d00;
-        --normal-color: #777;
-        --colder-color: #09d;
-        --def-color: #c30;
-    }
     circle {
         fill: var(--def-color);
     }

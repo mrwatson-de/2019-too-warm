@@ -1,20 +1,19 @@
 <script>
     import { language } from '../stores';
-    const options = ['de', 'en'];
+    const options = ['deutsch', 'english'];
 </script>
 
 <style>
     .btn-group {
-        position: relative;
-        top: 10px;
+        margin-bottom: 20px;
     }
 </style>
 
 <div class="btn-group btn-group-toggle" data-toggle="buttons">
     {#each options as opt}
-        <label class="btn btn-sm btn-outline-secondary" class:active={$language === opt}>
-            <input bind:group={$language} value={opt} type="radio" name="options" />
-            {opt.toUpperCase()}
+        <label class="btn btn-sm btn-outline-secondary" class:active={$language === opt.substr(0,2)}>
+            <input bind:group={$language} value={opt.substr(0,2)} type="radio" name="options" />
+            {opt}
         </label>
     {/each}
 </div>

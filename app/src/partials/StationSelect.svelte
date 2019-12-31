@@ -14,6 +14,8 @@
 
     const tfmt = timeFormat('%Y/%m/%d');
 
+    let userSelectedStation = false;
+
     export let station;
     let stations = [];
     $: groupedStations = Array.from(group(stations, d => d.state))
@@ -28,6 +30,10 @@
         await tick();
         hashChange();
         if (!station) {
+            // try to get location from user
+            findNearestStation();
+
+            // pick random station
             const initStations = [
                 '00433',
                 '01975',
@@ -43,33 +49,42 @@
             ];
             const random = initStations[Math.floor(Math.random() * 0.99 * initStations.length)];
             station = stations.find(s => s.id === random);
+        } else {
+            userSelectedStation = true;
         }
     });
 
     $: {
         if (station && station.name) {
-            window.location.hash = `#/${$language}/${station.id}/${station.name
+            const hashParts = [$language];
+            console.log({userSelectedStation});
+            if (userSelectedStation) {
+                hashParts.push(station.id);
+                hashParts.push(station.name
                 .toLowerCase()
                 .split('(')[0]
                 .trim()
                 .replace(/ö/g, 'oe')
                 .replace(/ä/g, 'ae')
                 .replace(/ü/g, 'ue')
-                .replace(/[^a-z-]/g, '')}${
-                tfmt($maxDate) < tfmt(new Date()) ? `/${tfmt($maxDate)}` : ''
-            }`;
+                .replace(/[^a-z-]/g, ''));
+            }
+            if (tfmt($maxDate) < tfmt(new Date())) {
+                hashParts.push(tfmt($maxDate));
+            }
+            window.location.hash = `#/${hashParts.join('/')}`;
         }
     }
 
     function hashChange() {
         const match = window.location.hash.match(
-            /^#\/(de|en)\/(\d{5})\/[^\/]+(?:\/(\d{4}\/\d{2}\/\d{2}))?/
+            /^#\/(de|en)(?:\/(\d{5})\/[^\/]+)?(?:\/(\d{4}\/\d{2}\/\d{2}))?/
         );
-        if (match) {
+        if (match && stations.length) {
             const [lang, sid, date] = match.slice(1);
             if (lang) $language = lang;
 
-            if (!station || sid !== station.id) {
+            if (!station || (sid && sid !== station.id)) {
                 station = stations.find(d => d.id === sid);
             }
 
@@ -91,16 +106,15 @@
         return 2 * R * Math.asin(Math.sqrt(a));
     }
 
-    function findNearestStation() {
+    function findNearestStation(event) {
         navigator.geolocation.getCurrentPosition(
             position => {
                 const { latitude, longitude } = position.coords;
-                console.log({ latitude, longitude });
                 // compute distances
                 stations.forEach(s => {
                     s.dist = latLonDist(latitude, longitude, s.lat, s.lon);
                 });
-
+                userSelectedStation = !!event;
                 station = stations.sort((a, b) => a.dist - b.dist)[0];
             },
             () => {
@@ -111,32 +125,31 @@
 </script>
 
 <style>
-    .btn i.im {
+    a i.im {
         font-size: 16px;
         position: relative;
         top: 2px;
     }
 </style>
 
-<svelte:window on:hashchange={hashChange} />
+<svelte:window on:hashchange={() => hashChange(false)} />
 
 {#await loadStations then res}
-    <small class="form-text text-muted">{$msg.selectStation.replace('%count%', stations.length)}</small>
-    <div class="btn-group">
-        <select class="custom-select" bind:value={station}>
-            <option value={null}>(select station)</option>
-            {#each groupedStations as stations}
-                <optgroup label={stations[0].state}>
-                    {#each stations as s}
-                        <option value={s}>
-                            {s.name} ({s.from.getFullYear()} - {s.to.getFullYear()})
-                        </option>
-                    {/each}
-                </optgroup>
-            {/each}
-        </select>
-        <button class="btn btn-outline-secondary" on:click={findNearestStation}>
-            <i class="im im-location" />
-        </button>
-    </div>
+    <label class="form-text">{$msg.selectStation.replace('%count%', stations.length)}</label>
+
+    <select class="custom-select" bind:value={station} on:change="{() => userSelectedStation = true}">
+        <option value={null}>(select station)</option>
+        {#each groupedStations as stations}
+            <optgroup label={stations[0].state}>
+                {#each stations as s}
+                    <option value={s}>
+                        {s.name} ({s.from.getFullYear()} - {s.to.getFullYear()})
+                    </option>
+                {/each}
+            </optgroup>
+        {/each}
+    </select>
+    oder <a href="#/near-me" on:click|preventDefault={findNearestStation} >
+        <i class="im im-location" /> Wetterstation in meiner Nähe finden
+    </a>
 {/await}

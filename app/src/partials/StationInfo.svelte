@@ -3,11 +3,27 @@
     import { msg } from '../stores';
 </script>
 
+<style>
+    h3 {
+        position: relative;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: none;
+        letter-spacing: normal;
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        color:
+        #222;
+        display: block;
+    }
+</style>
+
 {#if station}
-    <h2>{station.name}, {station.state}</h2>
+    <h3 lang="de">Höchst- und Tiefstwerte der Lufttemperatur in der Wetterstation {station.name}, {station.state}</h3>
+    <h3 lang="en">Highlest and lowest air temperature measurements at weather station {station.name}, {station.state}</h3>
     <div class="info">
 
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-sm-auto">
                 <b>ID:</b>
                 <tt>{station.id}</tt>
@@ -35,6 +51,6 @@
                     {station.dist.toFixed()}km
                 </div>
             {/if}
-        </div>
+        </div> -->
     </div>
 {/if}

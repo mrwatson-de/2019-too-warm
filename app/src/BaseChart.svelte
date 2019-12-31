@@ -124,10 +124,9 @@
                 date: day,
                 dateRaw,
                 grouped,
-                tMin: $normalRange < 100 ? quantileSorted(tMinSorted, $normalRange / 100) : tAvg,
+                tMin: mean(tMinSorted),
                 tAvg,
-                tMax:
-                    $normalRange < 100 ? quantileSorted(tMaxSorted, 1 - $normalRange / 100) : tAvg,
+                tMax: mean(tMaxSorted),
                 tMinAbs,
                 tMaxAbs,
                 tMinSorted,

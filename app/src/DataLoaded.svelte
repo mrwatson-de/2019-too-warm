@@ -6,7 +6,7 @@
     import CurrentTemperatures from './layers/CurrentTemperatures.svelte';
     import Switch from './components/Switch.svelte';
     import Checkbox from './components/Checkbox.svelte';
-    import { timeFormat } from 'd3-time-format';
+
 
     $: layerRecord = true;
     $: layerNormal = true;
@@ -39,45 +39,13 @@
     $: globalMinYear = data[data.length - 1].date.getFullYear();
     $: globalMaxYear = data[0].date.getFullYear();
 
-    let repeat;
 
-    function changeDate(prop, offset, delay = 300) {
-        let d = new Date($maxDate);
-        d[`set${prop}`](d[`get${prop}`]() + offset);
-        if (d >= new Date()) d = new Date();
-        $maxDate = d;
-        stop();
-        repeat = setTimeout(() => changeDate(prop, offset, 0), delay);
-    }
-
-    const prevDay = () => changeDate('Date', -1);
-    const nextDay = () => changeDate('Date', +1);
-    const prevMonth = () => changeDate('Month', -1);
-    const nextMonth = () => changeDate('Month', +1);
-    const prevYear = () => changeDate('FullYear', -1);
-    const nextYear = () => changeDate('FullYear', +1);
-
-    const tfmt = timeFormat('%Y-%m-%d');
-    const tfmtIntro = timeFormat($msg.introDateFormat);
-
-    $: maxDateStr = tfmt($maxDate);
-
-    $: introLong = $msg.introLong
-        .replace('%station%', station.name)
-        .replace('%minDate%', tfmtIntro($minDate))
-        .replace('%maxDate%', tfmtIntro($maxDate));
-
-    function stop() {
-        clearInterval(repeat);
-    }
 
     function switchLanguage() {
         $language = $language === 'de' ? 'en' : 'de';
     }
 
-    function handleDateChange(event) {
-        $maxDate = new Date(event.target.value);
-    }
+
 </script>
 
 <style>
@@ -114,7 +82,7 @@
 <svelte:window on:mouseup={stop} />
 <BaseChart {data} {layers} />
 
-<div class="row justify-content-between">
+<!-- <div class="row justify-content-between">
     <div class="col-auto mb-4">
         <span class="mr-4">
         {$msg.source}:
@@ -128,68 +96,16 @@
             <a href="https://vis4.net">Gregor Aisch</a>
     </div>
     <div class="col-auto">
-        <div class="form-row">
-            <div class="col-auto">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <button class="btn btn-outline-secondary" on:mousedown={prevYear}>
-                        <i class="im im-care-left" />
-                        <i class="im im-care-left" />
-                        <i class="im im-care-left" />
-                    </button>
-                    <button class="btn btn-outline-secondary" on:mousedown={prevMonth}>
-                        <i class="im im-care-left" />
-                        <i class="im im-care-left" />
-                    </button>
-                    <button class="btn btn-outline-secondary" on:mousedown={prevDay}>
-                        <i class="im im-care-left" />
-                    </button>
-                </div>
-            </div>
-            <div class="col-auto form-group">
-                <!-- <button class="btn btn-sm btn-outline-secondary" on:mousedown={prevYear}>&minus;</button> -->
-                <input
-                    class="form-control"
-                    type="date"
-                    value={maxDateStr}
-                    required
-                    on:change={handleDateChange} />
 
-            </div>
-
-            <div class="col-auto">
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <button class="btn btn-outline-secondary" on:mousedown={nextDay}>
-                        <i class="im im-care-right" />
-                    </button>
-                    <button class="btn btn-outline-secondary" on:mousedown={nextMonth}>
-                        <i class="im im-care-right" />
-                        <i class="im im-care-right" />
-                    </button>
-                    <button class="btn btn-outline-secondary" on:mousedown={nextYear}>
-                        <i class="im im-care-right" />
-                        <i class="im im-care-right" />
-                        <i class="im im-care-right" />
-                    </button>
-                </div>
-            </div>
-            <div class="col-auto">
-                <button
-                    class="btn btn-outline-secondary"
-                    on:mousedown={() => ($maxDate = new Date())}>
-                    {$msg.today}
-                </button>
-            </div>
-        </div>
     </div>
 
-</div>
+</div> -->
 
-<div class="row">
+<!-- <div class="row">
 
     <div class="col-md-6 col-lg-4 col-xl-4">
-        <p><b>{@html $msg.intro}</b></p>
-        <p class="text-muted">{@html introLong}</p>
-        <img style="max-width: 100%;margin-bottom: 20px" src="key-{$language}.svg">
+
+
 
     </div>
     <div class="col-md-6 col-lg-8 col-xl-8">
@@ -248,7 +164,7 @@
                     </label>
                 </div>
 
-                <!-- <div class="form-inline">
+                <div class="form-inline">
                     <label class="my-1 mr-2 text-muted">Normalbereich:</label>
                     <select bind:value={$normalRange} class="custom-select custom-select-sm">
                         <option value={50}>Median (Tiefst- u. Höchstwert)</option>
@@ -256,10 +172,11 @@
                         <option value={25}>25pct. Tiefst - 75pct Höchst</option>
                         <option value={100}>keiner</option>
                     </select>
-                </div> -->
+                </div>
             </div>
         </div>
 
     </div>
 
 </div>
+ -->
