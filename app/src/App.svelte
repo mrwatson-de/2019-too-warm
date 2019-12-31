@@ -11,13 +11,9 @@
     import StationSelect from './partials/StationSelect.svelte';
     import TimeSelect from './partials/TimeSelect.svelte';
     import TemperatureDay from './TemperatureDay.svelte';
+    import DecadeAnomalies from './DecadeAnomalies.svelte';
 
     const tfmtIntro = timeFormat($msg.introDateFormat);
-
-    $: introLong = $msg.introLong
-        .replace('%station%', station ? station.name : '...')
-        .replace('%minDate%', tfmtIntro($minDate))
-        .replace('%maxDate%', tfmtIntro($maxDate));
 
     let data;
 
@@ -97,7 +93,10 @@
     <!-- <LanguageSelect />
  -->
     <h2 lang="de">Das Jahr 2019 war wärmer als "normal" — aber was heißt das eigentlich?</h2>
-    <h2 lang="en">Third-hottest year in Germany since 1881</h2>
+    <h2 lang="en">2019 was hotter than normal — but what does this even mean?</h2>
+
+    <p lang="de"><i>[ <a href="#/en">Click here to read this text in English</a> ]</i></p>
+    <p lang="en"><i>[ <a href="#/de">Hier klicken um diesen Text auf deutsch zu lesen</i> ]</p>
 
     <p lang="de">
         Laut Deutschem Wetterdienst (DWD) war 2019 das
@@ -112,15 +111,16 @@
     </p>
 
     <p lang="en">
-        According to the Deutsche Wetterdienst (DWD) 2019 was the third hottest year in Germany
-        since beginning of Deutschlands drittwärmstes Jahr seit Beginn der regelmäßigen Messungen
-        1881. Der Temperaturdurchschnitt im Jahr lag bei 10,2°C, gleich hinter 2014 (10,3°C) und
-        2018 (10,5°C).
+        According to Deutsche Wetterdienst (DWD), 2019 was the third hottest year in Germany
+        since we started to measure temperatures regularly in 1881. On July 25 a new national record of <b>42.6°C</b> was measured, along with local records in most weather stations.
     </p>
 
     <p lang="de">
-        Auch abseits von Rekordwerten war 2019 laut DWD "zu trocken, zu sonnig und vor allem wärmer
-        als üblich". Aber wer sagt eigentlich was übliche oder "normale" Temperaturen sind?
+        Auch abseits von Rekordwerten war 2019 laut DWD "zu trocken, zu sonnig und vor allem wärmer als üblich". Aber wer sagt eigentlich was übliche oder "normale" Temperaturen sind?
+    </p>
+
+    <p lang="en">
+        Aside from record temperatures, DWD described the year 2019 as "too dry, too sunny, and most of all warmer than usual". But who's to say what usual or "normal" temperatures are? How are they defined?
     </p>
 
     <p lang="de">
@@ -129,17 +129,30 @@
         <b>{dailyMaxDec18}°C</b>
         . Um zu bestimmen welche Temperaturen "normal" für einen bestimmten Tag sind, berechnen
         Meterologen die Mittelwerte aus den Höchst- und tiefsttemperaturen am selben Datum in einem
-        Vergleichszeitraum, z.B. {$contextMinYear} bis {$contextMaxYear - 1}.
+        <b>Vergleichszeitraum</b>, zum Beispiel zwischen {$contextMinYear} und {$contextMaxYear - 1}.
     </p>
 
+    <p lang="en">
+        So let's take a look at a single day, December 18, at weather station {station ? station.name : '...'}. The daily maximum temperature was at
+        <b>{dailyMaxDec18}°C</b>
+        . Was that hotter than normal? To answer this question, meterologists compute averages of maximum and minimum temperatures on the same date over a <b>base period</b>, for instance between {$contextMinYear} and {$contextMaxYear - 1}.
+    </p>
+
+
     {#if data}
-        <h3>Wie sich der "normale" Temperaturbereich errechnet</h3>
-        <p class="text-muted text-small">
+        <h3 lang="de">Wie sich der "normale" Temperaturbereich errechnet</h3>
+        <h3 lang="en">How "normal" temperature ranges are being calculated</h3>
+        <p class="text-muted text-small" lang="de">
             Jeder Balken zeigt die Temperaturspanne am 18.12. im jeweiligen Jahr (gemessen an der
             Wetterstation {station.name}). Tipp: Du kannst den Vergleichszeitraum nach links und
             rechts verschieben.
         </p>
+        <p class="text-muted text-small" lang="en">
+            Each bar shows the temperature range on December 18 in a given year (measured at weather station  {station.name}). Hint: You can move the base period to the left and right.
+        </p>
         <TemperatureDay {data} />
+    {:else}
+        <i class="text-small text-muted">loading data...</i>
     {/if}
 
     <p>
@@ -150,13 +163,17 @@
     </p>
 
     <p>
-        Das Problem ist, dass der 18. Dezember bei weitem kein Einzelfall ist. Die folgende Grafik
+       Natürlich ist der 18. Dezember bei weitem kein Einzelfall. Die folgende Grafik
         zeigt die Temperaturwerte für
     </p>
 
-    <h3>Zu heiße Tage und Rekordtemperaturen über das ganze Jahr</h3>
-    <p class="text-muted text-small">
-        {@html introLong}
+    <h3 lang="de">Zu heiße Tage und Rekordtemperaturen über das ganze Jahr</h3>
+    <h3 lang="en">Days too hot and temperature records all year round</h3>
+    <p lang="de" class="text-muted text-small">
+        Das Diagramm zeigt tägliche Höchst- und Tiefstwerte der Lufttemperatur an der Wetterstation {station ? station.name : '...'} zwischen {tfmtIntro($minDate)} und {tfmtIntro($maxDate)}. Jeder Tag wird durch einen Balken dargestellt; ein Kreis zeigt die Tagesmitteltemperatur. <span class="only-mobile">Tipp: drehe dein Telefon seitwärts um einen längeren Zeitraum anzusehen!</span>
+    </p>
+    <p lang="en" class="text-muted text-small">
+        This chart shows daily highs and lows of air temperature at weather station {station ? station.name : '...'} between {tfmtIntro($minDate)} and {tfmtIntro($maxDate)}. Each day is represented by a bar, the daily mean temperature is displayed with a circle. <span class="only-mobile">Tipp: rotate your phone to see a longer time frame!</span>
     </p>
 </main>
 
@@ -189,6 +206,12 @@
     </p>
 
     <p>Die ... ist kein ganz neues Phänomen. Auch die vergangengen Jahre sehen ähnlich aus.</p>
+
+    {#if data}
+    <DecadeAnomalies {data} />
+    {:else}
+    <i class="text-small text-muted">loading data...</i>
+    {/if}
 
     <p>
         Du kannst die Grafiken und Beispiele in diesem Artikel auch mit einer anderen Wetterstation

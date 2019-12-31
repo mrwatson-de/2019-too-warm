@@ -36,16 +36,16 @@
             // pick random station
             const initStations = [
                 '00433',
-                '01975',
-                '03668',
-                '00691',
-                '05792',
-                '01420',
-                '03987',
-                '03126',
-                '01270',
-                '00880',
-                '02667'
+                // '01975',
+                // '03668',
+                // '00691',
+                // '05792',
+                // '01420',
+                // '03987',
+                // '03126',
+                // '01270',
+                // '00880',
+                // '02667'
             ];
             const random = initStations[Math.floor(Math.random() * 0.99 * initStations.length)];
             station = stations.find(s => s.id === random);
@@ -117,6 +117,8 @@
                 });
                 userSelectedStation = !!event;
                 station = stations.sort((a, b) => a.dist - b.dist)[0];
+            }, () => {
+
             }
         );
     }

@@ -47,17 +47,7 @@
     input[type='number'] {
         width: 5em;
     }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        /* display: none; <- Crashes Chrome on hover */
-        -webkit-appearance: none;
-        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-    }
-
-    input[type='number'] {
-        -moz-appearance: textfield; /* Firefox */
-    }
+s
     .form-group .form-control {
         margin-bottom: 0;
     }
