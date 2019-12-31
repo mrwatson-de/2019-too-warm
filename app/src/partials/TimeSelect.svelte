@@ -22,30 +22,28 @@
 
     function handleDateChange(event) {
         if (+event.target.value > 1881 && event.target.value < 2021) {
-            $maxDate = new Date(event.target.value, 11,31);
+            $maxDate = new Date(event.target.value, 11, 31);
         }
     }
     function handleMonthChange(event) {
         console.log(event.target.value, $maxDate.getFullYear());
-        $maxDate = new Date($maxDate.getFullYear(), +(event.target.value)+1, 0);
+        $maxDate = new Date($maxDate.getFullYear(), +event.target.value + 1, 0);
         console.log($maxDate);
     }
-
 </script>
 
 <style>
-
     .btn i.im {
         font-size: 10px;
         margin: 0 -3px;
     }
-    input[type=number] {
+    input[type='number'] {
         max-width: 5em;
     }
     .form-inline {
         margin-bottom: 20px;
     }
-    .btn-group input[type=number] {
+    .btn-group input[type='number'] {
         border-left: 0;
         border-right: 0;
         border-radius: 0;
@@ -56,17 +54,17 @@
 
     <label>Monat</label>
     <div class="btn-group ml-2 mr-4">
-        <button class="btn btn-outline-secondary" on:click="{prevMonth}">
+        <button class="btn btn-outline-secondary" on:click={prevMonth}>
             <i class="im im-care-left" />
         </button>
-        <button class="btn btn-outline-secondary" on:click="{nextMonth}">
+        <button class="btn btn-outline-secondary" on:click={nextMonth}>
             <i class="im im-care-right" />
         </button>
     </div>
 
     <label>Jahr</label>
     <div class="btn-group ml-2 mr-4">
-        <button class="btn btn-outline-secondary" on:click="{prevYear}">
+        <button class="btn btn-outline-secondary" on:click={prevYear}>
             <i class="im im-care-left" />
         </button>
         <input
@@ -75,14 +73,12 @@
             value={$maxDate.getFullYear()}
             on:input={handleDateChange}
             on:change={handleDateChange} />
-        <button class="btn btn-outline-secondary" on:click="{nextYear}">
+        <button class="btn btn-outline-secondary" on:click={nextYear}>
             <i class="im im-care-right" />
         </button>
     </div>
 
-    <button
-        class="btn btn-secondary ml-2"
-        on:mousedown={() => ($maxDate = new Date())}>
+    <button class="btn btn-secondary ml-2" on:mousedown={() => ($maxDate = new Date())}>
         {$msg.today}
     </button>
 

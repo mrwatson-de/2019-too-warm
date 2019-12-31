@@ -7,7 +7,6 @@
     import Switch from './components/Switch.svelte';
     import Checkbox from './components/Checkbox.svelte';
 
-
     $: layerRecord = true;
     $: layerNormal = true;
     $: layerNormalRange = true;
@@ -39,13 +38,9 @@
     $: globalMinYear = data[data.length - 1].date.getFullYear();
     $: globalMaxYear = data[0].date.getFullYear();
 
-
-
     function switchLanguage() {
         $language = $language === 'de' ? 'en' : 'de';
     }
-
-
 </script>
 
 <style>

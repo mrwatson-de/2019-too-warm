@@ -57,17 +57,19 @@
     $: {
         if (station && station.name) {
             const hashParts = [$language];
-            console.log({userSelectedStation});
+            console.log({ userSelectedStation });
             if (userSelectedStation) {
                 hashParts.push(station.id);
-                hashParts.push(station.name
-                .toLowerCase()
-                .split('(')[0]
-                .trim()
-                .replace(/ö/g, 'oe')
-                .replace(/ä/g, 'ae')
-                .replace(/ü/g, 'ue')
-                .replace(/[^a-z-]/g, ''));
+                hashParts.push(
+                    station.name
+                        .toLowerCase()
+                        .split('(')[0]
+                        .trim()
+                        .replace(/ö/g, 'oe')
+                        .replace(/ä/g, 'ae')
+                        .replace(/ü/g, 'ue')
+                        .replace(/[^a-z-]/g, '')
+                );
             }
             if (tfmt($maxDate) < tfmt(new Date())) {
                 hashParts.push(tfmt($maxDate));
@@ -137,7 +139,10 @@
 {#await loadStations then res}
     <label class="form-text">{$msg.selectStation.replace('%count%', stations.length)}</label>
 
-    <select class="custom-select" bind:value={station} on:change="{() => userSelectedStation = true}">
+    <select
+        class="custom-select"
+        bind:value={station}
+        on:change={() => (userSelectedStation = true)}>
         <option value={null}>(select station)</option>
         {#each groupedStations as stations}
             <optgroup label={stations[0].state}>
@@ -149,7 +154,9 @@
             </optgroup>
         {/each}
     </select>
-    oder <a href="#/near-me" on:click|preventDefault={findNearestStation} >
-        <i class="im im-location" /> Wetterstation in meiner Nähe finden
+    oder
+    <a href="#/near-me" on:click|preventDefault={findNearestStation}>
+        <i class="im im-location" />
+        Wetterstation in meiner Nähe finden
     </a>
 {/await}

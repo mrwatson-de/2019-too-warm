@@ -12,15 +12,18 @@
         letter-spacing: normal;
         margin-top: 2rem;
         margin-bottom: 0.5rem;
-        color:
-        #222;
+        color: #222;
         display: block;
     }
 </style>
 
 {#if station}
-    <h3 lang="de">Höchst- und Tiefstwerte der Lufttemperatur in der Wetterstation {station.name}, {station.state}</h3>
-    <h3 lang="en">Highlest and lowest air temperature measurements at weather station {station.name}, {station.state}</h3>
+    <h3 lang="de">
+        Höchst- und Tiefstwerte der Lufttemperatur in der Wetterstation {station.name}, {station.state}
+    </h3>
+    <h3 lang="en">
+        Highlest and lowest air temperature measurements at weather station {station.name}, {station.state}
+    </h3>
     <div class="info">
 
         <!-- <div class="row">

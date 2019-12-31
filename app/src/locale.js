@@ -24,11 +24,13 @@ export const de = {
     // intro: `Wie warm ist dieser Winter verglichen mit vergangenen Wintern? Der letzte Sommer war heiß, aber war er wirklich heißer als normal? Um diese und andere Fragen zu beantworten kombiniert das obige Diagramm tagesaktuelle Wetterdaten mit historischen Mittelwerten über lange Zeitspannen. Temperaturen über immun fb unter den normalen Höchst- und Tiefstwerten sind als Anomalien hervorgehoben. Die Grafik ist verfügbar für ... Wetterstationen in Deutschland. Inspiriert von diesem klassischem Temperatur-Diagramm der New York Times. `,
     absRecords: 'Absolute Höchst- und Tiefstwerte',
     avgHighLow: 'Normaler Temperaturbereich',
-    avgHighLowInfo: 'Der Bereich zwischen den mittleren Tageshöchst- und -tiefstwerten im Vergleichszeitraum',
+    avgHighLowInfo:
+        'Der Bereich zwischen den mittleren Tageshöchst- und -tiefstwerten im Vergleichszeitraum',
     avgMedian: 'Mittlere Tagesmitteltemperatur',
     showAnomalies: 'Anomalien hervorheben',
     showRecords: 'Rekorde beschriften',
-    recordsNote: 'Temperaturen die in dieser Höhe/Tiefe noch nicht an dieser Wetterstation gemessen wurden',
+    recordsNote:
+        'Temperaturen die in dieser Höhe/Tiefe noch nicht an dieser Wetterstation gemessen wurden',
     smooth: 'Normalbereich glätten über',
     anomaliesNote:
         'Anomalien bezeichnen Tagestemperaturen ober- und unterhalb der gemittelten Tageshöchst- und Tiefstwerte',
