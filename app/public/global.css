@@ -49,6 +49,13 @@ main.story, header.story {
     line-height: 1.725;
 }
 
+@media (max-device-width: 600px) {
+	.story p {
+	    font-size: 17px;
+	    line-height: 1.6;
+	}
+}
+
 main.full-width {
     padding: 1em;
     margin: 0 auto;
