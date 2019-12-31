@@ -53,7 +53,7 @@
     $: normalLow = mean(contextYears, d => d.tMin);
     $: normalHigh = mean(contextYears, d => d.tMax);
 
-    $: padding = { top: 40, right: 180, bottom: 30, left: 60 };
+    $: padding = { top: 40, right: 180, bottom: 30, left: width < 500 ? 40 : 60 };
 
     $: xScale = scaleLinear()
         .domain([minYear, maxYear])
@@ -77,17 +77,22 @@
     let dragStartX;
 
     function dragstart(event) {
-        dragStartX = event.clientX;
+        console.log(event)
+        dragStartX = getOffset(event);
         dragging = true;
+    }
+    function getOffset(event) {
+        return event.targetTouches ? event.targetTouches[0].screenX : event.clientX;
     }
     function drag(event) {
         if (dragging) {
-            const offset = event.clientX - dragStartX;
+            console.log(event)
+            const offset = getOffset(event) - dragStartX;
             localContextMin = Math.min(
                 maxYear - $contextRange,
                 Math.max(minYear, Math.round(xScale.invert(xScale(localContextMin) + offset)))
             );
-            dragStartX = event.clientX;
+            dragStartX = getOffset(event);
         }
     }
     function dragend(event) {
@@ -211,7 +216,7 @@
     }
 </style>
 
-<svelte:window on:mousemove={drag} on:mouseup={dragend} />
+<svelte:window on:mousemove={drag} on:mouseup={dragend} on:touchmove={drag} on:touchend={dragend} />
 
 <div class="chart" bind:clientWidth={width}>
     <svg {height}>
@@ -242,7 +247,7 @@
                 {/each}
             </g>
 
-            <g class="context" on:mousedown={dragstart}>
+            <g class="context" on:mousedown={dragstart} on:touchstart={dragstart}>
                 <rect
                     x={xScale(localContextMin - 0.5)}
                     width={xScale(localContextMax) - xScale(localContextMin)}

@@ -118,9 +118,6 @@
                 });
                 userSelectedStation = !!event;
                 station = stations.sort((a, b) => a.dist - b.dist)[0];
-            },
-            () => {
-                window.alert('didnt work');
             }
         );
     }
