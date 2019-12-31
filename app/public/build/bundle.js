@@ -7344,36 +7344,36 @@ var app = (function () {
     			t8 = space();
     			button4 = element("button");
     			t9 = text(t9_value);
-    			add_location(label0, file$7, 54, 4, 1479);
-    			attr_dev(i0, "class", "im im-care-left svelte-uuc6jt");
-    			add_location(i0, file$7, 57, 12, 1622);
-    			attr_dev(button0, "class", "btn btn-outline-secondary svelte-uuc6jt");
-    			add_location(button0, file$7, 56, 8, 1546);
-    			attr_dev(i1, "class", "im im-care-right svelte-uuc6jt");
-    			add_location(i1, file$7, 60, 12, 1754);
-    			attr_dev(button1, "class", "btn btn-outline-secondary svelte-uuc6jt");
-    			add_location(button1, file$7, 59, 8, 1678);
-    			attr_dev(div0, "class", "btn-group ml-2 mr-4");
-    			add_location(div0, file$7, 55, 4, 1504);
-    			add_location(label1, file$7, 64, 4, 1819);
-    			attr_dev(i2, "class", "im im-care-left svelte-uuc6jt");
-    			add_location(i2, file$7, 67, 12, 1960);
-    			attr_dev(button2, "class", "btn btn-outline-secondary svelte-uuc6jt");
-    			add_location(button2, file$7, 66, 8, 1885);
-    			attr_dev(input, "class", "form-control svelte-uuc6jt");
+    			add_location(label0, file$7, 63, 4, 1827);
+    			attr_dev(i0, "class", "im im-care-left svelte-1yua0q9");
+    			add_location(i0, file$7, 66, 12, 1970);
+    			attr_dev(button0, "class", "btn btn-outline-secondary svelte-1yua0q9");
+    			add_location(button0, file$7, 65, 8, 1894);
+    			attr_dev(i1, "class", "im im-care-right svelte-1yua0q9");
+    			add_location(i1, file$7, 69, 12, 2102);
+    			attr_dev(button1, "class", "btn btn-outline-secondary svelte-1yua0q9");
+    			add_location(button1, file$7, 68, 8, 2026);
+    			attr_dev(div0, "class", "btn-group ml-2 mr-2");
+    			add_location(div0, file$7, 64, 4, 1852);
+    			add_location(label1, file$7, 73, 4, 2167);
+    			attr_dev(i2, "class", "im im-care-left svelte-1yua0q9");
+    			add_location(i2, file$7, 76, 12, 2308);
+    			attr_dev(button2, "class", "btn btn-outline-secondary svelte-1yua0q9");
+    			add_location(button2, file$7, 75, 8, 2233);
+    			attr_dev(input, "class", "form-control svelte-1yua0q9");
     			attr_dev(input, "type", "number");
     			input.value = input_value_value = /*$maxDate*/ ctx[0].getFullYear();
-    			add_location(input, file$7, 69, 8, 2016);
-    			attr_dev(i3, "class", "im im-care-right svelte-uuc6jt");
-    			add_location(i3, file$7, 76, 12, 2292);
-    			attr_dev(button3, "class", "btn btn-outline-secondary svelte-uuc6jt");
-    			add_location(button3, file$7, 75, 8, 2217);
-    			attr_dev(div1, "class", "btn-group ml-2 mr-4 svelte-uuc6jt");
-    			add_location(div1, file$7, 65, 4, 1843);
+    			add_location(input, file$7, 78, 8, 2364);
+    			attr_dev(i3, "class", "im im-care-right svelte-1yua0q9");
+    			add_location(i3, file$7, 85, 12, 2640);
+    			attr_dev(button3, "class", "btn btn-outline-secondary svelte-1yua0q9");
+    			add_location(button3, file$7, 84, 8, 2565);
+    			attr_dev(div1, "class", "btn-group ml-2 mr-2 svelte-1yua0q9");
+    			add_location(div1, file$7, 74, 4, 2191);
     			attr_dev(button4, "class", "btn btn-secondary ml-2");
-    			add_location(button4, file$7, 80, 4, 2357);
-    			attr_dev(div2, "class", "form-inline svelte-uuc6jt");
-    			add_location(div2, file$7, 52, 0, 1448);
+    			add_location(button4, file$7, 89, 4, 2705);
+    			attr_dev(div2, "class", "form-inline svelte-1yua0q9");
+    			add_location(div2, file$7, 61, 0, 1796);
 
     			dispose = [
     				listen_dev(button0, "click", /*prevMonth*/ ctx[2], false, false, false),
@@ -7551,7 +7551,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (226:16) {#each yTicks as tick}
+    // (224:16) {#each yTicks as tick}
     function create_each_block_2$1(ctx) {
     	let g;
     	let line;
@@ -7573,14 +7573,14 @@ var app = (function () {
     			t1 = text("°C\n                        ");
     			attr_dev(line, "x2", "5");
     			attr_dev(line, "class", "svelte-15i8jfr");
-    			add_location(line, file$8, 227, 24, 5529);
+    			add_location(line, file$8, 225, 24, 5455);
     			html_tag = new HtmlTag(raw_value, t0);
     			attr_dev(text_1, "y", "-4");
     			attr_dev(text_1, "class", "svelte-15i8jfr");
-    			add_location(text_1, file$8, 228, 24, 5569);
+    			add_location(text_1, file$8, 226, 24, 5495);
     			attr_dev(g, "class", g_class_value = "tick tick-" + /*tick*/ ctx[33] + " svelte-15i8jfr");
     			attr_dev(g, "transform", g_transform_value = "translate(0, " + /*yScale*/ ctx[9](/*tick*/ ctx[33]) + ")");
-    			add_location(g, file$8, 226, 20, 5435);
+    			add_location(g, file$8, 224, 20, 5361);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -7611,14 +7611,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2$1.name,
     		type: "each",
-    		source: "(226:16) {#each yTicks as tick}",
+    		source: "(224:16) {#each yTicks as tick}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (239:16) {#each xTicks as tick, i}
+    // (237:16) {#each xTicks as tick, i}
     function create_each_block_1$2(ctx) {
     	let g1;
     	let line;
@@ -7647,14 +7647,14 @@ var app = (function () {
     			attr_dev(line, "x1", "0");
     			attr_dev(line, "x2", "0");
     			attr_dev(line, "class", "svelte-15i8jfr");
-    			add_location(line, file$8, 240, 24, 6017);
+    			add_location(line, file$8, 238, 24, 5943);
     			attr_dev(text_1, "y", "0");
     			attr_dev(text_1, "class", "svelte-15i8jfr");
-    			add_location(text_1, file$8, 242, 28, 6148);
-    			add_location(g0, file$8, 241, 24, 6116);
+    			add_location(text_1, file$8, 240, 28, 6074);
+    			add_location(g0, file$8, 239, 24, 6042);
     			attr_dev(g1, "class", g1_class_value = "tick tick-" + /*tick*/ ctx[33] + " svelte-15i8jfr");
     			attr_dev(g1, "transform", g1_transform_value = "translate(" + /*xScale*/ ctx[7](/*tick*/ ctx[33]) + "," + height + ")");
-    			add_location(g1, file$8, 239, 20, 5917);
+    			add_location(g1, file$8, 237, 20, 5843);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g1, anchor);
@@ -7693,14 +7693,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1$2.name,
     		type: "each",
-    		source: "(239:16) {#each xTicks as tick, i}",
+    		source: "(237:16) {#each xTicks as tick, i}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (296:24) {:else}
+    // (294:24) {:else}
     function create_else_block$1(ctx) {
     	let line;
     	let line_y__value;
@@ -7712,7 +7712,7 @@ var app = (function () {
     			attr_dev(line, "y1", line_y__value = /*yScale*/ ctx[9](/*d*/ ctx[30].tMin));
     			attr_dev(line, "y2", line_y__value_1 = /*yScale*/ ctx[9](/*d*/ ctx[30].tMax));
     			attr_dev(line, "class", "svelte-15i8jfr");
-    			add_location(line, file$8, 296, 28, 8677);
+    			add_location(line, file$8, 294, 28, 8603);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, line, anchor);
@@ -7735,14 +7735,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(296:24) {:else}",
+    		source: "(294:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (275:24) {#if d.year < localContextMin || d.year >= localContextMax}
+    // (273:24) {#if d.year < localContextMin || d.year >= localContextMax}
     function create_if_block$2(ctx) {
     	let g;
     	let if_block0_anchor;
@@ -7761,7 +7761,7 @@ var app = (function () {
     			if_block1_anchor = empty();
     			if (if_block2) if_block2.c();
     			attr_dev(g, "transform", g_transform_value = "translate(" + (/*d*/ ctx[30].year === 2019 ? 10 : 0) + ",0)");
-    			add_location(g, file$8, 275, 28, 7473);
+    			add_location(g, file$8, 273, 28, 7399);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -7827,14 +7827,14 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(275:24) {#if d.year < localContextMin || d.year >= localContextMax}",
+    		source: "(273:24) {#if d.year < localContextMin || d.year >= localContextMax}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (277:32) {#if d.tMin < normalLow}
+    // (275:32) {#if d.tMin < normalLow}
     function create_if_block_3$1(ctx) {
     	let line;
     	let line_y__value;
@@ -7846,7 +7846,7 @@ var app = (function () {
     			attr_dev(line, "class", "colder svelte-15i8jfr");
     			attr_dev(line, "y1", line_y__value = /*yScale*/ ctx[9](/*d*/ ctx[30].tMin));
     			attr_dev(line, "y2", line_y__value_1 = /*yScale*/ ctx[9](Math.min(/*d*/ ctx[30].tMax, /*normalLow*/ ctx[4])));
-    			add_location(line, file$8, 277, 36, 7622);
+    			add_location(line, file$8, 275, 36, 7548);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, line, anchor);
@@ -7869,14 +7869,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$1.name,
     		type: "if",
-    		source: "(277:32) {#if d.tMin < normalLow}",
+    		source: "(275:32) {#if d.tMin < normalLow}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (283:32) {#if d.tMax > normalHigh}
+    // (281:32) {#if d.tMax > normalHigh}
     function create_if_block_2$1(ctx) {
     	let line;
     	let line_y__value;
@@ -7888,7 +7888,7 @@ var app = (function () {
     			attr_dev(line, "class", "hotter svelte-15i8jfr");
     			attr_dev(line, "y1", line_y__value = /*yScale*/ ctx[9](/*d*/ ctx[30].tMax));
     			attr_dev(line, "y2", line_y__value_1 = /*yScale*/ ctx[9](Math.max(/*d*/ ctx[30].tMin, /*normalHigh*/ ctx[5])));
-    			add_location(line, file$8, 283, 36, 7959);
+    			add_location(line, file$8, 281, 36, 7885);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, line, anchor);
@@ -7911,14 +7911,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$1.name,
     		type: "if",
-    		source: "(283:32) {#if d.tMax > normalHigh}",
+    		source: "(281:32) {#if d.tMax > normalHigh}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (289:32) {#if d.tMin < normalHigh && d.tMax > normalLow}
+    // (287:32) {#if d.tMin < normalHigh && d.tMax > normalLow}
     function create_if_block_1$2(ctx) {
     	let line;
     	let line_y__value;
@@ -7930,7 +7930,7 @@ var app = (function () {
     			attr_dev(line, "class", "normal svelte-15i8jfr");
     			attr_dev(line, "y1", line_y__value = /*yScale*/ ctx[9](Math.max(/*normalLow*/ ctx[4], /*d*/ ctx[30].tMin)));
     			attr_dev(line, "y2", line_y__value_1 = /*yScale*/ ctx[9](Math.min(/*normalHigh*/ ctx[5], /*d*/ ctx[30].tMax)));
-    			add_location(line, file$8, 289, 36, 8319);
+    			add_location(line, file$8, 287, 36, 8245);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, line, anchor);
@@ -7953,14 +7953,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$2.name,
     		type: "if",
-    		source: "(289:32) {#if d.tMin < normalHigh && d.tMax > normalLow}",
+    		source: "(287:32) {#if d.tMin < normalHigh && d.tMax > normalLow}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (270:16) {#each dataClean as d}
+    // (268:16) {#each dataClean as d}
     function create_each_block$3(ctx) {
     	let g;
     	let g_transform_value;
@@ -7980,7 +7980,7 @@ var app = (function () {
     			attr_dev(g, "class", "day svelte-15i8jfr");
     			attr_dev(g, "transform", g_transform_value = "translate(" + Math.round(/*xScale*/ ctx[7](/*d*/ ctx[30].year)) + ",0)");
     			toggle_class(g, "reference", /*d*/ ctx[30].year >= /*localContextMin*/ ctx[0] && /*d*/ ctx[30].year < /*localContextMax*/ ctx[3]);
-    			add_location(g, file$8, 270, 20, 7147);
+    			add_location(g, file$8, 268, 20, 7073);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, g, anchor);
@@ -8017,7 +8017,7 @@ var app = (function () {
     		block,
     		id: create_each_block$3.name,
     		type: "each",
-    		source: "(270:16) {#each dataClean as d}",
+    		source: "(268:16) {#each dataClean as d}",
     		ctx
     	});
 
@@ -8181,76 +8181,76 @@ var app = (function () {
     			text5 = svg_element("text");
     			t21 = text("\"Normalbereich\"");
     			attr_dev(g0, "class", "axis y-axis");
-    			add_location(g0, file$8, 224, 12, 5352);
+    			add_location(g0, file$8, 222, 12, 5278);
     			attr_dev(g1, "class", "axis x-axis svelte-15i8jfr");
-    			add_location(g1, file$8, 237, 12, 5831);
+    			add_location(g1, file$8, 235, 12, 5757);
     			attr_dev(rect0, "x", rect0_x_value = /*xScale*/ ctx[7](/*localContextMin*/ ctx[0] - 0.5));
     			attr_dev(rect0, "width", rect0_width_value = /*xScale*/ ctx[7](/*localContextMax*/ ctx[3]) - /*xScale*/ ctx[7](/*localContextMin*/ ctx[0]));
     			attr_dev(rect0, "height", rect0_height_value = height - /*padding*/ ctx[6].bottom);
     			attr_dev(rect0, "class", "svelte-15i8jfr");
-    			add_location(rect0, file$8, 250, 16, 6412);
+    			add_location(rect0, file$8, 248, 16, 6338);
     			attr_dev(text0, "transform", text0_transform_value = "translate(" + /*xScale*/ ctx[7](0.5 * (/*localContextMin*/ ctx[0] + /*localContextMax*/ ctx[3] - 1)) + ",\n                    20)");
     			attr_dev(text0, "class", "svelte-15i8jfr");
-    			add_location(text0, file$8, 254, 16, 6622);
+    			add_location(text0, file$8, 252, 16, 6548);
     			attr_dev(g2, "class", "context svelte-15i8jfr");
-    			add_location(g2, file$8, 249, 12, 6325);
+    			add_location(g2, file$8, 247, 12, 6251);
     			attr_dev(rect1, "class", "normal-range svelte-15i8jfr");
     			attr_dev(rect1, "height", rect1_height_value = /*yScale*/ ctx[9](/*normalLow*/ ctx[4]) - /*yScale*/ ctx[9](/*normalHigh*/ ctx[5]));
     			attr_dev(rect1, "width", rect1_width_value = /*width*/ ctx[1] - 40);
     			attr_dev(rect1, "y", rect1_y_value = /*yScale*/ ctx[9](/*normalHigh*/ ctx[5]));
     			attr_dev(rect1, "x", rect1_x_value = /*padding*/ ctx[6].left - 20);
-    			add_location(rect1, file$8, 261, 12, 6849);
-    			add_location(g3, file$8, 268, 12, 7084);
+    			add_location(rect1, file$8, 259, 12, 6775);
+    			add_location(g3, file$8, 266, 12, 7010);
     			attr_dev(line0, "class", "zero svelte-15i8jfr");
     			attr_dev(line0, "x1", line0_x__value = /*padding*/ ctx[6].left - 20);
     			attr_dev(line0, "x2", /*width*/ ctx[1]);
-    			add_location(line0, file$8, 306, 16, 9061);
+    			add_location(line0, file$8, 304, 16, 8987);
     			attr_dev(text1, "class", "temp svelte-15i8jfr");
-    			add_location(text1, file$8, 308, 20, 9212);
+    			add_location(text1, file$8, 306, 20, 9138);
     			attr_dev(tspan0, "x", "0");
-    			add_location(tspan0, file$8, 310, 24, 9345);
+    			add_location(tspan0, file$8, 308, 24, 9271);
     			attr_dev(tspan1, "x", "0");
     			attr_dev(tspan1, "dy", "15");
-    			add_location(tspan1, file$8, 311, 24, 9413);
+    			add_location(tspan1, file$8, 309, 24, 9339);
     			attr_dev(text2, "transform", "translate(0,-35)");
     			attr_dev(text2, "class", "svelte-15i8jfr");
-    			add_location(text2, file$8, 309, 20, 9285);
+    			add_location(text2, file$8, 307, 20, 9211);
     			attr_dev(g4, "transform", g4_transform_value = "translate(" + (/*width*/ ctx[1] - /*padding*/ ctx[6].right + 30) + ",-5)");
-    			add_location(g4, file$8, 307, 16, 9133);
+    			add_location(g4, file$8, 305, 16, 9059);
     			attr_dev(g5, "class", "normal-high svelte-15i8jfr");
     			attr_dev(g5, "transform", g5_transform_value = "translate(0," + /*yScale*/ ctx[9](/*normalHigh*/ ctx[5]) + ")");
-    			add_location(g5, file$8, 305, 12, 8975);
+    			add_location(g5, file$8, 303, 12, 8901);
     			attr_dev(line1, "class", "zero svelte-15i8jfr");
     			attr_dev(line1, "x1", line1_x__value = /*padding*/ ctx[6].left - 20);
     			attr_dev(line1, "x2", /*width*/ ctx[1]);
-    			add_location(line1, file$8, 319, 16, 9710);
+    			add_location(line1, file$8, 317, 16, 9636);
     			attr_dev(text3, "class", "temp svelte-15i8jfr");
     			attr_dev(text3, "transform", text3_transform_value = "translate(" + (/*width*/ ctx[1] - /*padding*/ ctx[6].right + 30) + ",+5)");
-    			add_location(text3, file$8, 320, 16, 9782);
+    			add_location(text3, file$8, 318, 16, 9708);
     			attr_dev(tspan2, "x", "0");
-    			add_location(tspan2, file$8, 324, 20, 10025);
+    			add_location(tspan2, file$8, 322, 20, 9951);
     			attr_dev(tspan3, "x", "0");
     			attr_dev(tspan3, "dy", "15");
-    			add_location(tspan3, file$8, 325, 20, 10089);
+    			add_location(tspan3, file$8, 323, 20, 10015);
     			attr_dev(text4, "transform", text4_transform_value = "translate(" + (/*width*/ ctx[1] - /*padding*/ ctx[6].right + 30) + ",25)");
     			attr_dev(text4, "class", "svelte-15i8jfr");
-    			add_location(text4, file$8, 323, 16, 9943);
+    			add_location(text4, file$8, 321, 16, 9869);
     			attr_dev(g6, "class", "normal-low svelte-15i8jfr");
     			attr_dev(g6, "transform", g6_transform_value = "translate(0," + /*yScale*/ ctx[9](/*normalLow*/ ctx[4]) + ")");
-    			add_location(g6, file$8, 318, 12, 9626);
+    			add_location(g6, file$8, 316, 12, 9552);
     			attr_dev(text5, "transform", text5_transform_value = "translate(" + (/*width*/ ctx[1] - /*padding*/ ctx[6].right + 30) + ",0)");
     			attr_dev(text5, "class", "svelte-15i8jfr");
-    			add_location(text5, file$8, 330, 16, 10324);
+    			add_location(text5, file$8, 328, 16, 10250);
     			attr_dev(g7, "class", "normal svelte-15i8jfr");
     			attr_dev(g7, "transform", g7_transform_value = "translate(0," + /*yScale*/ ctx[9]((/*normalLow*/ ctx[4] + /*normalHigh*/ ctx[5]) * 0.5) + ")");
-    			add_location(g7, file$8, 329, 12, 10223);
-    			add_location(g8, file$8, 222, 8, 5308);
+    			add_location(g7, file$8, 327, 12, 10149);
+    			add_location(g8, file$8, 220, 8, 5234);
     			attr_dev(svg, "height", height);
     			attr_dev(svg, "class", "svelte-15i8jfr");
-    			add_location(svg, file$8, 221, 4, 5285);
+    			add_location(svg, file$8, 219, 4, 5211);
     			attr_dev(div, "class", "chart svelte-15i8jfr");
     			add_render_callback(() => /*div_elementresize_handler*/ ctx[29].call(div));
-    			add_location(div, file$8, 220, 0, 5236);
+    			add_location(div, file$8, 218, 0, 5162);
 
     			dispose = [
     				listen_dev(window, "mousemove", /*drag*/ ctx[14], false, false, false),
@@ -8540,7 +8540,6 @@ var app = (function () {
 
     	function drag(event) {
     		if (dragging) {
-    			console.log(event);
     			const offset = getOffset(event) - dragStartX;
     			$$invalidate(0, localContextMin = Math.min(maxYear - $contextRange, Math.max(minYear, Math.round(xScale.invert(xScale(localContextMin) + offset)))));
     			dragStartX = getOffset(event);
@@ -8549,7 +8548,6 @@ var app = (function () {
 
     	function dragend(event) {
     		if (dragging) {
-    			console.log("dragend", event);
     			dragging = false;
     			set_store_value(contextMinYear, $contextMinYear = localContextMin);
     		}

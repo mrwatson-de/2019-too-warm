@@ -86,7 +86,6 @@
     }
     function drag(event) {
         if (dragging) {
-            console.log(event)
             const offset = getOffset(event) - dragStartX;
             localContextMin = Math.min(
                 maxYear - $contextRange,
@@ -97,7 +96,6 @@
     }
     function dragend(event) {
         if (dragging) {
-            console.log('dragend', event);
             dragging = false;
             $contextMinYear = localContextMin;
         }

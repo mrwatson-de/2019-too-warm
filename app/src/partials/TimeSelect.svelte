@@ -40,6 +40,15 @@
     input[type='number'] {
         max-width: 5em;
     }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+    input[type='number'] {
+        -moz-appearance: textfield; /* Firefox */
+    }
     .form-inline {
         margin-bottom: 20px;
     }
@@ -53,7 +62,7 @@
 <div class="form-inline">
 
     <label>Monat</label>
-    <div class="btn-group ml-2 mr-4">
+    <div class="btn-group ml-2 mr-2">
         <button class="btn btn-outline-secondary" on:click={prevMonth}>
             <i class="im im-care-left" />
         </button>
@@ -63,7 +72,7 @@
     </div>
 
     <label>Jahr</label>
-    <div class="btn-group ml-2 mr-4">
+    <div class="btn-group ml-2 mr-2">
         <button class="btn btn-outline-secondary" on:click={prevYear}>
             <i class="im im-care-left" />
         </button>
