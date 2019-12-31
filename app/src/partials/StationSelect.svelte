@@ -57,7 +57,6 @@
     $: {
         if (station && station.name) {
             const hashParts = [$language];
-            console.log({ userSelectedStation });
             if (userSelectedStation) {
                 hashParts.push(station.id);
                 hashParts.push(
