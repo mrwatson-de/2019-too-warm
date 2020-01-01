@@ -253,7 +253,7 @@
         <i class="text-small text-muted">loading data...</i>
     {/if}
 
-    <p>Komprimiert man die Daten weiter zu einem einzigem Mittelwer pro</p>
+    <p>Komprimiert man die Daten weiter zu einem einzigem Temperatur-Mittelwert pro Jahr lässt sich der Trend auch mathematisch berechnen und als Trendlinie darstellen. Die Stärke des Anstiegs ist unterschiedlich in jeder Wetterstation, aber ansteigen tut die Temperatur von der <a href="#/{$language}/05792/zugspitze">Zugspitze</a> bis <a href="#/{$language}/02115/helgoland">Helgoland</a>.</p>
 
     {#if data}
     <h3 lang="de">Die globale Erwärmung zeigt sich auch an der Wetterstation {stationShort}</h3>
@@ -267,10 +267,10 @@
 
     <p>
         Alle Grafiken in diesem Artikel beziehen sich auf die Wetterstation {station ? station.name : '...'}
-        in {station ? station.state : '...'}, aber da der Klimawandel sich nicht auf einzelne
-        Regionen beschränkt lassen sich die selben Effekte auch in allen anderen deutschen
+        in {station ? station.state : '...'}. Da der Klimawandel sich nicht auf einzelne
+        Regionen beschränkt, lassen sich die selben Effekte auch in allen anderen deutschen
         Wetterstationen beobachten. Die folgende Liste enthält alle Stationen die mindestens
-        tägliche Temperaturdaten zwischen 1980 und heute gesammelt haben.
+        tägliche Temperaturdaten zwischen 1980 und 2019 gesammelt haben.
     </p>
     <div class="shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 30rem">
         <StationSelect bind:station />
