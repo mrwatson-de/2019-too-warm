@@ -237,11 +237,8 @@
     </p>
 
     <p>
-        Den globale Erwärmung hat freilich nicht in diesem Jahr angefangen. Was wir sehen ist nur die Fortsetzungen des Trendes der letzten Jahrzehnte. Um einen besseren Überblick zu erhalten zeigt die  monatliche Temperaturdaten seit 1960. Aber
-        statt der tatsächlichen Durchschnittstemperaturen wird die
-        <i>Temperaturdifferenz</i>
-        zu den normalen Monaten angezeigt. Die Rekordjahre 2019 und 2018 fallen sofort ins Auge,
-        aber auch der Rekordwinter von 2006/07.
+        Den globale Erwärmung hat freilich nicht in diesem Jahr angefangen. Was wir sehen ist nur die Fortsetzungen des Trendes der letzten Jahrzehnte. Um einen besseren Überblick auf einen längeren Zeitraum zu erhalten zeigt die folgende Grafik monatliche Temperaturanomalien (d.h. die Differenz der Monatsmitteltemperatur und dem Monatsmittel im Vergleichszeitraum) seit 1960. Die Rekordjahre 2019 und 2018 sind gut erkennbar,
+        aber auch der Rekordwinter von 2006/07 fällt ins Auge.
     </p>
 
     {#if data}
