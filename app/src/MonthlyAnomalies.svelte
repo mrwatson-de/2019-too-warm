@@ -174,13 +174,13 @@
 </style>
 
 <div class="chart" bind:clientWidth={width}>
-    <svg height={byDecade.length * decadeH + 50}>
+    <svg height={byDecade.length * decadeH + 20}>
         {#each byDecade as decade, d}
             <g class="decade" transform="translate(0, {d * decadeH + 10})">
 
                 <!-- y axis -->
                 <g class="axis y-axis">
-                    {#each yScale.ticks(4) as tick}
+                    {#each [-4,0,4] as tick}
                         {#if !d}
                             <text x={width - 35} y={yScale(tick)}>
                                 {@html tick > 0 ? '+' : tick < 0 ? '&minus;' : '&plusmn;'}

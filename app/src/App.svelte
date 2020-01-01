@@ -9,11 +9,14 @@
     import StationSelect from './partials/StationSelect.svelte';
     import TimeSelect from './partials/TimeSelect.svelte';
     import TemperatureDay from './TemperatureDay.svelte';
-    import DecadeAnomalies from './DecadeAnomalies.svelte';
+    import MonthlyAnomalies from './MonthlyAnomalies.svelte';
+    import YearlyAnomalies from './YearlyAnomalies.svelte';
 
     const tfmtIntro = timeFormat($msg.introDateFormat);
 
     let data;
+
+    $: stationShort = station ? station.name : '...';
 
     const parseRow = d => ({
         date: new Date(d.date),
@@ -88,7 +91,7 @@
 
     <!-- <LanguageSelect />
  -->
-    <h2 lang="de">Das Jahr 2019 war wärmer als "normal" — aber was heißt das eigentlich?</h2>
+    <h2 lang="de">Das Jahr 2019 war wärmer als normal — aber was heißt hier eigentlich "normal"?</h2>
     <h2 lang="en">2019 was hotter than normal — but what does this even mean?</h2>
 
     <p lang="de">
@@ -137,7 +140,7 @@
     </p>
 
     <p lang="de">
-        Als Rechenbeispiel nehmen wir uns den 18. Dezember an der Wetterstation {station ? station.name : '...'}.
+        Als Rechenbeispiel nehmen wir uns den 18. Dezember an der Wetterstation {stationShort}.
         Die Tageshöchsttemperatur lag an diesem Tag bei
         <b>{dailyMaxDec18}°C</b>
         . Um zu bestimmen welche Temperaturen "normal" für einen bestimmten Tag sind, berechnen
@@ -147,7 +150,7 @@
     </p>
 
     <p lang="en">
-        So let's take a look at a single day, December 18, at weather station {station ? station.name : '...'}.
+        So let's take a look at a single day, December 18, at weather station {stationShort}.
         The daily maximum temperature was at
         <b>{dailyMaxDec18}°C</b>
         . Was that hotter than normal? To answer this question, meterologists compute averages of
@@ -161,12 +164,12 @@
         <h3 lang="en">How "normal" temperature ranges are being calculated</h3>
         <p class="text-muted text-small" lang="de">
             Jeder Balken zeigt die Temperaturspanne am 18.12. im jeweiligen Jahr (gemessen an der
-            Wetterstation {station.name}). Tipp: Du kannst den Vergleichszeitraum nach links und
+            Wetterstation {stationShort}). Tipp: Du kannst den Vergleichszeitraum nach links und
             rechts verschieben.
         </p>
         <p class="text-muted text-small" lang="en">
             Each bar shows the temperature range on December 18 in a given year (measured at weather
-            station {station.name}). Hint: You can move the base period to the left and right.
+            station {stationShort}). Hint: You can move the base period to the left and right.
         </p>
         <TemperatureDay {data} />
     {:else}
@@ -175,14 +178,13 @@
 
     <p>
         Ob ein Temperaturwert nun "höher als normal" ist, hängt also davon ab, mit welchem Zeitraum
-        wir vergleichen. Doch wie wir den Zeitraum auch verändern, ein Tageshoch von
+        wir vergleichen (der Zeitraum im Diagramm lässt sich verschieben um den Effekt zu beobachten). Doch wie wir den Zeitraum auch verändern, das Tageshoch von
         <b>{dailyMaxDec18}°C</b>
-        am 18.12. ist und bleibt zu hoch.
+        am 18.12. ist und bleibt ein Ausreißer und damit "zu hoch".
     </p>
 
     <p>
-        Natürlich ist der 18. Dezember bei weitem kein Einzelfall. Die folgende Grafik zeigt die
-        Temperaturwerte für
+        Natürlich war der 18. Dezember kein Einzelfall: Über das ganze Jahr hinweg gab es solche "zu heißen" Tage. Die folgende Grafik zeigt die an der Wetterstation {stationShort} gemessenen Temperaturwerte. Der hellgraue Bereich im Hintergrund zeigt die bisherigen Temperaturrekorde (an dieser Wetterstation) und die kleinen Pfeile weisen die neu aufgestellten Temperaturrekorde aus.
     </p>
 
     <h3 lang="de">Zu heiße Tage und Rekordtemperaturen über das ganze Jahr</h3>
@@ -235,8 +237,7 @@
     </p>
 
     <p>
-        Der zu heißen ist kein ganz neues Phänomen. Auch die vergangengen Jahre sehen ähnlich aus.
-        Die folgende Grafik zoomt etwas heraus und zeigt monatliche Temperaturdaten seit 1960. Aber
+        Den globale Erwärmung hat freilich nicht in diesem Jahr angefangen. Was wir sehen ist nur die Fortsetzungen des Trendes der letzten Jahrzehnte. Um einen besseren Überblick zu erhalten zeigt die  monatliche Temperaturdaten seit 1960. Aber
         statt der tatsächlichen Durchschnittstemperaturen wird die
         <i>Temperaturdifferenz</i>
         zu den normalen Monaten angezeigt. Die Rekordjahre 2019 und 2018 fallen sofort ins Auge,
@@ -250,12 +251,22 @@
             Monatsdurchschnitt im Vergleichszeitraum von {$contextMinYear} bis {$contextMaxYear - 1}).
             Rot sind "zu warme" Monate, blau sind "zu kalte" Monate.
         </p>
-        <DecadeAnomalies {data} />
+        <MonthlyAnomalies {data} />
     {:else}
         <i class="text-small text-muted">loading data...</i>
     {/if}
 
-    <p>Komprimiert man die Daten weiter zu einem einzigem Jahresmittel</p>
+    <p>Komprimiert man die Daten weiter zu einem einzigem Mittelwer pro</p>
+
+    {#if data}
+    <h3 lang="de">Die globale Erwärmung zeigt sich auch an der Wetterstation {stationShort}</h3>
+    <h3 lang="de">Global warming is visible at weather station {stationShort}, too</h3>
+    <p lang="de" class="text-muted text-small">
+            Die Balken zeigen mittlere Temperaturabweichungen (Temperaturanomalien) pro Jahr gegenüber dem
+            Desamtdurchschnitt Vergleichszeitraum von <b>{$contextMinYear} bis {$contextMaxYear - 1}).</b>
+        </p>
+    <YearlyAnomalies {data} />
+    {/if}
 
     <p>
         Alle Grafiken in diesem Artikel beziehen sich auf die Wetterstation {station ? station.name : '...'}
