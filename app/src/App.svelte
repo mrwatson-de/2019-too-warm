@@ -257,7 +257,7 @@
 
     {#if data}
     <h3 lang="de">Die globale Erwärmung zeigt sich auch an der Wetterstation {stationShort}</h3>
-    <h3 lang="de">Global warming is visible at weather station {stationShort}, too</h3>
+    <h3 lang="en">Global warming is visible at weather station {stationShort}, too</h3>
     <p lang="de" class="text-muted text-small">
             Die Balken zeigen mittlere Temperaturabweichungen (Temperaturanomalien) pro Jahr gegenüber dem
             Desamtdurchschnitt Vergleichszeitraum von <b>{$contextMinYear} bis {$contextMaxYear - 1}).</b>
