@@ -25,43 +25,41 @@
         .filter(d => d.tMin > -999 && d.tMax > -999)
         .map(d => {
             d.year = d.date.getFullYear();
-            d.decade = Math.floor(d.year/10)*10;
+            d.decade = Math.floor(d.year / 10) * 10;
             d.yearMonth = fmt(d.date);
             return d;
         })
         .filter(d => d.year >= 1960 && d.year < 2020);
 
-    $: byMonth = Array.from(group(dataClean, d => d.yearMonth))
-        .map(([key, values]) => ({
-                year: values[0].year,
-                decade: values[0].decade,
-                month: values[0].date.getMonth(),
-                date: new Date(values[0].year, values[0].date.getMonth(), 1),
-                tAvg: mean(values, d => d.tAvg)
-        }));
+    $: byMonth = Array.from(group(dataClean, d => d.yearMonth)).map(([key, values]) => ({
+        year: values[0].year,
+        decade: values[0].decade,
+        month: values[0].date.getMonth(),
+        date: new Date(values[0].year, values[0].date.getMonth(), 1),
+        tAvg: mean(values, d => d.tAvg)
+    }));
 
-    $: byMonthBase = byMonth
-        .filter(d => d.year >= $contextMinYear && d.year < $contextMaxYear);
+    $: byMonthBase = byMonth.filter(d => d.year >= $contextMinYear && d.year < $contextMaxYear);
 
-    $: monthlyNormalRange = [0,1,2,3,4,5,6,7,8,9,10,11].map(month => {
+    $: monthlyNormalRange = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(month => {
         const monthValues = byMonthBase.filter(d => d.month === month);
         return {
-            tAvg: mean(monthValues, d => d.tAvg),
+            tAvg: mean(monthValues, d => d.tAvg)
         };
     });
 
-    $: monthlyNormalAvg = [0,1,2,3,4,5,6,7,8,9,10,11].map(month => {
+    $: monthlyNormalAvg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(month => {
         const monthValues = byMonthBase.filter(d => d.month === month);
         return mean(monthValues, d => d.tAvg);
     });
 
-    $: byDecade = Array.from(group(byMonth, d => d.decade).values())
-        .map(d => ({
-            decade: d[0].decade,
-            xScale: scaleTime().domain([new Date(d[0].decade, 0,1), new Date(d[0].decade+10, 0,0)]).range([0, width]),
-            values: d
-        }));
-
+    $: byDecade = Array.from(group(byMonth, d => d.decade).values()).map(d => ({
+        decade: d[0].decade,
+        xScale: scaleTime()
+            .domain([new Date(d[0].decade, 0, 1), new Date(d[0].decade + 10, 0, 0)])
+            .range([0, width - 40]),
+        values: d
+    }));
 
     let dtMin = 99;
     let dtMax = -99;
@@ -89,20 +87,18 @@
 
     $: padding = { top: 40, right: 180, bottom: 30, left: width < 500 ? 40 : 60 };
 
-    $: decadeH = width < 500 ? 70 : 90;
+    $: decadeH = width < 500 ? 80 : 100;
 
     $: yScale = scaleLinear()
         .domain([dtMin, dtMax])
-        .range([decadeH-10, 0]);
+        .range([decadeH - 20, 0]);
 
     $: yTicks = yScale.ticks(6);
 
     const height = 300;
     let width = 400;
 
-    const format = (d, i) => i ? formatMobile(d) : d.getFullYear();
-    const formatMobile = (d, i) => `'${String(d.getFullYear()).substr(2)}`;
-
+    const format = (d, i) => (i ? `'${String(d.getFullYear()).substr(2)}` : d.getFullYear());
 </script>
 
 <style>
@@ -113,12 +109,12 @@
     }
 
     .tick line {
-        stroke: #ccc;
+        stroke: var(--tick-line);
         shape-rendering: crispEdges;
     }
 
     .tick text {
-        fill: #666;
+        fill: var(--tick);
         font-weight: 500;
         font-size: 14px;
         text-anchor: start;
@@ -126,12 +122,30 @@
 
     .x-axis .tick text {
         dominant-baseline: text-after-edge;
+        text-anchor: middle;
     }
 
-    line.zero {
+    .y-axis text {
+        dominant-baseline: central;
+        text-anchor: start;
+        fill: var(--tick);
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .y-axis line {
         stroke-width: 1;
-        stroke: black;
-        opacity: 0.5;
+        shape-rendering: crispEdges;
+        stroke: var(--tick-line);
+    }
+    .y-axis line.zero {
+        stroke: var(--tick);
+    }
+    text.buffer {
+        fill: #eee;
+        stroke: #eee;
+        stroke-width: 2;
+        stroke-linejoin: round;
     }
 
     @media (max-width: 400px) {
@@ -141,7 +155,7 @@
     }
 
     .chart {
-        max-width: 600px;
+        max-width: 650px;
         margin-bottom: 20px;
     }
 
@@ -151,10 +165,12 @@
         shape-rendering: crispEdges;
     }
 
-
     @media (max-width: 500px) {
         .month line {
             stroke-width: 3;
+        }
+        .x-axis .tick:nth-child(2n) text {
+            display: none;
         }
     }
     line.hotter {
@@ -166,41 +182,69 @@
 </style>
 
 <div class="chart" bind:clientWidth={width}>
-    <svg height="{byDecade.length*decadeH+40}">
-        {#each byDecade as decade,d}
-        <g class="decade" transform="translate(0, {d*decadeH})">
-            <!-- x axis -->
-            <g class="axis x-axis" transform="translate(0,{decadeH-5})">
-                {#each decade.xScale.ticks(8) as tick,i}
-                    <g class="tick" transform="translate({decade.xScale(tick)}, 0)">
-                        <text y="0">{(true ? formatMobile : format)(tick, i)}</text>
-                    </g>
-                {/each}
-            </g>
-            <!-- y axis -->
-            <line class="zero" transform="translate(0,{yScale(0)})" x2="100%"/>
-            <g class="values">
-                {#each decade.values as d}
-                <g class="month" transform="translate({decade.xScale(d.date)},0)">
+    <svg height={byDecade.length * decadeH + 50}>
+        {#each byDecade as decade, d}
+            <g class="decade" transform="translate(0, {d * decadeH + 10})">
 
-                    {#if d.tAvg < monthlyNormalAvg[d.month]}
+                <!-- y axis -->
+                <g class="axis y-axis">
+                    {#each yScale.ticks(4) as tick}
+                        {#if !d}
+                            <text x={width - 35} y={yScale(tick)}>
+                                {@html tick > 0 ? '+' : tick < 0 ? '&minus;' : '&plusmn;'}
+                                {Math.abs(tick).toFixed(0)}°C
+                            </text>
+                        {/if}
                         <line
-                            class="colder"
-                            y1={yScale(0)}
-                            y2={yScale(d.tAvg - monthlyNormalAvg[d.month])} />
-                    {/if}
-                    {#if d.tAvg > monthlyNormalAvg[d.month]}
-                        <line
-                            class="hotter"
-                            y1={yScale(0)}
-                            y2={yScale(d.tAvg -monthlyNormalAvg[d.month])} />
-                    {/if}
-
-
+                            class:zero={!tick}
+                            transform="translate(0,{yScale(tick)})"
+                            x2={width - 40} />
+                    {/each}
                 </g>
-                {/each}
+                <!-- x axis -->
+                <g class="axis x-axis">
+                    {#each decade.xScale.ticks(8) as tick, i}
+                        <g class="tick" transform="translate({decade.xScale(tick)}, 0)">
+                            <line y1={yScale(-6)} y2={yScale(6)} />
+                            <g transform="translate(0,{decadeH - 5})">
+                                <text
+                                    class="buffer"
+                                    x={decade.xScale(new Date(tick.getTime() + 864e5 * 182)) - decade.xScale(tick)}
+                                    y="-10">
+                                    {format(tick, i)}
+                                </text>
+                                <text
+                                    x={decade.xScale(new Date(tick.getTime() + 864e5 * 182)) - decade.xScale(tick)}
+                                    y="-15">
+                                    {format(tick, i)}
+                                </text>
+                            </g>
+                        </g>
+                    {/each}
+                </g>
+                <g class="values">
+                    {#each decade.values as d}
+                        <g
+                            class="month"
+                            transform="translate({decade.xScale(new Date(d.date.getTime() + 864e5 * 15))},0)">
+
+                            {#if d.tAvg < monthlyNormalAvg[d.month]}
+                                <line
+                                    class="colder"
+                                    y1={yScale(0)}
+                                    y2={yScale(d.tAvg - monthlyNormalAvg[d.month])} />
+                            {/if}
+                            {#if d.tAvg > monthlyNormalAvg[d.month]}
+                                <line
+                                    class="hotter"
+                                    y1={yScale(0)}
+                                    y2={yScale(d.tAvg - monthlyNormalAvg[d.month])} />
+                            {/if}
+
+                        </g>
+                    {/each}
+                </g>
             </g>
-        </g>
         {/each}
     </svg>
 </div>

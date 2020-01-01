@@ -165,7 +165,10 @@
     }
 </style>
 
-<svelte:window on:mousemove={handleMouseMove} on:touchmove={handleMouseMove} on:mouseout={() => (highlight = null)} />
+<svelte:window
+    on:mousemove={handleMouseMove}
+    on:touchmove={handleMouseMove}
+    on:mouseout={() => (highlight = null)} />
 
 <g bind:this={layer} class:highlight>
     {#each currentTempData as d}

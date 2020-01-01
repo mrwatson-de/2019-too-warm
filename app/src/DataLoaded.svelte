@@ -47,8 +47,7 @@
     input[type='number'] {
         width: 5em;
     }
-s
-    .form-group .form-control {
+    s .form-group .form-control {
         margin-bottom: 0;
     }
     .form-text {

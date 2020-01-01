@@ -77,7 +77,7 @@
     let dragStartX;
 
     function dragstart(event) {
-        console.log(event)
+        console.log(event);
         dragStartX = getOffset(event);
         dragging = true;
     }
@@ -110,7 +110,7 @@
     }
 
     .tick line {
-        stroke: #ccc;
+        stroke: var(--tick-line);
         shape-rendering: crispEdges;
     }
 

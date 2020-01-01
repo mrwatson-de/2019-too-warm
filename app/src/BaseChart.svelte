@@ -72,7 +72,7 @@
 
     $: height = Math.max(
         450,
-        $chartWidth * ($chartWidth > 800 ? 0.35 : $chartWidth > 500 ? 0.7 : 1)
+        Math.min(500, $chartWidth * ($chartWidth > 800 ? 0.35 : $chartWidth > 500 ? 0.7 : 1))
     );
 
     $: format = (d, i) => $msg.monthLong[d.getMonth()];
@@ -163,7 +163,7 @@
     }
 
     .tick line {
-        stroke: #ccc;
+        stroke: var(--tick-line);
         shape-rendering: crispEdges;
     }
 

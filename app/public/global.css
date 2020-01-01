@@ -41,6 +41,7 @@ a:visited {
 
 main.story, header.story {
     max-width: 45rem;
+    font-size: 18px;
     margin: 0 auto;
 }
 

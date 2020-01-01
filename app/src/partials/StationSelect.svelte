@@ -35,7 +35,7 @@
 
             // pick random station
             const initStations = [
-                '00433',
+                '00433'
                 // '01975',
                 // '03668',
                 // '00691',
@@ -117,9 +117,8 @@
                 });
                 userSelectedStation = !!event;
                 station = stations.sort((a, b) => a.dist - b.dist)[0];
-            }, () => {
-
-            }
+            },
+            () => {}
         );
     }
 </script>
@@ -129,6 +128,9 @@
         font-size: 16px;
         position: relative;
         top: 2px;
+    }
+    label {
+        display: block;
     }
 </style>
 
@@ -145,9 +147,7 @@
         {#each groupedStations as stations}
             <optgroup label={stations[0].state}>
                 {#each stations as s}
-                    <option value={s}>
-                        {s.name} ({s.from.getFullYear()} - {s.to.getFullYear()})
-                    </option>
+                    <option value={s}>{s.name}</option>
                 {/each}
             </optgroup>
         {/each}
@@ -157,4 +157,32 @@
         <i class="im im-location" />
         Wetterstation in meiner Nähe finden
     </a>
+
+    <hr />
+    <table>
+
+        <tr>
+            <th class="pr-4">Ausgewählte Station:</th>
+            <td>{station.name}, {station.state}</td>
+        </tr>
+        <tr>
+            <th>{$msg.timerange}:</th>
+            <td>{station.from.getFullYear()} - {station.to.getFullYear()}</td>
+        </tr>
+        <tr>
+            <th>{$msg.location}:</th>
+            <td>
+                <a
+                    target="_blank"
+                    href="https://www.openstreetmap.org/#map=19/{station.lat}/{station.lon}">
+                    {(+station.lat).toFixed(2)}, {(+station.lon).toFixed(2)}
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <th>{$msg.altitude}:</th>
+            <td>{station.altitude}m</td>
+        </tr>
+    </table>
+
 {/await}
