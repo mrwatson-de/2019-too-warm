@@ -17,12 +17,13 @@
     let userSelectedStation = false;
 
     export let station;
+
     let stations = [];
     $: groupedStations = Array.from(group(stations, d => d.state))
         .map(([k, v]) => v)
         .sort((a, b) => (a[0].state > b[0].state ? 1 : a[0].state < b[0].state ? -1 : 0));
 
-    let loadStations = csv('/data/stations.csv', parseStations).then(async res => {
+    const loadStations = csv('/data/stations.csv', parseStations).then(async res => {
         stations = res
             .filter(d => d.from.getFullYear() <= 1980 && d.to.getFullYear() >= 2019)
             .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0));
@@ -97,7 +98,7 @@
     }
 
     function latLonDist(lat1, lon1, lat2, lon2) {
-        const p = 0.017453292519943295; //This is  Math.PI / 180
+        const p = 0.017453292519943295; // This is  Math.PI / 180
         const c = Math.cos;
         const a =
             0.5 -

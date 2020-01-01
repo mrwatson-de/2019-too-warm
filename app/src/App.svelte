@@ -2,12 +2,10 @@
     import { csv } from 'd3-fetch';
     import { timeFormat } from 'd3-time-format';
 
-    import { beforeUpdate, onMount, tick } from 'svelte';
+    import { beforeUpdate } from 'svelte';
     import { maxDate, msg, language, minDate, contextMinYear, contextMaxYear } from './stores';
 
     import DataLoaded from './DataLoaded.svelte';
-    import LanguageSelect from './partials/LanguageSelect.svelte';
-    import StationInfo from './partials/StationInfo.svelte';
     import StationSelect from './partials/StationSelect.svelte';
     import TimeSelect from './partials/TimeSelect.svelte';
     import TemperatureDay from './TemperatureDay.svelte';
@@ -69,10 +67,6 @@
         main {
             padding: 1ex;
         }
-    }
-
-    .custom-select {
-        margin-bottom: 0;
     }
 </style>
 
@@ -234,7 +228,10 @@
         </b>
     </p>
     <p>
-        <img style="max-width: 100%;margin-bottom: 20px" src="key-{$language}.svg" />
+        <img
+            alt="reading instructions"
+            style="max-width: 100%;margin-bottom: 20px"
+            src="key-{$language}.svg" />
     </p>
 
     <p>
@@ -258,7 +255,7 @@
         <i class="text-small text-muted">loading data...</i>
     {/if}
 
-    <p />
+    <p>Komprimiert man die Daten weiter zu einem einzigem Jahresmittel</p>
 
     <p>
         Alle Grafiken in diesem Artikel beziehen sich auf die Wetterstation {station ? station.name : '...'}

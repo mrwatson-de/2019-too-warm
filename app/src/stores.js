@@ -9,8 +9,6 @@ export const contextMaxYear = derived(
     ([$contextMinYear, $contextRange]) => $contextMinYear + $contextRange
 );
 
-export const normalRange = writable(50);
-
 export const maxDate = writable(new Date());
 
 export const innerWidth = writable(window.innerWidth);

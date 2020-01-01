@@ -11,7 +11,6 @@
         maxDate,
         contextMinYear,
         contextMaxYear,
-        normalRange,
         smoothNormalRangeWidth
     } from './stores';
 
@@ -143,9 +142,7 @@
 </script>
 
 <style>
-    .chart,
-    h2,
-    p {
+    .chart {
         width: 100%;
         margin-left: auto;
         margin-right: auto;

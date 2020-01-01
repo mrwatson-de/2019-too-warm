@@ -40,6 +40,9 @@
     },
     "eslintConfig": {
         "parser": "babel-eslint",
+        "env": {
+            "es6": true
+        },
         "rules": {
             "no-console": [
                 "error",

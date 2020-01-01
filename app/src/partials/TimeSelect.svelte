@@ -13,8 +13,6 @@
         $maxDate = d;
     }
 
-    const prevDay = () => changeDate('Date', -1);
-    const nextDay = () => changeDate('Date', +1);
     const prevMonth = () => changeDate('Month', -1);
     const nextMonth = () => changeDate('Month', +1);
     const prevYear = () => changeDate('FullYear', -1);
@@ -24,11 +22,6 @@
         if (+event.target.value > 1881 && event.target.value < 2021) {
             $maxDate = new Date(event.target.value, 11, 31);
         }
-    }
-    function handleMonthChange(event) {
-        console.log(event.target.value, $maxDate.getFullYear());
-        $maxDate = new Date($maxDate.getFullYear(), +event.target.value + 1, 0);
-        console.log($maxDate);
     }
 </script>
 

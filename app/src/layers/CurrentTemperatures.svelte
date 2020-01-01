@@ -1,10 +1,6 @@
 <script>
-    export let xScale;
-    export let yScale;
-    export let data;
-    export let grouped;
+    import { clientPoint } from 'd3-selection';
     import { timeFormat } from 'd3-time-format';
-
     import {
         msg,
         language,
@@ -13,8 +9,11 @@
         showAnomalies,
         labelRecordTemperatures
     } from '../stores';
-    import { clientPoint } from 'd3-selection';
-    import Steps from './Steps.svelte';
+
+    export let xScale;
+    export let yScale;
+    export let data;
+    export let grouped;
 
     $: fmt = date =>
         $language === 'de'
@@ -53,13 +52,13 @@
                 if (d.tMax > d.tMaxAbs || d.tMin < d.tMinAbs) {
                     // check if we're a local max
                     filteredData.slice(Math.max(0, i - 7), i + 8).forEach(e => {
-                        if (d != e && e.tMax > e.tMaxAbs && e.labelMaxRecord) {
+                        if (d !== e && e.tMax > e.tMaxAbs && e.labelMaxRecord) {
                             // e is also a record
                             if (e.tMax >= d.tMax) {
                                 d.labelMaxRecord = false;
                             }
                         }
-                        if (d != e && e.tMin < e.tMinAbs && e.labelMinRecord) {
+                        if (d !== e && e.tMin < e.tMinAbs && e.labelMinRecord) {
                             // e is also a record
                             if (e.tMin <= d.tMin) {
                                 d.labelMinRecord = false;
@@ -140,13 +139,6 @@
     g.highlight g.day.highlight circle {
         fill: black;
     }
-    .skinny line {
-        stroke-width: 1;
-    }
-    .skinny g.day.highlight line {
-        stroke-width: 2;
-    }
-
     text {
         pointer-events: none;
         text-anchor: middle;

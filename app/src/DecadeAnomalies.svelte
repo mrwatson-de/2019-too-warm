@@ -1,20 +1,15 @@
 <script>
     import { scaleTime, scaleLinear } from 'd3-scale';
-    import { timeMonth, timeDay, timeDays } from 'd3-time';
     import { timeFormat } from 'd3-time-format';
-    import { median, mean, extent, quantileSorted, group, ascending, max, min } from 'd3-array';
-    import {
-        msg,
-        contextMinYear,
-        contextMaxYear,
-        normalRange,
-        contextRange,
-        smoothNormalRangeWidth
-    } from './stores';
+    import { mean, group } from 'd3-array';
+    import { contextMinYear, contextMaxYear, contextRange } from './stores';
 
     export let data = [];
 
     export let day = new Date(2019, 11, 18);
+
+    let width = 400;
+
     const fmt = timeFormat('%Y-%m');
     $: dayFmt = fmt(day);
 
@@ -94,9 +89,6 @@
         .range([decadeH - 20, 0]);
 
     $: yTicks = yScale.ticks(6);
-
-    const height = 300;
-    let width = 400;
 
     const format = (d, i) => (i ? `'${String(d.getFullYear()).substr(2)}` : d.getFullYear());
 </script>

@@ -1,16 +1,8 @@
 <script>
-    import { scaleTime, scaleLinear } from 'd3-scale';
-    import { timeMonth, timeDay, timeDays } from 'd3-time';
+    import { scaleLinear } from 'd3-scale';
     import { timeFormat } from 'd3-time-format';
-    import { median, mean, extent, quantileSorted, group, ascending, max, min } from 'd3-array';
-    import {
-        msg,
-        contextMinYear,
-        contextMaxYear,
-        normalRange,
-        contextRange,
-        smoothNormalRangeWidth
-    } from './stores';
+    import { mean } from 'd3-array';
+    import { contextMinYear, contextRange } from './stores';
 
     export let data = [];
 
@@ -53,6 +45,9 @@
     $: normalLow = mean(contextYears, d => d.tMin);
     $: normalHigh = mean(contextYears, d => d.tMax);
 
+    let width = 400;
+    const height = 300;
+
     $: padding = { top: 40, right: 180, bottom: 30, left: width < 500 ? 40 : 60 };
 
     $: xScale = scaleLinear()
@@ -67,9 +62,6 @@
 
     $: yTicks = yScale.ticks(6);
 
-    const height = 300;
-    let width = 400;
-
     $: format = (d, i) => d;
     $: formatMobile = (d, i) => `'${String(d).substr(2)}`;
 
@@ -77,7 +69,6 @@
     let dragStartX;
 
     function dragstart(event) {
-        console.log(event);
         dragStartX = getOffset(event);
         dragging = true;
     }
@@ -149,14 +140,8 @@
         stroke-width: 2;
         shape-rendering: crispEdges;
     }
-    .day circle {
-        fill: #888;
-    }
     .day.reference line {
         stroke: #000;
-    }
-    .day.reference circle {
-        fill: #000;
     }
     .context {
         cursor: grab;
