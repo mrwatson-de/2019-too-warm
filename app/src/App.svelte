@@ -205,7 +205,7 @@
     </p>
 </main>
 
-<main class="full-width">
+<main class="full-width" lang="{$language}">
     {#if promise}
         {#await promise}
             <!-- promise is pending -->
@@ -220,7 +220,7 @@
 
 </main>
 
-<main class="story">
+<main class="story" lang="{$language}">
     <TimeSelect />
     <p class="text-small text-muted">Schau dir gerne auch einen anderen Zeitraum an!</p>
 
