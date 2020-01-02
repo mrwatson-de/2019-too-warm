@@ -9,12 +9,12 @@ export const contextMaxYear = derived(
     ([$contextMinYear, $contextRange]) => $contextMinYear + $contextRange
 );
 
-export const maxDate = writable(new Date());
+export const maxDate = writable(new Date(2019,11,31));
 
 export const innerWidth = writable(window.innerWidth);
 export const chartWidth = writable(1000);
 
-export const showDays = derived(chartWidth, $cw => Math.round(($cw - 50) / 4));
+export const showDays = derived(chartWidth, $cw => $cw < 500 ? 180 : 365);
 
 export const minDate = derived([maxDate, chartWidth, showDays], ([$a, $cw, $showDays]) => {
     const approxDays = $showDays;

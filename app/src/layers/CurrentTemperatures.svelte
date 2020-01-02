@@ -1,6 +1,7 @@
 <script>
     import { clientPoint } from 'd3-selection';
     import { timeFormat } from 'd3-time-format';
+    import { timeDay } from 'd3-time';
     import {
         msg,
         language,
@@ -25,6 +26,8 @@
     let layer;
     let highlight;
 
+    $: pxPerDay = (xScale.range()[1] - xScale.range()[0]) / timeDay.count(...xScale.domain());
+    $: thin = pxPerDay < 3;
     $: filteredData = data.filter(
         d => d.dateRaw >= compFmt($minDate) && d.dateRaw <= compFmt($maxDate)
     );
@@ -97,6 +100,9 @@
         stroke-width: 2;
         shape-rendering: crispEdges;
     }
+    .thin line {
+        stroke-width: 1;
+    }
     circle.hotter,
     .record.high path,
     .record.high text {
@@ -166,6 +172,7 @@
     {#each currentTempData as d}
         <g
             class="day"
+            class:thin
             class:highlight={highlight && sameDay(highlight, d.date)}
             class:sameMonth={highlight && sameMonth(highlight, d.date)}
             transform="translate({xScale(d.date)},0)">
@@ -196,7 +203,7 @@
                 class:hotter={$showAnomalies && d.tAvg > d.trendMax}
                 class:colder={$showAnomalies && d.tAvg < d.trendMin}
                 class:normal={$showAnomalies && d.tAvg >= d.trendMin && d.tAvg <= d.trendMax}
-                r={highlight && sameDay(highlight, d.date) ? 3 : 2}
+                r={(highlight && sameDay(highlight, d.date) ? 3 : 2)*(thin?0.75:1)}
                 transform="translate(0,{yScale(d.tAvg)})" />
             {#if highlight && sameDay(highlight, d.date)}
                 <text class="date" y={yScale(d.tMax) - 25}>{fmt(d.date)}</text>

@@ -1,5 +1,6 @@
 <script>
     import { timeFormat } from 'd3-time-format';
+    import { timeDay, timeMonth } from 'd3-time';
     import { maxDate, msg } from '../stores';
 
     const tfmt = timeFormat('%Y');
@@ -9,6 +10,8 @@
     function changeDate(prop, offset, delay = 300) {
         let d = new Date($maxDate);
         d[`set${prop}`](d[`get${prop}`]() + offset);
+        // move date to last of month
+        d = timeDay.offset(timeMonth.ceil(d),-1);
         if (d >= new Date()) d = new Date();
         $maxDate = d;
     }
