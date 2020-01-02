@@ -35,3 +35,11 @@ export const smoothNormalRangeWidth = writable(0);
 export const msg = derived(language, lang => {
     return lang === 'de' ? de : en;
 });
+
+export const formatTemp = derived(language, lang => {
+	return (d, unit=true) => {
+		if (!d.toFixed) return d;
+		const n = d.toFixed(d === Math.round(d) ? 0 : 1).replace(lang === 'de' ? '.' : null, ',');
+		return `${n}${unit?'°C':''}`;
+	}
+});

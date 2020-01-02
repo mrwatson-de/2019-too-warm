@@ -23,7 +23,7 @@
         .map(([k, v]) => v)
         .sort((a, b) => (a[0].state > b[0].state ? 1 : a[0].state < b[0].state ? -1 : 0));
 
-    const loadStations = csv('/data/stations.csv', parseStations).then(async res => {
+    const loadStations = csv('/blog/interactives/2019-too-warm/data/stations.csv', parseStations).then(async res => {
         stations = res
             .filter(d => d.from.getFullYear() <= 1980 && d.to.getFullYear() >= 2019)
             .sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0));

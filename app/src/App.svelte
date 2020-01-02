@@ -3,7 +3,7 @@
     import { timeFormat } from 'd3-time-format';
 
     import { beforeUpdate } from 'svelte';
-    import { maxDate, msg, language, minDate, contextMinYear, contextMaxYear } from './stores';
+    import { maxDate, msg, language, minDate, contextMinYear, contextMaxYear, formatTemp } from './stores';
 
     import DataLoaded from './DataLoaded.svelte';
     import StationSelect from './partials/StationSelect.svelte';
@@ -26,16 +26,19 @@
         tMax: +d.TXK
     });
 
+    $: stationFrom = station ? station.from.getFullYear() : 1980;
+
     let promise;
     const load = () => {
         if (!station) return;
-        promise = csv(`/data/stations/${station.id}.csv`, parseRow).then(res => {
+        promise = csv(`/blog/interactives/2019-too-warm/data/stations/${station.id}.csv`, parseRow).then(res => {
             data = res;
             return data;
         });
     };
 
     let _station;
+    let _lang;
     let station;
     let stations = [];
 
@@ -45,15 +48,19 @@
         if (station !== _station) {
             // new station selected!
             _station = station;
+            data = false;
             load();
         }
+        if (_lang !== $language) {
+            document.querySelector('h1.posttitle').innerHTML = $msg.title;
+            _lang = $language;
+        }
     });
+
+    $: loading = `<i class="fa fa-spinner fa-pulse fa-fw"></i> ${$msg.loading}...`
 </script>
 
 <style>
-    h1 {
-    }
-
     header {
         margin-bottom: 20px;
     }
@@ -72,42 +79,53 @@
             padding: 1ex;
         }
     }
+
+    main.story, header.story {
+        max-width: 45rem;
+        font-size: 18px;
+        margin: 0 auto;
+    }
+
+    p.text-small {
+        font-size: 15px;
+        line-height: 22px;
+    }
+    .text-muted {
+        color: var(--tick);
+    }
+    @media (min-device-width: 600px) {
+        .only-mobile {
+            display: none;
+        }
+    }
+
+    @media (max-device-width: 600px) {
+        .only-desktop {
+            display: none;
+        }
+        .story p {
+            font-size: 17px;
+            line-height: 1.6;
+        }
+    }
+
+
+    main[lang="de"] *[lang="en"] {
+        display: none;
+    }
+
+    main[lang="en"] *[lang="de"] {
+        display: none;
+    }
 </style>
 
-<header id="header" class="story">
-    <div id="logo">
-        <i class="im im-code" />
-    </div>
-    <h1>
-        <a href="/blog">vis4.net</a>
-    </h1>
-    <p style="color: #555">
-        Hi, I'm Gregor. I write about data visualization, cartography, colors, data journalism and
-        some of my open source hacks. This is my blog.
+<main lang={$language} class="story px2">
+
+    <p class="p-2 text-center text-muted text-small" lang="de">
+        <a class="text-reset" href="#/en">Read this text in English</a>
     </p>
-    <hr />
-</header>
-
-<main lang={$language} class="story">
-
-    <!-- <LanguageSelect />
- -->
-    <h2 lang="de">Das Jahr 2019 war wärmer als normal — aber was heißt hier eigentlich "normal"?</h2>
-    <h2 lang="en">2019 was hotter than normal — but what does this even mean?</h2>
-
-    <p lang="de">
-        <i>
-            [
-            <a href="#/en">Click here to read this text in English</a>
-            ]
-        </i>
-    </p>
-    <p lang="en">
-        <i>
-            [
-            <a href="#/de">Hier klicken um diesen Text auf deutsch zu lesen</a>
-        </i>
-        ]
+    <p class="p-2 text-center text-muted text-small" lang="en">
+        <a class="text-reset" href="#/de">Diesen Text auf deutsch lesen</a>
     </p>
 
     <p lang="de">
@@ -143,8 +161,7 @@
     <p lang="de">
         Als Rechenbeispiel nehmen wir uns den 18. Dezember an der Wetterstation {stationShort}.
         Die Tageshöchsttemperatur lag an diesem Tag bei
-        <b>{dailyMaxDec18}°C</b>
-        . Um zu bestimmen welche Temperaturen "normal" für einen bestimmten Tag sind, berechnen
+        <b>{$formatTemp(dailyMaxDec18)}</b>. Um zu bestimmen welche Temperaturen "normal" für einen bestimmten Tag sind, berechnen
         Meterologen die Mittelwerte aus den Höchst- und tiefsttemperaturen am selben Datum in einem
         <b>Vergleichszeitraum</b>
         , zum Beispiel zwischen {$contextMinYear} und {$contextMaxYear - 1}.
@@ -153,7 +170,7 @@
     <p lang="en">
         So let's take a look at a single day, December 18, at weather station {stationShort}.
         The daily maximum temperature was at
-        <b>{dailyMaxDec18}°C</b>
+        <b>{$formatTemp(dailyMaxDec18)}</b>
         . Was that hotter than normal? To answer this question, meterologists compute averages of
         maximum and minimum temperatures on the same date over a
         <b>base period</b>
@@ -161,20 +178,20 @@
     </p>
 
     {#if data}
-        <h3 lang="de">Wie sich der "normale" Temperaturbereich errechnet</h3>
-        <h3 lang="en">How "normal" temperature ranges are being calculated</h3>
-        <p class="text-muted text-small" lang="de">
+        <h2 lang="de">Wie sich der "normale" Temperaturbereich errechnet</h2>
+        <h2 lang="en">How "normal" temperature ranges are being calculated</h2>
+        <p class="text-muted text-small mt0" lang="de">
             Jeder Balken zeigt die Temperaturspanne am 18.12. im jeweiligen Jahr (gemessen an der
             Wetterstation {stationShort}). Tipp: Du kannst den Vergleichszeitraum nach links und
             rechts verschieben.
         </p>
-        <p class="text-muted text-small" lang="en">
+        <p class="text-muted text-small mt0" lang="en">
             Each bar shows the temperature range on December 18 in a given year (measured at weather
             station {stationShort}). Hint: You can move the base period to the left and right.
         </p>
         <TemperatureDay {data} />
     {:else}
-        <i class="text-small text-muted">loading data...</i>
+        <p class="text-small text-muted">{@html loading}</p>
     {/if}
 
     <p lang="de">
@@ -185,7 +202,7 @@
     </p>
 
     <p lang="en">
-        As we see, whether or not a given temperature is classified as "too hot" depends on the choice of the base period (you can move the base period in the above chart to see this effect). But no matter how we move the base period, the daily maximum of <b>{dailyMaxDec18}°C</b> will remain an outlier on a December 18, and therefor qualifies as "too hot".
+        As we see, whether or not a given temperature is classified as "too hot" depends on the choice of the base period (you can move the base period in the above chart to see this effect). But no matter how we move the base period, the daily maximum of <b>{$formatTemp(dailyMaxDec18)}</b> will remain an outlier on a December 18, and therefor qualifies as "too hot".
     </p>
 
     <p lang="de">
@@ -196,9 +213,9 @@
         Of course, the 18th of December was no isolated case. We can see these "too-hot" days throughout the entire year. The following graphic shows daily temperature measurements at the weather station {stationShort}. The area in light gray in the background shows past temperature records at this station, and the small arrows point to newly set records.
     </p>
 
-    <h3 lang="de">Zu heiße Tage und Rekordtemperaturen über das ganze Jahr</h3>
-    <h3 lang="en">Days too hot and temperature records all year round</h3>
-    <p lang="de" class="text-muted text-small">
+    <h2 lang="de">Zu heiße Tage und Rekordtemperaturen über das ganze Jahr</h2>
+    <h2 lang="en">Days too hot and temperature records all year round</h2>
+    <p lang="de" class="text-muted text-small mt0">
         Das Diagramm zeigt tägliche Höchst- und Tiefstwerte der Lufttemperatur an der Wetterstation {station ? station.name : '...'}
         zwischen {tfmtIntro($minDate)} und {tfmtIntro($maxDate)}. Jeder Tag wird durch einen Balken
         dargestellt; ein Kreis zeigt die Tagesmitteltemperatur.
@@ -206,7 +223,7 @@
             Tipp: drehe dein Telefon seitwärts um einen längeren Zeitraum anzusehen!
         </span>
     </p>
-    <p lang="en" class="text-muted text-small">
+    <p lang="en" class="text-muted text-small mt0">
         This chart shows daily highs and lows of air temperature at weather station {station ? station.name : '...'}
         between {tfmtIntro($minDate)} and {tfmtIntro($maxDate)}. Each day is represented by a bar,
         the daily mean temperature is displayed with a circle.
@@ -218,7 +235,7 @@
     {#if promise}
         {#await promise}
             <!-- promise is pending -->
-            <p>Daten werden geladen...</p>
+            <p class="text-small text-muted">{@html loading}</p>
         {:then data}
             <DataLoaded {data} {station} />
         {:catch error}
@@ -234,12 +251,12 @@
             <img
                 alt="reading instructions"
                 style="width:300px; max-width: 100%;margin-bottom: 20px"
-                src="key-{$language}.png" />
+                src="/blog/images/2020/2019-too-warm-key-{$language}.png" />
         </div>
     </div>
 </main>
 
-<main class="story" lang="{$language}">
+<main class="story px2" lang="{$language}">
 
     <p lang="de">
         Das vermehrte Aufkommen zu warmer Tage hat freilich nicht erst in diesem Jahr angefangen (du kannst dir mit der Monat/Jahr-Steuerung unter dem Diagramm ältere Messungen ansehen). Was wir sehen ist vielmehr die Fortsetzungen des Langzeittrends der letzten Jahrzehnte. Es lohnt sich daher einen Blick auf einen längeren Zeitraum zu werfen.</p>
@@ -257,38 +274,53 @@
         The following chart shows the differences of average monthly temperatures to the long-term average over the base period — also known as temperature anomalies — between {!station ? 1960 : Math.max(station.from.getFullYear(),1960)} and 2019. We can see the heat records from 2019 and 2018 but also the record winter of 2006/07 is visible, too.
     </p>
 
+    <h2 lang="de">Zu warme Monate werden immer häufiger</h2>
+    <h2 lang="en">Too-hot months become more frequent</h2>
+    <p lang="de" class="text-muted text-small mt0">
+        Die Balken zeigen mittlere Temperaturabweichungen pro Monat gegenüber dem
+        Monatsdurchschnitt im Vergleichszeitraum von {$contextMinYear} bis {$contextMaxYear - 1}).
+        Zu warme Monate sind rot dargestellt, zu kalte sind blau.
+    </p>
+    <p lang="en" class="text-muted text-small mt0">
+        Bars show temperature anomalies over the base period from {$contextMinYear} to {$contextMaxYear - 1}. Too-hot months are shown red, too-cold months are shown in blue.
+    </p>
     {#if data}
-        <h3 lang="de">Zu warme Monate werden immer häufiger</h3>
-        <h3 lang="en">Too-hot months become more frequent</h3>
-        <p lang="de" class="text-muted text-small">
-            Die Balken zeigen mittlere Temperaturabweichungen pro Monat gegenüber dem
-            Monatsdurchschnitt im Vergleichszeitraum von {$contextMinYear} bis {$contextMaxYear - 1}).
-            Zu warme Monate sind rot dargestellt, zu kalte sind blau.
-        </p>
-        <p lang="en" class="text-muted text-small">
-            Bars show temperature anomalies over the base period from {$contextMinYear} to {$contextMaxYear - 1}. Too-hot months are shown red, too-cold months are shown in blue.
-        </p>
         <MonthlyAnomalies {data} />
     {:else}
-        <i class="text-small text-muted">loading data...</i>
+        <p class="text-small text-muted">{@html loading}</p>
     {/if}
 
     <p lang="de">Komprimiert man die Daten weiter zu einem einzigem Temperatur-Mittelwert pro Jahr lässt sich der Trend auch mathematisch berechnen und als Trendlinie darstellen. Die Stärke des Anstiegs ist unterschiedlich in jeder Wetterstation, aber ansteigen tut die Temperatur überall, von den <a href="#/{$language}/05792/zugspitze">Alpen</a> bis nach <a href="#/{$language}/02115/helgoland">Helgoland</a> in der Nordsee.</p>
 
 
     <p lang="en">If we compress the data further to yearly temperature averages we can compute the trend mathematically and visualize it as trend line. The slope of this line is different in each weather station, but temperatures are rising everywhere from the <a href="#/{$language}/05792/zugspitze">alps</a> in the South up to the Northern Sea island <a href="#/{$language}/02115/helgoland">Helgoland</a>.</p>
-    {#if data}
-    <h3 lang="de">Die globale Erwärmung zeigt sich auch an der Wetterstation {stationShort}</h3>
-    <h3 lang="en">Global warming is visible at weather station {stationShort}, too</h3>
-    <p lang="de" class="text-muted text-small">
+    <h2 lang="de">Die globale Erwärmung zeigt sich auch an der Wetterstation {stationShort}</h2>
+    <h2 lang="en">Global warming is visible at weather station {stationShort}, too</h2>
+    <p lang="de" class="text-muted text-small mt0">
             Die Balken zeigen jährliche Temperaturanomalien an der Wetterstation {stationShort} gegenüber dem
             Vergleichszeitraum von <b>{$contextMinYear} bis {$contextMaxYear - 1}).</b>
         </p>
-    <p lang="en" class="text-muted text-small">
+    <p lang="en" class="text-muted text-small mt0">
             In this chart bars show yearly temperature anomalies at weather station {stationShort} over the base period from <b>{$contextMinYear} to {$contextMaxYear - 1}).</b>
         </p>
+    {#if data}
     <YearlyAnomalies {data} />
+    {:else}
+    <p class="text-small text-muted">{@html loading}</p>
     {/if}
+
+  <p lang="de">
+        Auch hier ändert die Wahl des Vergleichszeitraums die Position der Grundline im Diagramm, und damit auch welche Balken in rot und welche in blau erscheinen. Aber sie hat keinen Einfluß auf den Anstieg der Trendlinie. Die Welt erwärmt sich, egal mit welcher Zeit wir vergleichen.
+    </p>
+
+    <p lang="en">
+        Again, the choice of the base period will change the baseline for this chart, and with it some lines will turn from red to blue. But it won't change the slope of the trend line. The world is warming, no matter what time we compare it with.
+    </p>
+
+    <div class="form-inline mb-3">
+        <b>{$msg.changePeriod}:</b>
+        <input style="width:300px;max-width: 100%" class="ml-2 mr-2 form-control" type="range" min="{stationFrom}" max="1989" bind:value="{$contextMinYear}"> {$contextMinYear} - {$contextMaxYear}
+    </div>
 
     <p lang="de">
         Alle Grafiken in diesem Artikel beziehen sich auf die Wetterstation <b>{station ? station.name : '...'}
@@ -304,4 +336,12 @@
     <div class="shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 30rem">
         <StationSelect bind:station bind:stations />
     </div>
+    <h2 lang="de">Quellenangabe</h2>
+    <h2 lang="en">Sources</h2>
+    <p class="de">
+        Alle in diesem Artikel verwendeten Daten stammen vom <b><a href="https://www.dwd.de/DE/">Deutschen Wetterdienst</a></b>, der diese dankenswerterweise als <a href="https://www.dwd.de/DE/klimaumwelt/cdc/cdc_node.html">OpenData</a> zur Verfügung stellt. Weiterhin befindet sich der <a href="https://github.com/vis4/2019-too-warm">komplette Quellcode</a> für diesen Artikel und die darin enthaltenen Grafiken auf <a href="https://github.com/vis4/2019-too-warm">Github</a>.
+    </p>
+    <p class="de">
+        All data used in this articles comes from <b><a href="https://www.dwd.de/EN/">Deutschen Wetterdienst</a></b>, which released them as as <a href="https://www.dwd.de/DE/klimaumwelt/cdc/cdc_node.html">open data</a> for free. You can also find the <a href="https://github.com/vis4/2019-too-warm">full source code</a> for this article and all contained graphics on <a href="https://github.com/vis4/2019-too-warm">Github</a>.
+    </p>
 </main>

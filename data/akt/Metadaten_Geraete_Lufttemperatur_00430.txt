@@ -1,3 +1,0 @@
-Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
-430;Berlin-Tegel;13.31;52.56;36;2;19941121;20191225;PT 100 (Luft);Temperaturmessung, elektr.;eor;
-generiert: 26.12.2019 --  Deutscher Wetterdienst  --

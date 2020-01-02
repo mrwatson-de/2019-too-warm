@@ -1,4 +1,5 @@
 export const de = {
+    title: 'Das Jahr 2019 war wärmer als normal — aber was heißt hier eigentlich "normal"?',
     today: 'Heute',
     year: 'Jahr',
     month: 'Monat',
@@ -8,6 +9,7 @@ export const de = {
     days: 'Tage',
     timerange: 'Zeitraum',
     to: 'bis',
+    loading: 'Daten werden geladen',
     selectStation: 'Wetterstation in Deutschland auswählen',
     altitude: 'Stationshöhe',
     tooltipDateFormat: '%d. %b',
@@ -34,13 +36,14 @@ export const de = {
         'Anomalien bezeichnen Tagestemperaturen ober- und unterhalb der gemittelten Tageshöchst- und Tiefstwerte',
     overFullPeriod: 'Bezogen auf gesamten verfügbaren Zeitraum (bis zum gezeigten Bereich)',
     overPeriod: 'Gemittelte Werte des Normalbereichs beziehen sich auf den Vergleichszeitraum',
-    changePeriod: 'Vergleichszeitraum ändern auf',
+    changePeriod: 'Vergleichszeitraum verschieben',
     periodYearsFrom: 'Jahre ab',
     cdcUrl: 'https://www.dwd.de/DE/klimaumwelt/cdc/cdc_node.html',
     monthShort: 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sept.,Okt.,Nov.,Dez.'.split(',')
 };
 
 export const en = {
+    title: '2019 was hotter than normal — but what does this even mean?',
     today: 'Today',
     year: 'Year',
     language: 'Language',
@@ -50,6 +53,7 @@ export const en = {
     days: 'days',
     timerange: 'Range',
     to: 'to',
+    loading: 'Loading data',
     selectStation: 'Select a weather station in Germany',
     altitude: 'Station altitude',
     tooltipDateFormat: '%b %d',
@@ -71,7 +75,7 @@ export const en = {
     recordsNote: 'Temperatures that are higher or lower than the max/min temperatures in the past',
     overFullPeriod: 'Full availabe period until displayed time range',
     overPeriod: 'Averages for normal range are computed over period ',
-    changePeriod: 'Change base period to',
+    changePeriod: 'Move base period',
     periodYearsFrom: 'years from',
     cdcUrl: 'https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html',
     monthLong: 'January,February,March,April,May,June,July,August,September,October,November,December'.split(

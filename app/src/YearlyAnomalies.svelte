@@ -2,7 +2,7 @@
     import { scaleTime, scaleLinear } from 'd3-scale';
     import { timeFormat } from 'd3-time-format';
     import { mean, group } from 'd3-array';
-    import { contextMinYear, contextMaxYear, contextRange } from './stores';
+    import { contextMinYear, contextMaxYear, contextRange, formatTemp } from './stores';
     import leastSquares from './leastSquares';
 
     export let data = [];
@@ -156,7 +156,7 @@
                 {#each yScale.ticks(5) as tick}
                     <text x={width - padding.right+5} y={yScale(tick)}>
                         {@html tick > 0 ? '+' : tick < 0 ? '&minus;' : '&plusmn;'}
-                        {Math.abs(tick).toFixed(1)}°C
+                        {$formatTemp(Math.abs(tick))}
                     </text>
                     <line
                         class:zero={!tick}

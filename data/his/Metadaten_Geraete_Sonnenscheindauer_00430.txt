@@ -1,5 +1,0 @@
-Stations_ID;Stationsname;Geo. Laenge [Grad];Geo. Breite [Grad];Stationshoehe [m];Geberhoehe ueber Grund [m];Von_Datum;Bis_Datum;Geraetetyp Name;Messverfahren;eor;
-430;Berlin-Tegel;13.31;52.56;36;4.6;19821001;20080930;Sonnenscheinschreiber nach Campbell-Stokes;Sonnenscheinregistrierung, konv.;eor;
-430;Berlin-Tegel;13.31;52.56;36;2.5;19941114;20111206;SONIe Sonnenenergie-Sensor;Sonnenscheindauer, elektr.;eor;
-430;Berlin-Tegel;13.31;52.56;36;2.5;20111206;20190312;SCAPP;Sonnenscheind/Strahlungsmessung, elektr.;eor;
-generiert: 14.03.2019 --  Deutscher Wetterdienst  --

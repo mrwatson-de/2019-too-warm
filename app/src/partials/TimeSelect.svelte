@@ -61,17 +61,17 @@
     <label>{$msg.month}</label>
     <div class="btn-group ml-2 mr-2">
         <button class="btn btn-sm btn-outline-secondary" on:click={prevMonth}>
-            <i class="im im-care-left" />
+            <i class="fa fa-caret-left" />
         </button>
         <button class="btn btn-sm btn-outline-secondary" on:click={nextMonth}>
-            <i class="im im-care-right" />
+            <i class="fa fa-caret-right" />
         </button>
     </div>
 
     <label>{$msg.year}</label>
     <div class="btn-group ml-2 mr-2">
         <button class="btn btn-sm btn-outline-secondary" on:click={prevYear}>
-            <i class="im im-care-left" />
+            <i class="fa fa-caret-left" />
         </button>
         <input
             class="form-control form-control-sm"
@@ -80,7 +80,7 @@
             on:input={handleDateChange}
             on:change={handleDateChange} />
         <button class="btn btn-sm btn-outline-secondary" on:click={nextYear}>
-            <i class="im im-care-right" />
+            <i class="fa fa-caret-right" />
         </button>
     </div>
 
