@@ -18,7 +18,7 @@
 
     export let station;
 
-    let stations = [];
+    export let stations = [];
     $: groupedStations = Array.from(group(stations, d => d.state))
         .map(([k, v]) => v)
         .sort((a, b) => (a[0].state > b[0].state ? 1 : a[0].state < b[0].state ? -1 : 0));

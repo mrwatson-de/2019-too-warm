@@ -37,6 +37,7 @@
 
     let _station;
     let station;
+    let stations = [];
 
     $: dailyMaxDec18 = data ? data.find(d => d.dateRaw === '2019-12-18').tMax : '...';
 
@@ -176,15 +177,23 @@
         <i class="text-small text-muted">loading data...</i>
     {/if}
 
-    <p>
+    <p lang="de">
         Ob ein Temperaturwert nun "höher als normal" ist, hängt also davon ab, mit welchem Zeitraum
         wir vergleichen (der Zeitraum im Diagramm lässt sich verschieben um den Effekt zu beobachten). Doch wie wir den Zeitraum auch verändern, das Tageshoch von
         <b>{dailyMaxDec18}°C</b>
-        am 18.12. ist und bleibt ein Ausreißer und damit "zu hoch".
+        ist und bleibt ein Ausreißer für einen 18. Dezember, und damit "zu hoch".
     </p>
 
-    <p>
+    <p lang="en">
+        As we see, whether or not a given temperature is classified as "too hot" depends on the choice of the base period (you can move the base period in the above chart to see this effect). But no matter how we move the base period, the daily maximum of <b>{dailyMaxDec18}°C</b> will remain an outlier on a December 18, and therefor qualifies as "too hot".
+    </p>
+
+    <p lang="de">
         Natürlich war der 18. Dezember kein Einzelfall: Über das ganze Jahr hinweg gab es solche "zu heißen" Tage. Die folgende Grafik zeigt die an der Wetterstation {stationShort} gemessenen Temperaturwerte. Der hellgraue Bereich im Hintergrund zeigt die bisherigen Temperaturrekorde (an dieser Wetterstation) und die kleinen Pfeile weisen die neu aufgestellten Temperaturrekorde aus.
+    </p>
+
+    <p lang="en">
+        Of course, the 18th of December was no isolated case. We can see these "too-hot" days throughout the entire year. The following graphic shows daily temperature measurements at the weather station {stationShort}. The area in light gray in the background shows past temperature records at this station, and the small arrows point to newly set records.
     </p>
 
     <h3 lang="de">Zu heiße Tage und Rekordtemperaturen über das ganze Jahr</h3>
@@ -217,62 +226,82 @@
             <p>Something went wrong: {error.message}</p>
         {/await}
     {/if}
-
+    <div class="row">
+        <div class="col-md">
+            <TimeSelect />
+        </div>
+        <div class="col-md-auto">
+            <img
+                alt="reading instructions"
+                style="width:300px; max-width: 100%;margin-bottom: 20px"
+                src="key-{$language}.png" />
+        </div>
+    </div>
 </main>
 
 <main class="story" lang="{$language}">
-    <TimeSelect />
-    <p class="text-small text-muted">Schau dir gerne auch einen anderen Zeitraum an!</p>
 
-    <p>
-        <b>
-            {@html $msg.intro}
-        </b>
-    </p>
-    <p>
-        <img
-            alt="reading instructions"
-            style="max-width: 100%;margin-bottom: 20px"
-            src="key-{$language}.svg" />
+    <p lang="de">
+        Das vermehrte Aufkommen zu warmer Tage hat freilich nicht erst in diesem Jahr angefangen (du kannst dir mit der Monat/Jahr-Steuerung unter dem Diagramm ältere Messungen ansehen). Was wir sehen ist vielmehr die Fortsetzungen des Langzeittrends der letzten Jahrzehnte. Es lohnt sich daher einen Blick auf einen längeren Zeitraum zu werfen.</p>
+
+    <p lang="en">
+        The increasing frequency of days that are "too hot" certainly didn't start this year (you can browse through time using the year/month controls below the chart if you want). Rather, what we see is the continuation of a long-term trend over the last decades. Therefor it's worth taking a look at a longer time span
     </p>
 
-    <p>
-        Den globale Erwärmung hat freilich nicht in diesem Jahr angefangen. Was wir sehen ist nur die Fortsetzungen des Trendes der letzten Jahrzehnte. Um einen besseren Überblick auf einen längeren Zeitraum zu erhalten zeigt die folgende Grafik monatliche Temperaturanomalien (d.h. die Differenz der Monatsmitteltemperatur und dem Monatsmittel im Vergleichszeitraum) seit 1960. Die Rekordjahre 2019 und 2018 sind gut erkennbar,
+    <p lang="de">
+        Die folgende Grafik zeigt die Differenzen der Monatsmitteltemperaturem zum Monatsmittel im Vergleichszeitraum — auch bekannt als Temperaturanomalien — von {!station ? 1960 : Math.max(station.from.getFullYear(),1960)} bis 2019. Die Rekordjahre 2019 und 2018 sind gut erkennbar,
         aber auch der Rekordwinter von 2006/07 fällt ins Auge.
     </p>
 
+    <p lang="en">
+        The following chart shows the differences of average monthly temperatures to the long-term average over the base period — also known as temperature anomalies — between {!station ? 1960 : Math.max(station.from.getFullYear(),1960)} and 2019. We can see the heat records from 2019 and 2018 but also the record winter of 2006/07 is visible, too.
+    </p>
+
     {#if data}
-        <h3>Zu warme Monate werden immer häufiger</h3>
+        <h3 lang="de">Zu warme Monate werden immer häufiger</h3>
+        <h3 lang="en">Too-hot months become more frequent</h3>
         <p lang="de" class="text-muted text-small">
             Die Balken zeigen mittlere Temperaturabweichungen pro Monat gegenüber dem
             Monatsdurchschnitt im Vergleichszeitraum von {$contextMinYear} bis {$contextMaxYear - 1}).
-            Rot sind "zu warme" Monate, blau sind "zu kalte" Monate.
+            Zu warme Monate sind rot dargestellt, zu kalte sind blau.
+        </p>
+        <p lang="en" class="text-muted text-small">
+            Bars show temperature anomalies over the base period from {$contextMinYear} to {$contextMaxYear - 1}. Too-hot months are shown red, too-cold months are shown in blue.
         </p>
         <MonthlyAnomalies {data} />
     {:else}
         <i class="text-small text-muted">loading data...</i>
     {/if}
 
-    <p>Komprimiert man die Daten weiter zu einem einzigem Temperatur-Mittelwert pro Jahr lässt sich der Trend auch mathematisch berechnen und als Trendlinie darstellen. Die Stärke des Anstiegs ist unterschiedlich in jeder Wetterstation, aber ansteigen tut die Temperatur von der <a href="#/{$language}/05792/zugspitze">Zugspitze</a> bis <a href="#/{$language}/02115/helgoland">Helgoland</a>.</p>
+    <p lang="de">Komprimiert man die Daten weiter zu einem einzigem Temperatur-Mittelwert pro Jahr lässt sich der Trend auch mathematisch berechnen und als Trendlinie darstellen. Die Stärke des Anstiegs ist unterschiedlich in jeder Wetterstation, aber ansteigen tut die Temperatur überall, von den <a href="#/{$language}/05792/zugspitze">Alpen</a> bis nach <a href="#/{$language}/02115/helgoland">Helgoland</a> in der Nordsee.</p>
 
+
+    <p lang="en">If we compress the data further to yearly temperature averages we can compute the trend mathematically and visualize it as trend line. The slope of this line is different in each weather station, but temperatures are rising everywhere from the <a href="#/{$language}/05792/zugspitze">alps</a> in the South up to the Northern Sea island <a href="#/{$language}/02115/helgoland">Helgoland</a>.</p>
     {#if data}
     <h3 lang="de">Die globale Erwärmung zeigt sich auch an der Wetterstation {stationShort}</h3>
     <h3 lang="en">Global warming is visible at weather station {stationShort}, too</h3>
     <p lang="de" class="text-muted text-small">
-            Die Balken zeigen mittlere Temperaturabweichungen (Temperaturanomalien) pro Jahr gegenüber dem
-            Desamtdurchschnitt Vergleichszeitraum von <b>{$contextMinYear} bis {$contextMaxYear - 1}).</b>
+            Die Balken zeigen jährliche Temperaturanomalien an der Wetterstation {stationShort} gegenüber dem
+            Vergleichszeitraum von <b>{$contextMinYear} bis {$contextMaxYear - 1}).</b>
+        </p>
+    <p lang="en" class="text-muted text-small">
+            In this chart bars show yearly temperature anomalies at weather station {stationShort} over the base period from <b>{$contextMinYear} to {$contextMaxYear - 1}).</b>
         </p>
     <YearlyAnomalies {data} />
     {/if}
 
-    <p>
-        Alle Grafiken in diesem Artikel beziehen sich auf die Wetterstation {station ? station.name : '...'}
-        in {station ? station.state : '...'}. Da der Klimawandel sich nicht auf einzelne
+    <p lang="de">
+        Alle Grafiken in diesem Artikel beziehen sich auf die Wetterstation <b>{station ? station.name : '...'}
+        in {station ? station.state : '...'}</b>. Aber da der Klimawandel sich nicht auf einzelne
         Regionen beschränkt, lassen sich die selben Effekte auch in allen anderen deutschen
-        Wetterstationen beobachten. Die folgende Liste enthält alle Stationen die mindestens
+        Wetterstationen beobachten. Du kannst das folgende Formular benutzen, um die Daten einer der anderen {stations.length} Wetterstationen anzusehen, die mindestens
         tägliche Temperaturdaten zwischen 1980 und 2019 gesammelt haben.
     </p>
+    <p lang="en">
+        All charts in this article are referring to the weather station <b>{station ? station.name : '...'}
+        in {station ? station.state : '...'}</b>. But since climate change is not limited to certain regions, the same effects can be seen in all other German weather stations. You can use the form below to change to any of the {stations.length} stations in Germany that collected daily temperature data between at least 1980 and 2019.
+    </p>
     <div class="shadow-sm p-3 mb-5 bg-white rounded" style="max-width: 30rem">
-        <StationSelect bind:station />
+        <StationSelect bind:station bind:stations />
     </div>
 </main>

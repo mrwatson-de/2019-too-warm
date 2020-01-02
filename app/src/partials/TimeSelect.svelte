@@ -51,39 +51,40 @@
     .btn-group input[type='number'] {
         border-left: 0;
         border-right: 0;
+        text-align: center;
         border-radius: 0;
     }
 </style>
 
 <div class="form-inline">
 
-    <label>Monat</label>
+    <label>{$msg.month}</label>
     <div class="btn-group ml-2 mr-2">
-        <button class="btn btn-outline-secondary" on:click={prevMonth}>
+        <button class="btn btn-sm btn-outline-secondary" on:click={prevMonth}>
             <i class="im im-care-left" />
         </button>
-        <button class="btn btn-outline-secondary" on:click={nextMonth}>
+        <button class="btn btn-sm btn-outline-secondary" on:click={nextMonth}>
             <i class="im im-care-right" />
         </button>
     </div>
 
-    <label>Jahr</label>
+    <label>{$msg.year}</label>
     <div class="btn-group ml-2 mr-2">
-        <button class="btn btn-outline-secondary" on:click={prevYear}>
+        <button class="btn btn-sm btn-outline-secondary" on:click={prevYear}>
             <i class="im im-care-left" />
         </button>
         <input
-            class="form-control"
+            class="form-control form-control-sm"
             type="number"
             value={$maxDate.getFullYear()}
             on:input={handleDateChange}
             on:change={handleDateChange} />
-        <button class="btn btn-outline-secondary" on:click={nextYear}>
+        <button class="btn btn-sm btn-outline-secondary" on:click={nextYear}>
             <i class="im im-care-right" />
         </button>
     </div>
 
-    <button class="btn btn-secondary ml-2" on:mousedown={() => ($maxDate = new Date())}>
+    <button class="btn btn-sm btn-outline-secondary ml-2" on:mousedown={() => ($maxDate = new Date())}>
         {$msg.today}
     </button>
 
