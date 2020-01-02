@@ -1,5 +1,7 @@
 # 2019-too-warm
 
+This repo contains the sources for this article https://www.vis4.net/blog/2020/01/2019-too-warm/ 
+
 `r-work` contains the R scripts I used to download and clean the raw data from DWD. 
 
 To update the data run
