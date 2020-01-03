@@ -208,10 +208,10 @@
                 transform="translate(0,{yScale(d.tAvg)})" />
             {#if highlight && sameDay(highlight, d.date)}
                 <text class="date" y={yScale(d.tMax) - 25}>{fmt(d.date)}</text>
-                <text y={yScale(d.tMax) - 5}>{$formatTemp(d.tMax)}</text>
-                <text class="min" y={yScale(d.tMin) + 5}>{$formatTemp(d.tMin)}</text>
+                <text y={yScale(d.tMax) - 5}>{@html $formatTemp(d.tMax)}</text>
+                <text class="min" y={yScale(d.tMin) + 5}>{@html $formatTemp(d.tMin)}</text>
                 {#if yScale(d.tMin) - yScale(d.tMax) > 30}
-                    <text class="avg" x="5" y={yScale(d.tAvg)}>{$formatTemp(d.tAvg)}</text>
+                    <text class="avg" x="5" y={yScale(d.tAvg)}>{@html $formatTemp(d.tAvg)}</text>
                 {/if}
             {/if}
 
@@ -219,7 +219,7 @@
                 {#if d.tMax > d.tMaxAbs}
                     <g class="record high" transform="translate(0, {yScale(d.tMax) - 7})">
                         {#if d.labelMaxRecord}
-                            <text y="-15">{$formatTemp(d.tMax,false)}</text>
+                            <text y="-15">{@html $formatTemp(d.tMax,false)}</text>
                         {/if}
                         <path d="M0,0 L-4,-4 L 4,-4 Z" />
                     </g>
@@ -227,7 +227,7 @@
                 {#if d.tMin < d.tMinAbs}
                     <g class="record low" transform="translate(0, {yScale(d.tMin) + 7})">
                         {#if d.labelMinRecord}
-                            <text y="15">{$formatTemp(d.tMin,false)}</text>
+                            <text y="15">{@html $formatTemp(d.tMin,false)}</text>
                         {/if}
                         <path d="M0,0 L-4,4 L 4,4 Z" />
                     </g>

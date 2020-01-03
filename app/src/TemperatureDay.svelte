@@ -288,7 +288,7 @@
             <g class="normal-high" transform="translate(0,{yScale(normalHigh)})">
                 <line class="zero" x1={padding.left - 20} x2={width} />
                 <g transform="translate({width - padding.right + 30},-5)">
-                    <text class="temp">{$formatTemp(normalHigh)}</text>
+                    <text class="temp">{@html $formatTemp(normalHigh)}</text>
                     <text transform="translate(0,-35)">
                         <tspan x="0">{$msg.dailyAvgHighOn}</tspan>
                         <tspan x="0" dy="15">
@@ -301,7 +301,7 @@
             <g class="normal-low" transform="translate(0,{yScale(normalLow)})">
                 <line class="zero" x1={padding.left - 20} x2={width} />
                 <text class="temp" transform="translate({width - padding.right + 30},+5)">
-                    {$formatTemp(normalLow)}
+                    {@html $formatTemp(normalLow)}
                 </text>
                 <text transform="translate({width - padding.right + 30},25)">
                     <tspan x="0">{$msg.dailyAvgLowOn}</tspan>
