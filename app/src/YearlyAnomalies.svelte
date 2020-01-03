@@ -2,7 +2,7 @@
     import { scaleTime, scaleLinear } from 'd3-scale';
     import { timeFormat } from 'd3-time-format';
     import { mean, group } from 'd3-array';
-    import { contextMinYear, contextMaxYear, contextRange, formatTemp } from './stores';
+    import { contextMinYear, contextMaxYear, contextRange, formatTemp, useFahrenheit, getTempTicks } from './stores';
     import leastSquares from './leastSquares';
 
     export let data = [];
@@ -44,7 +44,6 @@
     }
 
     $: sq = leastSquares(byYear.map(d => d.year), byYear.map(d => d.tAvg - baseTemp));
-
     $: padding = { top: 20, right: 60, bottom: 30, left: 20 };
 
     $: xScale = scaleLinear()
@@ -55,7 +54,7 @@
         .domain([dtMin, dtMax])
         .range([height - padding.bottom - padding.top, 0]);
 
-    $: yTicks = yScale.ticks(6);
+    $: yTicks = $getTempTicks(yScale, 4);
 
     const format = (d, i) => d;
 </script>
@@ -153,10 +152,9 @@
         <g transform="translate(0,{padding.top})">
             <!-- y axis -->
             <g class="axis y-axis">
-                {#each yScale.ticks(5) as tick}
+                {#each yTicks as tick,i}
                     <text x={width - padding.right+5} y={yScale(tick)}>
-                        {@html tick > 0 ? '+' : tick < 0 ? '&minus;' : '&plusmn;'}
-                        {$formatTemp(Math.abs(tick))}
+                        {@html $formatTemp(tick, !i, true)}
                     </text>
                     <line
                         class:zero={!tick}

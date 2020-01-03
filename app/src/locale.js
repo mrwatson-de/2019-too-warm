@@ -37,6 +37,10 @@ export const de = {
     overFullPeriod: 'Bezogen auf gesamten verfügbaren Zeitraum (bis zum gezeigten Bereich)',
     overPeriod: 'Gemittelte Werte des Normalbereichs beziehen sich auf den Vergleichszeitraum',
     changePeriod: 'Vergleichszeitraum verschieben',
+    basePeriod: 'Vergleichszeitraum',
+    dailyAvgHighOn: 'Mittleres Tageshoch am',
+    dailyAvgLowOn: 'Mittleres Tagestief am',
+    normalRange: 'Normalbereich',
     periodYearsFrom: 'Jahre ab',
     cdcUrl: 'https://www.dwd.de/DE/klimaumwelt/cdc/cdc_node.html',
     monthShort: 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sept.,Okt.,Nov.,Dez.'.split(',')
@@ -76,6 +80,10 @@ export const en = {
     overFullPeriod: 'Full availabe period until displayed time range',
     overPeriod: 'Averages for normal range are computed over period ',
     changePeriod: 'Move base period',
+    basePeriod: 'base period',
+    normalRange: 'normal range',
+    dailyAvgHighOn: 'Daily average max on',
+    dailyAvgLowOn: 'Daily average low on',
     periodYearsFrom: 'years from',
     cdcUrl: 'https://www.dwd.de/EN/climate_environment/cdc/cdc_node.html',
     monthLong: 'January,February,March,April,May,June,July,August,September,October,November,December'.split(

@@ -2,7 +2,7 @@
     import { scaleLinear } from 'd3-scale';
     import { timeFormat } from 'd3-time-format';
     import { mean } from 'd3-array';
-    import { contextMinYear, contextRange } from './stores';
+    import { msg, contextMinYear, contextRange, getTempTicks, toF, useFahrenheit, formatTemp } from './stores';
 
     export let data = [];
 
@@ -60,7 +60,7 @@
         .domain([tMin - 3, tMax + 3])
         .range([height - padding.bottom, padding.top]);
 
-    $: yTicks = yScale.ticks(6);
+    $: yTicks = $getTempTicks(yScale, 6);
 
     $: format = (d, i) => d;
     $: formatMobile = (d, i) => `'${String(d).substr(2)}`;
@@ -114,7 +114,7 @@
 
     .x-axis .tick text {
         text-anchor: middle;
-        dominant-baseline: text-after-edge;
+        dominant-baseline: alphabetic;
     }
 
     line.zero {
@@ -172,10 +172,10 @@
         fill: #6c757d;
     }
     .normal-high text {
-        dominant-baseline: text-after-edge;
+        dominant-baseline: alphabetic;
     }
     .normal-low text {
-        dominant-baseline: text-before-edge;
+        dominant-baseline: hanging;
     }
     .normal-high text.temp,
     .normal-low text.temp {
@@ -206,12 +206,11 @@
         <g>
             <!-- y axis -->
             <g class="axis y-axis">
-                {#each yTicks as tick}
+                {#each yTicks as tick,i}
                     <g class="tick tick-{tick}" transform="translate(0, {yScale(tick)})">
                         <line x2="5" />
                         <text y="-4">
-                            {@html tick < 0 ? '&minus;' : ''}
-                            {Math.abs(tick)}°C
+                            {@html $formatTemp(tick, !i)}
                         </text>
                     </g>
                 {/each}
@@ -238,7 +237,7 @@
                 <text
                     transform="translate({xScale(0.5 * (localContextMin + localContextMax - 1))},
                     20)">
-                    ◂ Vergleichszeitraum ▸
+                    ◂ {$msg.basePeriod} ▸
                 </text>
             </g>
 
@@ -289,9 +288,9 @@
             <g class="normal-high" transform="translate(0,{yScale(normalHigh)})">
                 <line class="zero" x1={padding.left - 20} x2={width} />
                 <g transform="translate({width - padding.right + 30},-5)">
-                    <text class="temp">{normalHigh.toFixed(2)} °C</text>
+                    <text class="temp">{$formatTemp(normalHigh)}</text>
                     <text transform="translate(0,-35)">
-                        <tspan x="0">Mittleres Tageshoch am</tspan>
+                        <tspan x="0">{$msg.dailyAvgHighOn}</tspan>
                         <tspan x="0" dy="15">
                             18.12. ({localContextMin} - {localContextMax - 1})
                         </tspan>
@@ -302,16 +301,16 @@
             <g class="normal-low" transform="translate(0,{yScale(normalLow)})">
                 <line class="zero" x1={padding.left - 20} x2={width} />
                 <text class="temp" transform="translate({width - padding.right + 30},+5)">
-                    {normalLow.toFixed(2)} °C
+                    {$formatTemp(normalLow)}
                 </text>
                 <text transform="translate({width - padding.right + 30},25)">
-                    <tspan x="0">Mittleres Tagestief am</tspan>
+                    <tspan x="0">{$msg.dailyAvgLowOn}</tspan>
                     <tspan x="0" dy="15">18.12. ({localContextMin} - {localContextMax - 1})</tspan>
                 </text>
             </g>
 
             <g class="normal" transform="translate(0,{yScale((normalLow + normalHigh) * 0.5)})">
-                <text transform="translate({width - padding.right + 30},0)">"Normalbereich"</text>
+                <text transform="translate({width - padding.right + 30},0)">"{$msg.normalRange}"</text>
             </g>
         </g>
     </svg>

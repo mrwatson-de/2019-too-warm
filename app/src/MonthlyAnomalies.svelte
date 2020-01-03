@@ -2,7 +2,7 @@
     import { scaleTime, scaleLinear } from 'd3-scale';
     import { timeFormat } from 'd3-time-format';
     import { mean, group } from 'd3-array';
-    import { contextMinYear, contextMaxYear, contextRange } from './stores';
+    import { contextMinYear, contextMaxYear, contextRange, formatTemp, useFahrenheit } from './stores';
 
     export let data = [];
 
@@ -88,8 +88,6 @@
         .domain([dtMin, dtMax])
         .range([decadeH - 20, 0]);
 
-    $: yTicks = yScale.ticks(6);
-
     const format = (d, i) => (i ? `'${String(d.getFullYear()).substr(2)}` : d.getFullYear());
 </script>
 
@@ -113,7 +111,7 @@
     }
 
     .x-axis .tick text {
-        dominant-baseline: text-after-edge;
+        dominant-baseline: alphabetic;
         text-anchor: middle;
     }
 
@@ -180,11 +178,10 @@
 
                 <!-- y axis -->
                 <g class="axis y-axis">
-                    {#each [-4,0,4] as tick}
+                    {#each ($useFahrenheit ? [3.888888888,0,-3.88888888] : [-4, 0, 4]) as tick,i}
                         {#if !d}
                             <text x={width - 35} y={yScale(tick)}>
-                                {@html tick > 0 ? '+' : tick < 0 ? '&minus;' : '&plusmn;'}
-                                {Math.abs(tick).toFixed(0)}°C
+                                {@html $formatTemp(tick, !i, true)}
                             </text>
                         {/if}
                         <line

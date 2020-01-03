@@ -5,12 +5,16 @@
     import { mean, quantileSorted, group, ascending, max, min } from 'd3-array';
     import {
         msg,
+        toF,
         innerWidth,
         chartWidth,
+        formatTemp,
         minDate,
         maxDate,
         contextMinYear,
         contextMaxYear,
+        getTempTicks,
+        useFahrenheit,
         smoothNormalRangeWidth
     } from './stores';
 
@@ -67,7 +71,7 @@
         .domain([tMin, tMax])
         .range([height - padding.bottom, padding.top]);
 
-    $: yTicks = yScale.ticks(6);
+    $: yTicks = $getTempTicks(yScale, 6);
 
     $: height = Math.max(
         450,
@@ -173,7 +177,7 @@
 
     .x-axis .tick text {
         text-anchor: middle;
-        dominant-baseline: text-after-edge;
+        dominant-baseline: alphabetic;
     }
 
     line.zero {
@@ -196,12 +200,11 @@
         <g>
             <!-- y axis -->
             <g class="axis y-axis">
-                {#each yTicks as tick}
+                {#each yTicks as tick,i}
                     <g class="tick tick-{tick}" transform="translate(0, {yScale(tick)})">
                         <line x2="100%" />
                         <text y="-4">
-                            {@html tick < 0 ? '&minus;' : ''}
-                            {Math.abs(tick)}°C
+                            {@html $formatTemp(tick, !i)}
                         </text>
                     </g>
                 {/each}
