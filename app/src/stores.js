@@ -39,7 +39,7 @@ export const msg = derived(language, lang => {
     return lang === 'de' ? de : en;
 });
 
-export const useFahrenheit = writable(!false);
+export const useFahrenheit = writable(false);
 
 export const formatTemp = derived([language, useFahrenheit], ([lang, useF]) => {
     return (d, unit = true, rel = false) => {
