@@ -20,4 +20,4 @@ cd app/
 npm run dev
 ```
 
-[reddit](https://www.reddit.com/r/dataisbeautiful/comments/ejfra9/oc_someone_argued_with_me_if_this_winter_was/)
+[discuss on reddit](https://www.reddit.com/r/dataisbeautiful/comments/ejfra9/oc_someone_argued_with_me_if_this_winter_was/)
