@@ -72,7 +72,7 @@
         duration: 600,
         easing: cubicOut
     });
-    let focus = 0;
+    let focus = 10;
 
     $: xScale = scaleFisheye(scaleTime, $distortion, focus)
         .domain([$minDate, $maxDate])
@@ -105,10 +105,17 @@
     let grouped;
 
     function handleMouseClick(event) {
-        distortion.set(zoomed ? 0 : 3);
+        const x = clientPoint(chart, event)[0];
+        if (isNaN(x)) return;
+        const oldFocus = focus;
+        event.preventDefault();
+        distortion.set(zoomed && (!event.type === 'touchstart')? 0 : 3);
+        focus = x;
     }
     function handleMouseMove(event) {
+        event.preventDefault();
         const x = clientPoint(chart, event)[0];
+        if (isNaN(x)) return;
         focus = x;
     }
     function handleMouseLeave(event) {
@@ -232,8 +239,7 @@
     on:touchstart={handleMouseClick}
     on:mousemove={handleMouseMove}
     on:touchmove={handleMouseMove}
-    on:mouseleave={handleMouseLeave}
-    on:touchend={handleMouseLeave}>
+    on:mouseleave={handleMouseLeave}>
     <svg {height}>
         <g>
             <!-- y axis -->

@@ -9,7 +9,6 @@ update-data:
 	Rscript update.R
 
 deploy:
-	cd ~/projects/vis4net
-	npm run deploy
+	cd ~/projects/vis4net && npm run deploy
 
 update: update-data publish deploy
