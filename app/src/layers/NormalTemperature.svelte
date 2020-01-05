@@ -16,6 +16,7 @@
 <style>
     path {
         stroke: #000;
+        opacity: 0.75;
         stroke-linejoin: round;
         fill: none;
     }

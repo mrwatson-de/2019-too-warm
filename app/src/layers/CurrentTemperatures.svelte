@@ -33,6 +33,8 @@
         d => d.dateRaw >= compFmt($minDate) && d.dateRaw <= compFmt($maxDate)
     );
 
+    $: highlightDay = highlight ? filteredData.find(d => sameDay(d.date, highlight)) : null;
+
     $: currentTempData = filteredData
         .map(d => {
             if ($showAnomalies) {
@@ -127,12 +129,6 @@
     line.normal {
         stroke: var(--normal-color);
     }
-    g.highlight g.day {
-        opacity: 0.15;
-    }
-    g.highlight g.day.sameMonth {
-        opacity: 0.3;
-    }
     g.record text {
         font-weight: 400;
         font-size: 13px;
@@ -143,10 +139,25 @@
     }
     g.highlight g.day.highlight line {
         stroke: black;
+        stroke-width: 2;
     }
     g.highlight g.day.highlight circle {
         fill: black;
+        stroke: black;
+        stroke-width: 1;
     }
+    g.highlight g.day.highlight .buffer line {
+        stroke: #dedede;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+        stroke-width: 8;
+    }
+    g.highlight g.day.highlight .buffer circle {
+        fill: #dedede;
+        stroke: #dedede;
+        stroke-width: 4;
+    }
+
     text {
         pointer-events: none;
         text-anchor: middle;
@@ -163,6 +174,16 @@
         text-anchor: start;
         dominant-baseline: central;
     }
+    .highlight .buffer text {
+        fill: var(--bg);
+        stroke: var(--bg);
+        stroke-width: 4;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+    }
+    .highlight.focus {
+        pointer-events: none;
+    }
 </style>
 
 <svelte:window
@@ -176,9 +197,8 @@
             class="day"
             class:thin
             class:highlight={highlight && sameDay(highlight, d.date)}
-            class:sameMonth={highlight && sameMonth(highlight, d.date)}
             transform="translate({xScale(d.date)},0)">
-            {#if $showAnomalies}
+            {#if $showAnomalies && !(highlight && sameDay(highlight, d.date))}
                 {#if d.tMin < d.trendMin}
                     <line
                         class="colder"
@@ -207,16 +227,8 @@
                 class:normal={$showAnomalies && d.tAvg >= d.trendMin && d.tAvg <= d.trendMax}
                 r={(highlight && sameDay(highlight, d.date) ? 3 : 2)*(thin?0.75:1)}
                 transform="translate(0,{yScale(d.tAvg)})" />
-            {#if highlight && sameDay(highlight, d.date)}
-                <text class="date" y={yScale(d.tMax) - 25}>{fmt(d.date)}</text>
-                <text y={yScale(d.tMax) - 5}>{@html $formatTemp(d.tMax)}</text>
-                <text class="min" y={yScale(d.tMin) + 5}>{@html $formatTemp(d.tMin)}</text>
-                {#if yScale(d.tMin) - yScale(d.tMax) > 30}
-                    <text class="avg" x="5" y={yScale(d.tAvg)}>{@html $formatTemp(d.tAvg)}</text>
-                {/if}
-            {/if}
 
-            {#if $labelRecordTemperatures && !highlight}
+            {#if $labelRecordTemperatures}
                 {#if d.tMax > d.tMaxAbs}
                     <g class="record high" transform="translate(0, {yScale(d.tMax) - 7})">
                         {#if d.labelMaxRecord}
@@ -236,4 +248,29 @@
             {/if}
         </g>
     {/each}
+    {#if highlightDay}
+    <g class="highlight day focus" transform="translate({xScale(highlightDay.date)},0)">
+        <g class="buffer">
+            <line y1={yScale(highlightDay.tMin)} y2={yScale(highlightDay.tMax)} />
+            <circle
+                r={3*(thin?0.75:1)}
+                transform="translate(0,{yScale(highlightDay.tAvg)})" />
+            <text class="date" y={yScale(highlightDay.tMax) - 35}>{fmt(highlightDay.date)}</text>
+            <text y={yScale(highlightDay.tMax) - 15}>{@html $formatTemp(highlightDay.tMax)}</text>
+            <text class="min" y={yScale(highlightDay.tMin) + 15}>{@html $formatTemp(highlightDay.tMin)}</text>
+        </g>
+
+        <line y1={yScale(highlightDay.tMin)} y2={yScale(highlightDay.tMax)} />
+        <circle
+            r={3*(thin?0.75:1)}
+            transform="translate(0,{yScale(highlightDay.tAvg)})" />
+
+        <text class="date" y={yScale(highlightDay.tMax) - 35}>{fmt(highlightDay.date)}</text>
+        <text y={yScale(highlightDay.tMax) - 15}>{@html $formatTemp(highlightDay.tMax)}</text>
+        <text class="min" y={yScale(highlightDay.tMin) + 15}>{@html $formatTemp(highlightDay.tMin)}</text>
+        <!-- {#if yScale(highlightDay.tMin) - yScale(highlightDay.tMax) > 30}
+            <text class="avg" x="5" y={yScale(highlightDay.tAvg)}>{@html $formatTemp(highlightDay.tAvg)}</text>
+        {/if} -->
+    </g>
+    {/if}
 </g>

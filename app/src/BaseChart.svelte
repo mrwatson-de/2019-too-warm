@@ -1,5 +1,7 @@
 <script>
     import { scaleTime, scaleLinear } from 'd3-scale';
+    import { clientPoint } from 'd3-selection';
+    import scaleFisheye from './fisheye';
     import { timeMonth, timeDay, timeDays } from 'd3-time';
     import { timeFormat } from 'd3-time-format';
     import { mean, quantileSorted, group, ascending, max, min } from 'd3-array';
@@ -17,11 +19,16 @@
         useFahrenheit,
         smoothNormalRangeWidth
     } from './stores';
+    import { tweened } from 'svelte/motion';
+    import { cubicOut } from 'svelte/easing';
 
+    let chart;
     export let data = [];
     let tMin = -29;
     let tMax = 45;
     export let layers = [];
+
+    $: zoomed = $distortion > 0;
 
     $: dataClean = data.filter(d => d.tMin > -999 && d.tMax > -999);
 
@@ -61,7 +68,13 @@
 
     $: padding = { top: 20, right: 5, bottom: 30, left: innerWidth < 400 ? 30 : 40 };
 
-    $: xScale = scaleTime()
+    let distortion = tweened(0, {
+        duration: 600,
+        easing: cubicOut
+    });
+    let focus = 0;
+
+    $: xScale = scaleFisheye(scaleTime, $distortion, focus)
         .domain([$minDate, $maxDate])
         .range([padding.left, $chartWidth - padding.right]);
 
@@ -90,6 +103,17 @@
     const fmt = timeFormat('-%m-%d');
 
     let grouped;
+
+    function handleMouseClick(event) {
+        distortion.set(zoomed ? 0 : 3);
+    }
+    function handleMouseMove(event) {
+        const x = clientPoint(chart, event)[0];
+        focus = x;
+
+}    function handleMouseLeave(event) {
+        distortion.set(0);
+    }
 
     $: {
         const cache = group(dataClean, d => d.dateRaw.substr(4));
@@ -150,12 +174,16 @@
         width: 100%;
         margin-left: auto;
         margin-right: auto;
+        cursor: zoom-in;
+    }
+    .chart.zoomed {
+        cursor: zoom-out;
     }
 
     svg {
         position: relative;
         width: 100%;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .tick {
@@ -195,7 +223,7 @@
 
 <svelte:window bind:innerWidth={$innerWidth} />
 
-<div class="chart" bind:clientWidth={$chartWidth}>
+<div bind:this={chart} class:zoomed class="chart" bind:clientWidth={$chartWidth} on:click={handleMouseClick}  on:mousemove={handleMouseMove} on:mouseleave={handleMouseLeave}>
     <svg {height}>
         <g>
             <!-- y axis -->

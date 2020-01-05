@@ -84,6 +84,7 @@
         --def-color: #c30;
         --tick-line: #d0d2d5;
         --tick: #6c757d;
+        --bg: #eeeeee;
     }
 
     @media (max-width: 400px) {
