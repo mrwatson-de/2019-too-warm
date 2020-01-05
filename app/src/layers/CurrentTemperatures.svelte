@@ -55,7 +55,8 @@
             if ($labelRecordTemperatures) {
                 if (d.tMax > d.tMaxAbs || d.tMin < d.tMinAbs) {
                     // check if we're a local max
-                    filteredData.slice(Math.max(0, i - 7), i + 8).forEach(e => {
+                    const checkDays = pxPerDay < 3 ? 13 : 8;
+                    filteredData.slice(Math.max(0, i - checkDays), i + checkDays+1).forEach(e => {
                         if (d !== e && e.tMax > e.tMaxAbs && e.labelMaxRecord) {
                             // e is also a record
                             if (e.tMax >= d.tMax) {
