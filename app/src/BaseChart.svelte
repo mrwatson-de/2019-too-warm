@@ -110,8 +110,8 @@
     function handleMouseMove(event) {
         const x = clientPoint(chart, event)[0];
         focus = x;
-
-}    function handleMouseLeave(event) {
+    }
+    function handleMouseLeave(event) {
         distortion.set(0);
     }
 
@@ -223,12 +223,22 @@
 
 <svelte:window bind:innerWidth={$innerWidth} />
 
-<div bind:this={chart} class:zoomed class="chart" bind:clientWidth={$chartWidth} on:click={handleMouseClick}  on:mousemove={handleMouseMove} on:mouseleave={handleMouseLeave}>
+<div
+    bind:this={chart}
+    class:zoomed
+    class="chart"
+    bind:clientWidth={$chartWidth}
+    on:click={handleMouseClick}
+    on:touchstart={handleMouseClick}
+    on:mousemove={handleMouseMove}
+    on:touchmove={handleMouseMove}
+    on:mouseleave={handleMouseLeave}
+    on:touchend={handleMouseLeave}>
     <svg {height}>
         <g>
             <!-- y axis -->
             <g class="axis y-axis">
-                {#each yTicks as tick,i}
+                {#each yTicks as tick, i}
                     <g class="tick tick-{tick}" transform="translate(0, {yScale(tick)})">
                         <line x2="100%" />
                         <text y="-4">

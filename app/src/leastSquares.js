@@ -20,7 +20,7 @@ export default function(valuesX, valuesY) {
      * Nothing to do.
      */
     if (len === 0) {
-        return [ [], [] ];
+        return [[], []];
     }
 
     /*
@@ -31,8 +31,8 @@ export default function(valuesX, valuesY) {
         y = valuesY[v];
         sumX += x;
         sumY += y;
-        sumXX += x*x;
-        sumXY += x*y;
+        sumXX += x * x;
+        sumXY += x * y;
         count++;
     }
 
@@ -40,8 +40,8 @@ export default function(valuesX, valuesY) {
      * Calculate m and b for the formular:
      * y = x * m + b
      */
-    var m = (count*sumXY - sumX*sumY) / (count*sumXX - sumX*sumX);
-    var b = (sumY/count) - (m*sumX)/count;
+    var m = (count * sumXY - sumX * sumY) / (count * sumXX - sumX * sumX);
+    var b = sumY / count - (m * sumX) / count;
 
-    return (x) => x * m + b;
+    return x => x * m + b;
 }

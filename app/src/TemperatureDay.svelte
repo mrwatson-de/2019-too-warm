@@ -2,7 +2,15 @@
     import { scaleLinear } from 'd3-scale';
     import { timeFormat } from 'd3-time-format';
     import { mean } from 'd3-array';
-    import { msg, contextMinYear, contextRange, getTempTicks, toF, useFahrenheit, formatTemp } from './stores';
+    import {
+        msg,
+        contextMinYear,
+        contextRange,
+        getTempTicks,
+        toF,
+        useFahrenheit,
+        formatTemp
+    } from './stores';
 
     export let data = [];
 
@@ -206,7 +214,7 @@
         <g>
             <!-- y axis -->
             <g class="axis y-axis">
-                {#each yTicks as tick,i}
+                {#each yTicks as tick, i}
                     <g class="tick tick-{tick}" transform="translate(0, {yScale(tick)})">
                         <line x2="5" />
                         <text y="-4">
@@ -288,7 +296,9 @@
             <g class="normal-high" transform="translate(0,{yScale(normalHigh)})">
                 <line class="zero" x1={padding.left - 20} x2={width} />
                 <g transform="translate({width - padding.right + 30},-5)">
-                    <text class="temp">{@html $formatTemp(normalHigh)}</text>
+                    <text class="temp">
+                        {@html $formatTemp(normalHigh)}
+                    </text>
                     <text transform="translate(0,-35)">
                         <tspan x="0">{$msg.dailyAvgHighOn}</tspan>
                         <tspan x="0" dy="15">
@@ -310,7 +320,9 @@
             </g>
 
             <g class="normal" transform="translate(0,{yScale((normalLow + normalHigh) * 0.5)})">
-                <text transform="translate({width - padding.right + 30},0)">"{$msg.normalRange}"</text>
+                <text transform="translate({width - padding.right + 30},0)">
+                    "{$msg.normalRange}"
+                </text>
             </g>
         </g>
     </svg>

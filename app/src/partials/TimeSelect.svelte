@@ -11,7 +11,7 @@
         let d = new Date($maxDate);
         d[`set${prop}`](d[`get${prop}`]() + offset);
         // move date to last of month
-        d = timeDay.offset(timeMonth.ceil(d),-1);
+        d = timeDay.offset(timeMonth.ceil(d), -1);
         if (d >= new Date()) d = new Date();
         $maxDate = d;
     }
@@ -84,7 +84,9 @@
         </button>
     </div>
 
-    <button class="btn btn-sm btn-outline-secondary ml-2" on:mousedown={() => ($maxDate = new Date())}>
+    <button
+        class="btn btn-sm btn-outline-secondary ml-2"
+        on:mousedown={() => ($maxDate = new Date())}>
         {$msg.today}
     </button>
 

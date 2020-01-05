@@ -135,11 +135,20 @@
 <main lang={$language} class="story px2">
 
     <p class="p-2 text-center text-muted text-small" lang="de">
-        <a class="text-reset" href="#/en">Read this text in English</a><br>
+        <a class="text-reset" href="#/en">Read this text in English</a>
+        <br />
     </p>
     <p class="p-2 text-center text-muted text-small" lang="en">
-        <a class="text-reset" href="#/de">Diesen Text auf deutsch lesen</a><br>
-        <a class="text-reset" on:click|preventDefault="{() => $useFahrenheit = !$useFahrenheit}" href="#/en">(also click here if you <b>prefer temperatures in {$useFahrenheit ? 'Celsius' : 'Fahrenheit'}</b>)</a>
+        <a class="text-reset" href="#/de">Diesen Text auf deutsch lesen</a>
+        <br />
+        <a
+            class="text-reset"
+            on:click|preventDefault={() => ($useFahrenheit = !$useFahrenheit)}
+            href="#/en">
+            (also click here if you
+            <b>prefer temperatures in {$useFahrenheit ? 'Celsius' : 'Fahrenheit'}</b>
+            )
+        </a>
     </p>
 
     <p lang="de">

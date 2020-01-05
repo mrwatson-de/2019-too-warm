@@ -9,7 +9,7 @@
         maxDate,
         showAnomalies,
         labelRecordTemperatures,
-        formatTemp,
+        formatTemp
     } from '../stores';
 
     export let xScale;
@@ -58,7 +58,7 @@
                 if (d.tMax > d.tMaxAbs || d.tMin < d.tMinAbs) {
                     // check if we're a local max
                     const checkDays = pxPerDay < 3 ? 13 : 8;
-                    filteredData.slice(Math.max(0, i - checkDays), i + checkDays+1).forEach(e => {
+                    filteredData.slice(Math.max(0, i - checkDays), i + checkDays + 1).forEach(e => {
                         if (d !== e && e.tMax > e.tMaxAbs && e.labelMaxRecord) {
                             // e is also a record
                             if (e.tMax >= d.tMax) {
@@ -225,14 +225,16 @@
                 class:hotter={$showAnomalies && d.tAvg > d.trendMax}
                 class:colder={$showAnomalies && d.tAvg < d.trendMin}
                 class:normal={$showAnomalies && d.tAvg >= d.trendMin && d.tAvg <= d.trendMax}
-                r={(highlight && sameDay(highlight, d.date) ? 3 : 2)*(thin?0.75:1)}
+                r={(highlight && sameDay(highlight, d.date) ? 3 : 2) * (thin ? 0.75 : 1)}
                 transform="translate(0,{yScale(d.tAvg)})" />
 
             {#if $labelRecordTemperatures}
                 {#if d.tMax > d.tMaxAbs}
                     <g class="record high" transform="translate(0, {yScale(d.tMax) - 7})">
                         {#if d.labelMaxRecord}
-                            <text y="-15">{@html $formatTemp(d.tMax,false)}</text>
+                            <text y="-15">
+                                {@html $formatTemp(d.tMax, false)}
+                            </text>
                         {/if}
                         <path d="M0,0 L-4,-4 L 4,-4 Z" />
                     </g>
@@ -240,7 +242,9 @@
                 {#if d.tMin < d.tMinAbs}
                     <g class="record low" transform="translate(0, {yScale(d.tMin) + 7})">
                         {#if d.labelMinRecord}
-                            <text y="15">{@html $formatTemp(d.tMin,false)}</text>
+                            <text y="15">
+                                {@html $formatTemp(d.tMin, false)}
+                            </text>
                         {/if}
                         <path d="M0,0 L-4,4 L 4,4 Z" />
                     </g>
@@ -249,28 +253,38 @@
         </g>
     {/each}
     {#if highlightDay}
-    <g class="highlight day focus" transform="translate({xScale(highlightDay.date)},0)">
-        <g class="buffer">
+        <g class="highlight day focus" transform="translate({xScale(highlightDay.date)},0)">
+            <g class="buffer">
+                <line y1={yScale(highlightDay.tMin)} y2={yScale(highlightDay.tMax)} />
+                <circle
+                    r={3 * (thin ? 0.75 : 1)}
+                    transform="translate(0,{yScale(highlightDay.tAvg)})" />
+                <text class="date" y={yScale(highlightDay.tMax) - 35}>
+                    {fmt(highlightDay.date)}
+                </text>
+                <text y={yScale(highlightDay.tMax) - 15}>
+                    {@html $formatTemp(highlightDay.tMax)}
+                </text>
+                <text class="min" y={yScale(highlightDay.tMin) + 15}>
+                    {@html $formatTemp(highlightDay.tMin)}
+                </text>
+            </g>
+
             <line y1={yScale(highlightDay.tMin)} y2={yScale(highlightDay.tMax)} />
             <circle
-                r={3*(thin?0.75:1)}
+                r={3 * (thin ? 0.75 : 1)}
                 transform="translate(0,{yScale(highlightDay.tAvg)})" />
+
             <text class="date" y={yScale(highlightDay.tMax) - 35}>{fmt(highlightDay.date)}</text>
-            <text y={yScale(highlightDay.tMax) - 15}>{@html $formatTemp(highlightDay.tMax)}</text>
-            <text class="min" y={yScale(highlightDay.tMin) + 15}>{@html $formatTemp(highlightDay.tMin)}</text>
-        </g>
-
-        <line y1={yScale(highlightDay.tMin)} y2={yScale(highlightDay.tMax)} />
-        <circle
-            r={3*(thin?0.75:1)}
-            transform="translate(0,{yScale(highlightDay.tAvg)})" />
-
-        <text class="date" y={yScale(highlightDay.tMax) - 35}>{fmt(highlightDay.date)}</text>
-        <text y={yScale(highlightDay.tMax) - 15}>{@html $formatTemp(highlightDay.tMax)}</text>
-        <text class="min" y={yScale(highlightDay.tMin) + 15}>{@html $formatTemp(highlightDay.tMin)}</text>
-        <!-- {#if yScale(highlightDay.tMin) - yScale(highlightDay.tMax) > 30}
+            <text y={yScale(highlightDay.tMax) - 15}>
+                {@html $formatTemp(highlightDay.tMax)}
+            </text>
+            <text class="min" y={yScale(highlightDay.tMin) + 15}>
+                {@html $formatTemp(highlightDay.tMin)}
+            </text>
+            <!-- {#if yScale(highlightDay.tMin) - yScale(highlightDay.tMax) > 30}
             <text class="avg" x="5" y={yScale(highlightDay.tAvg)}>{@html $formatTemp(highlightDay.tAvg)}</text>
         {/if} -->
-    </g>
+        </g>
     {/if}
 </g>

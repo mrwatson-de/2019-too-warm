@@ -45,24 +45,28 @@ export const formatTemp = derived([language, useFahrenheit], ([lang, useF]) => {
     return (d, unit = true, rel = false) => {
         if (!d.toFixed) return d;
         if (useF) d = d * 1.8 + (rel ? 0 : 32);
-        const n = Math.abs(d).toFixed(Math.round(d*1e6)/1e6 === Math.round(d) ? 0 : 1).replace(lang === 'de' ? '.' : null, ',');
-        const sign = d < 0 ? '&minus;' :
-            rel && d > 0 ? '+' :
-            rel && !d ? '&plusmn;' : '';
-        return `${sign}${n}${unit ? `°${useF ? 'F':'C'}` : ''}`;
+        const n = Math.abs(d)
+            .toFixed(Math.round(d * 1e6) / 1e6 === Math.round(d) ? 0 : 1)
+            .replace(lang === 'de' ? '.' : null, ',');
+        const sign = d < 0 ? '&minus;' : rel && d > 0 ? '+' : rel && !d ? '&plusmn;' : '';
+        return `${sign}${n}${unit ? `°${useF ? 'F' : 'C'}` : ''}`;
     };
 });
 
-export function toF(C) { return C * 1.8 + 32 };
-export function toC(F) { return (F-32) / 1.8 };
+export function toF(C) {
+    return C * 1.8 + 32;
+}
+export function toC(F) {
+    return (F - 32) / 1.8;
+}
 
-export const getTempTicks = derived(useFahrenheit, (useF) => {
-    if (!useF) return (scale, num) => scale.ticks(num).sort((a,b) => b-a);
+export const getTempTicks = derived(useFahrenheit, useF => {
+    if (!useF) return (scale, num) => scale.ticks(num).sort((a, b) => b - a);
     return (scale, num) => {
         return scaleLinear()
             .domain(scale.domain().map(toF))
             .ticks(num)
             .map(toC)
-            .sort((a,b) => b-a);
-    }
+            .sort((a, b) => b - a);
+    };
 });

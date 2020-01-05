@@ -2,11 +2,9 @@ import { extent } from 'd3-array';
 import { scaleTime, scaleLinear } from 'd3-scale';
 
 export default function scaleFisheye(scaleType, distortion = 3, focus = 0) {
-
     let scale = scaleType();
     const isTimeScale = scaleType === scaleTime;
     let timeScale;
-
 
     if (isTimeScale) {
         timeScale = scale;
@@ -24,7 +22,10 @@ export default function scaleFisheye(scaleType, distortion = 3, focus = 0) {
         const max = range[1];
         let m = left ? focus - min : max - focus;
         if (m === 0) m = max - min;
-        return (left ? -1 : 1) * m * (distortion + 1) / (distortion + (m / Math.abs(x - focus))) + focus;
+        return (
+            ((left ? -1 : 1) * m * (distortion + 1)) / (distortion + m / Math.abs(x - focus)) +
+            focus
+        );
     }
 
     fisheye.invert = _ => {
@@ -84,13 +85,13 @@ function rebind(target, source) {
     let i = 1;
     const n = arguments.length;
     let method;
-    while (++i < n) target[method = arguments[i]] = d3Rebind(target, source, source[method]);
+    while (++i < n) target[(method = arguments[i])] = d3Rebind(target, source, source[method]);
     return target;
-};
+}
 
-  // Method is assumed to be a standard D3 getter-setter:
-  // If passed with no arguments, gets the value.
-  // If passed with arguments, sets the value and returns the target.
+// Method is assumed to be a standard D3 getter-setter:
+// If passed with no arguments, gets the value.
+// If passed with arguments, sets the value and returns the target.
 function d3Rebind(target, source, method) {
     return function() {
         var value = method.apply(source, arguments);

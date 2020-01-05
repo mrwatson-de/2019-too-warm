@@ -2,7 +2,13 @@
     import { scaleTime, scaleLinear } from 'd3-scale';
     import { timeFormat } from 'd3-time-format';
     import { mean, group } from 'd3-array';
-    import { contextMinYear, contextMaxYear, contextRange, formatTemp, useFahrenheit } from './stores';
+    import {
+        contextMinYear,
+        contextMaxYear,
+        contextRange,
+        formatTemp,
+        useFahrenheit
+    } from './stores';
 
     export let data = [];
 
@@ -178,7 +184,7 @@
 
                 <!-- y axis -->
                 <g class="axis y-axis">
-                    {#each ($useFahrenheit ? [3.888888888,0,-3.88888888] : [-4, 0, 4]) as tick,i}
+                    {#each $useFahrenheit ? [3.888888888, 0, -3.88888888] : [-4, 0, 4] as tick, i}
                         {#if !d}
                             <text x={width - 35} y={yScale(tick)}>
                                 {@html $formatTemp(tick, !i, true)}
